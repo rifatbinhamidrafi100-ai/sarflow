@@ -1,0 +1,198 @@
+{
+  "source": "https://cmr.earthdata.nasa.gov/search/granules.json?short_name=NISAR_L2_GCOV_BETA_V1&page_size=6&sort_key=-start_date",
+  "retrieved": "2026-09-23T09:00:24.185Z",
+  "records": [
+    {
+      "id": "G4059041445-ASF",
+      "title": "NISAR_L2_PR_GCOV_010_165_D_100_2005_DHDH_M_20260120T155930_20260120T155950_X05010_N_P_J_001",
+      "date": "2026-01-20T15:59:30.000Z",
+      "collection": "NISAR_L2_GCOV_BETA_V1",
+      "polygon": [
+        [
+          31.36272,
+          -22.59693
+        ],
+        [
+          31.0918,
+          -23.84596
+        ],
+        [
+          33.52789,
+          -24.26278
+        ],
+        [
+          33.77372,
+          -23.01651
+        ],
+        [
+          31.36272,
+          -22.59693
+        ]
+      ],
+      "browse": "https://nisar.asf.earthdatacloud.nasa.gov/BROWSE/NISAR_L2_GCOV_BETA_V1/NISAR_L2_PR_GCOV_010_165_D_100_2005_DHDH_M_20260120T155930_20260120T155950_X05010_N_P_J_001/NISAR_L2_PR_GCOV_010_165_D_100_2005_DHDH_M_20260120T155930_20260120T155950_X05010_N_P_J_001.png",
+      "localBrowse": null,
+      "sha256": null,
+      "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4059041445-ASF.html"
+    },
+    {
+      "id": "G4059047310-ASF",
+      "title": "NISAR_L2_PR_GCOV_010_164_D_077_2005_QPDH_A_20260120T140632_20260120T140648_X05010_N_P_J_001",
+      "date": "2026-01-20T14:06:32.000Z",
+      "collection": "NISAR_L2_GCOV_BETA_V1",
+      "polygon": [
+        [
+          66.90986,
+          24.19176
+        ],
+        [
+          66.62872,
+          23.18362
+        ],
+        [
+          69.0325,
+          22.59177
+        ],
+        [
+          69.33078,
+          23.59411
+        ],
+        [
+          66.90986,
+          24.19176
+        ]
+      ],
+      "browse": "https://nisar.asf.earthdatacloud.nasa.gov/BROWSE/NISAR_L2_GCOV_BETA_V1/NISAR_L2_PR_GCOV_010_164_D_077_2005_QPDH_A_20260120T140632_20260120T140648_X05010_N_P_J_001/NISAR_L2_PR_GCOV_010_164_D_077_2005_QPDH_A_20260120T140632_20260120T140648_X05010_N_P_J_001.png",
+      "localBrowse": null,
+      "sha256": null,
+      "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4059047310-ASF.html"
+    },
+    {
+      "id": "G4059046035-ASF",
+      "title": "NISAR_L2_PR_GCOV_010_164_D_076_2005_QPDH_A_20260120T140558_20260120T140633_X05010_N_F_J_001",
+      "date": "2026-01-20T14:05:58.000Z",
+      "collection": "NISAR_L2_GCOV_BETA_V1",
+      "polygon": [
+        [
+          67.48803,
+          26.20593
+        ],
+        [
+          66.87656,
+          24.07322
+        ],
+        [
+          69.29584,
+          23.47615
+        ],
+        [
+          69.94448,
+          25.59653
+        ],
+        [
+          67.48803,
+          26.20593
+        ]
+      ],
+      "browse": "https://nisar.asf.earthdatacloud.nasa.gov/BROWSE/NISAR_L2_GCOV_BETA_V1/NISAR_L2_PR_GCOV_010_164_D_076_2005_QPDH_A_20260120T140558_20260120T140633_X05010_N_F_J_001/NISAR_L2_PR_GCOV_010_164_D_076_2005_QPDH_A_20260120T140558_20260120T140633_X05010_N_F_J_001.png",
+      "localBrowse": null,
+      "sha256": null,
+      "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4059046035-ASF.html"
+    },
+    {
+      "id": "G4059047078-ASF",
+      "title": "NISAR_L2_PR_GCOV_010_164_D_075_2005_QPDH_A_20260120T140525_20260120T140559_X05010_N_F_J_001",
+      "date": "2026-01-20T14:05:25.000Z",
+      "collection": "NISAR_L2_GCOV_BETA_V1",
+      "polygon": [
+        [
+          68.06554,
+          28.15916
+        ],
+        [
+          67.46676,
+          26.08439
+        ],
+        [
+          69.90767,
+          25.47888
+        ],
+        [
+          70.56408,
+          27.53671
+        ],
+        [
+          68.06554,
+          28.15916
+        ]
+      ],
+      "browse": "https://nisar.asf.earthdatacloud.nasa.gov/BROWSE/NISAR_L2_GCOV_BETA_V1/NISAR_L2_PR_GCOV_010_164_D_075_2005_QPDH_A_20260120T140525_20260120T140559_X05010_N_F_J_001/NISAR_L2_PR_GCOV_010_164_D_075_2005_QPDH_A_20260120T140525_20260120T140559_X05010_N_F_J_001.png",
+      "localBrowse": null,
+      "sha256": null,
+      "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4059047078-ASF.html"
+    },
+    {
+      "id": "G4059046108-ASF",
+      "title": "NISAR_L2_PR_GCOV_010_164_D_074_2005_QPDH_A_20260120T140451_20260120T140526_X05010_N_F_J_001",
+      "date": "2026-01-20T14:04:51.000Z",
+      "collection": "NISAR_L2_GCOV_BETA_V1",
+      "polygon": [
+        [
+          68.69953,
+          30.16477
+        ],
+        [
+          68.02987,
+          28.04092
+        ],
+        [
+          70.52609,
+          27.4192
+        ],
+        [
+          71.22786,
+          29.53233
+        ],
+        [
+          68.69953,
+          30.16477
+        ]
+      ],
+      "browse": "https://nisar.asf.earthdatacloud.nasa.gov/BROWSE/NISAR_L2_GCOV_BETA_V1/NISAR_L2_PR_GCOV_010_164_D_074_2005_QPDH_A_20260120T140451_20260120T140526_X05010_N_F_J_001/NISAR_L2_PR_GCOV_010_164_D_074_2005_QPDH_A_20260120T140451_20260120T140526_X05010_N_F_J_001.png",
+      "localBrowse": null,
+      "sha256": null,
+      "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4059046108-ASF.html"
+    },
+    {
+      "id": "G4059046088-ASF",
+      "title": "NISAR_L2_PR_GCOV_010_164_D_073_2005_QPDH_A_20260120T140417_20260120T140452_X05010_N_F_J_001",
+      "date": "2026-01-20T14:04:17.000Z",
+      "collection": "NISAR_L2_GCOV_BETA_V1",
+      "polygon": [
+        [
+          69.36154,
+          32.16651
+        ],
+        [
+          68.66094,
+          30.04707
+        ],
+        [
+          71.18801,
+          29.41509
+        ],
+        [
+          71.92222,
+          31.52359
+        ],
+        [
+          69.36154,
+          32.16651
+        ]
+      ],
+      "browse": "https://nisar.asf.earthdatacloud.nasa.gov/BROWSE/NISAR_L2_GCOV_BETA_V1/NISAR_L2_PR_GCOV_010_164_D_073_2005_QPDH_A_20260120T140417_20260120T140452_X05010_N_F_J_001/NISAR_L2_PR_GCOV_010_164_D_073_2005_QPDH_A_20260120T140417_20260120T140452_X05010_N_F_J_001.png",
+      "localBrowse": null,
+      "sha256": null,
+      "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4059046088-ASF.html"
+    }
+  ]
+}

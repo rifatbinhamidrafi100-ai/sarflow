@@ -1,0 +1,5 @@
+﻿import {chromium} from '@playwright/test';
+const browser=await chromium.launch({channel:'chrome'});const context=await browser.newContext({viewport:{width:1440,height:1000},deviceScaleFactor:2});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));let tiles=0;page.on('response',r=>{if(r.url().includes('tiles.maps.eox.at')&&r.status()===200)tiles++;});
+await page.goto('http://127.0.0.1:5187/world');await page.getByText('World imagery loaded',{exact:true}).waitFor({timeout:60000});await page.screenshot({path:'artifacts/world-globe-live.png'});let downloading=page.waitForEvent('download');await page.getByRole('button',{name:'Save map PNG'}).click();await (await downloading).saveAs('artifacts/world-globe-export.png');
+await page.getByRole('button',{name:'Rasuwa river corridor',exact:true}).click();await page.getByText('World imagery loaded',{exact:true}).waitFor({timeout:60000});await page.screenshot({path:'artifacts/world-nepal-detail-live.png'});
+console.log(JSON.stringify({liveTilesLoaded:tiles,pageErrors:errors,export:'artifacts/world-globe-export.png'}));await browser.close();if(errors.length)process.exitCode=1;

@@ -1,0 +1,599 @@
+{
+  "version": 1,
+  "retrieved": "2026-09-23T19:40:05.067Z",
+  "source": "NASA GIBS / ASF / NASA CMR",
+  "layer": "NISAR_L2_Geocoded_Polarimetric_Covariance",
+  "collection": "NISAR_L2_GCOV_PROVISIONAL_V1",
+  "status": "Archived actual NISAR false-color imagery",
+  "limitations": [
+    "Daily mosaic may include more than one acquisition, mode, or track. Listed granule is a matching catalog record, not an exhaustive pixel-source inventory.",
+    "False-color RGB is a visualization, not calibrated power. No dB differences or event area are derived from colors.",
+    "Catalog grouping selects a repeated track/frame/mode; daily mosaic composition can still differ.",
+    "Transparent pixels mean no rendered coverage. Visual changes can reflect acquisition or rendering choices."
+  ],
+  "regions": [
+    {
+      "id": "seattle",
+      "name": "Puget Sound",
+      "country": "Washington, United States",
+      "topic": "Water, cities & terrain",
+      "center": [
+        -122.33,
+        47.6
+      ],
+      "bounds": [
+        -122.85,
+        47.15,
+        -121.8,
+        48
+      ],
+      "description": "Trace the contrast between water, urban structure, forest, and mountainous terrain around Seattle.",
+      "query": "https://cmr.earthdata.nasa.gov/search/granules.json?short_name=NISAR_L2_GCOV_PROVISIONAL_V1&page_size=100&sort_key=-start_date&point=-122.33,47.6",
+      "observations": [
+        {
+          "id": "G4282892788-ASF",
+          "date": "2026-08-13",
+          "acquired": "2026-08-13T12:55:41.000Z",
+          "title": "NISAR_L2_PR_GCOV_028_005_A_026_4005_DHDH_A_20260813T125541_20260813T125616_P05023_N_F_J_001",
+          "image": "/observations/seattle-2026-08-13.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.85%2C47.15%2C-121.8%2C48&WIDTH=1024&HEIGHT=900&TIME=2026-08-13",
+          "sha256": "0cfd7a84e5e7cc48375d224b6a2d2f77a74559a7955933a09b2584ae91ea6efc",
+          "bytes": 2794114,
+          "polygon": [
+            [
+              -118.78909,
+              47.74712
+            ],
+            [
+              -119.92716,
+              49.81359
+            ],
+            [
+              -123.25529,
+              48.95669
+            ],
+            [
+              -122.02313,
+              46.91742
+            ],
+            [
+              -118.78909,
+              47.74712
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4282892788-ASF.html"
+        },
+        {
+          "id": "G4291243822-ASF",
+          "date": "2026-08-25",
+          "acquired": "2026-08-25T12:55:41.000Z",
+          "title": "NISAR_L2_PR_GCOV_029_005_A_026_4005_DHDH_A_20260825T125541_20260825T125616_P05023_N_F_J_001",
+          "image": "/observations/seattle-2026-08-25.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.85%2C47.15%2C-121.8%2C48&WIDTH=1024&HEIGHT=900&TIME=2026-08-25",
+          "sha256": "e34ff4e91ac7183e79fde9866d996b4fbcc9135659f3e7a5778990e062e08b2b",
+          "bytes": 2184237,
+          "polygon": [
+            [
+              -118.79563,
+              47.75809
+            ],
+            [
+              -119.92993,
+              49.82553
+            ],
+            [
+              -123.26258,
+              48.96749
+            ],
+            [
+              -122.02993,
+              46.92829
+            ],
+            [
+              -118.79563,
+              47.75809
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4291243822-ASF.html"
+        },
+        {
+          "id": "G4308306301-ASF",
+          "date": "2026-09-06",
+          "acquired": "2026-09-06T12:55:41.000Z",
+          "title": "NISAR_L2_PR_GCOV_030_005_A_026_4005_DHDH_A_20260906T125541_20260906T125616_P05023_N_F_J_001",
+          "image": "/observations/seattle-2026-09-06.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.85%2C47.15%2C-121.8%2C48&WIDTH=1024&HEIGHT=900&TIME=2026-09-06",
+          "sha256": "49ccdcd080435fcec6aa509ee57178d8051e6b9362b05ab4e1edaa697c00c6a0",
+          "bytes": 2805252,
+          "polygon": [
+            [
+              -118.80031,
+              47.7666
+            ],
+            [
+              -119.93251,
+              49.83458
+            ],
+            [
+              -123.26839,
+              48.9757
+            ],
+            [
+              -122.03602,
+              46.93637
+            ],
+            [
+              -118.80031,
+              47.7666
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4308306301-ASF.html"
+        },
+        {
+          "id": "G4317652789-ASF",
+          "date": "2026-09-18",
+          "acquired": "2026-09-18T12:55:41.000Z",
+          "title": "NISAR_L2_PR_GCOV_031_005_A_026_4005_DHDH_A_20260918T125541_20260918T125616_P05023_F_F_J_001",
+          "image": "/observations/seattle-2026-09-18.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.85%2C47.15%2C-121.8%2C48&WIDTH=1024&HEIGHT=900&TIME=2026-09-18",
+          "sha256": "2d6275766207aa318972946900b331a7ae5120cc4d2c1fd85fdb8ddd84c9377f",
+          "bytes": 2799693,
+          "polygon": [
+            [
+              -118.79952,
+              47.76398
+            ],
+            [
+              -119.93315,
+              49.8316
+            ],
+            [
+              -123.26741,
+              48.9731
+            ],
+            [
+              -122.03505,
+              46.93378
+            ],
+            [
+              -118.79952,
+              47.76398
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4317652789-ASF.html",
+          "thumbnail": "/observations/seattle-thumbnail.png",
+          "thumbnailRequest": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.85%2C47.15%2C-121.8%2C48&WIDTH=320&HEIGHT=281&TIME=2026-09-18"
+        }
+      ]
+    },
+    {
+      "id": "brahmaputra",
+      "name": "Brahmaputra floodplain",
+      "country": "Bangladesh",
+      "topic": "River corridors & wetlands",
+      "center": [
+        89.72,
+        25.15
+      ],
+      "bounds": [
+        89.3,
+        24.75,
+        90.15,
+        25.55
+      ],
+      "description": "Explore river corridors and agricultural landscapes. Changing radar appearance alone does not establish flooding.",
+      "query": "https://cmr.earthdata.nasa.gov/search/granules.json?short_name=NISAR_L2_GCOV_PROVISIONAL_V1&page_size=100&sort_key=-start_date&point=89.72,25.15",
+      "observations": [
+        {
+          "id": "G4261131483-ASF",
+          "date": "2026-07-24",
+          "acquired": "2026-07-24T23:21:33.000Z",
+          "title": "NISAR_L2_PR_GCOV_026_069_A_014_4005_DHDH_A_20260724T232133_20260724T232208_P05023_N_F_J_001",
+          "image": "/observations/brahmaputra-2026-07-24.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=89.3%2C24.75%2C90.15%2C25.55&WIDTH=1024&HEIGHT=900&TIME=2026-07-24",
+          "sha256": "a1f5b78c9ab7687c1ccc2959254e1bdb39067443e95d36c01533c96b5d6e032f",
+          "bytes": 2956992,
+          "polygon": [
+            [
+              91.90567,
+              23.9961
+            ],
+            [
+              91.30012,
+              26.13013
+            ],
+            [
+              88.85122,
+              25.52268
+            ],
+            [
+              89.49915,
+              23.40223
+            ],
+            [
+              91.90567,
+              23.9961
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4261131483-ASF.html"
+        },
+        {
+          "id": "G4285744971-ASF",
+          "date": "2026-08-17",
+          "acquired": "2026-08-17T23:21:32.000Z",
+          "title": "NISAR_L2_PR_GCOV_028_069_A_014_4005_DHDH_A_20260817T232132_20260817T232206_P05023_N_F_J_001",
+          "image": "/observations/brahmaputra-2026-08-17.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=89.3%2C24.75%2C90.15%2C25.55&WIDTH=1024&HEIGHT=900&TIME=2026-08-17",
+          "sha256": "7e867e22ca9d1d3aa59b84fecc6d9b4d1a2924949552b91c4e1709d6f2788a85",
+          "bytes": 2994156,
+          "polygon": [
+            [
+              91.90498,
+              23.99567
+            ],
+            [
+              91.31651,
+              26.07044
+            ],
+            [
+              88.86907,
+              25.46342
+            ],
+            [
+              89.49871,
+              23.40184
+            ],
+            [
+              91.90498,
+              23.99567
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4285744971-ASF.html"
+        },
+        {
+          "id": "G4294032847-ASF",
+          "date": "2026-08-29",
+          "acquired": "2026-08-29T23:21:32.000Z",
+          "title": "NISAR_L2_PR_GCOV_029_069_A_014_4005_DHDH_A_20260829T232132_20260829T232206_P05023_N_F_J_001",
+          "image": "/observations/brahmaputra-2026-08-29.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=89.3%2C24.75%2C90.15%2C25.55&WIDTH=1024&HEIGHT=900&TIME=2026-08-29",
+          "sha256": "3993e9f492e414ce2de9d9856146e4a7dfa3a5c4dcdfc6730770fcdff0bfb7c2",
+          "bytes": 2989744,
+          "polygon": [
+            [
+              91.90124,
+              24.0173
+            ],
+            [
+              91.31115,
+              26.09171
+            ],
+            [
+              88.86313,
+              25.48456
+            ],
+            [
+              89.49296,
+              23.423
+            ],
+            [
+              91.90124,
+              24.0173
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4294032847-ASF.html"
+        },
+        {
+          "id": "G4310083498-ASF",
+          "date": "2026-09-10",
+          "acquired": "2026-09-10T23:21:31.000Z",
+          "title": "NISAR_L2_PR_GCOV_030_069_A_014_4005_DHDH_A_20260910T232131_20260910T232206_P05023_N_F_J_001",
+          "image": "/observations/brahmaputra-2026-09-10.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=89.3%2C24.75%2C90.15%2C25.55&WIDTH=1024&HEIGHT=900&TIME=2026-09-10",
+          "sha256": "e1bd086e4dece8dfa77e076feff0b2803e87cba6f4b468cd2c272bb883ba620f",
+          "bytes": 3019269,
+          "polygon": [
+            [
+              91.91184,
+              23.96762
+            ],
+            [
+              91.30874,
+              26.10219
+            ],
+            [
+              88.86027,
+              25.49492
+            ],
+            [
+              89.50788,
+              23.37444
+            ],
+            [
+              91.91184,
+              23.96762
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4310083498-ASF.html",
+          "thumbnail": "/observations/brahmaputra-thumbnail.png",
+          "thumbnailRequest": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=89.3%2C24.75%2C90.15%2C25.55&WIDTH=320&HEIGHT=281&TIME=2026-09-10"
+        }
+      ]
+    },
+    {
+      "id": "sacramento",
+      "name": "Sacramento Valley",
+      "country": "California, United States",
+      "topic": "Agricultural landscapes",
+      "center": [
+        -121.8,
+        39
+      ],
+      "bounds": [
+        -122.3,
+        38.6,
+        -121.3,
+        39.4
+      ],
+      "description": "Inspect field patterns and surface structure across repeated radar observations; crop identity and yield are not inferred.",
+      "query": "https://cmr.earthdata.nasa.gov/search/granules.json?short_name=NISAR_L2_GCOV_PROVISIONAL_V1&page_size=100&sort_key=-start_date&point=-121.8,39",
+      "observations": [
+        {
+          "id": "G4284103888-ASF",
+          "date": "2026-08-15",
+          "acquired": "2026-08-15T13:09:30.000Z",
+          "title": "NISAR_L2_PR_GCOV_028_034_A_021_4005_DHDH_A_20260815T130930_20260815T131005_P05023_N_F_J_001",
+          "image": "/observations/sacramento-2026-08-15.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.3%2C38.6%2C-121.3%2C39.4&WIDTH=1024&HEIGHT=900&TIME=2026-08-15",
+          "sha256": "e668d8a9ee084ed2cae20d48c65cb436259f126798afdaa3edd66e35fd777d1c",
+          "bytes": 2347688,
+          "polygon": [
+            [
+              -118.63693,
+              37.85744
+            ],
+            [
+              -119.44492,
+              39.96706
+            ],
+            [
+              -122.28267,
+              39.24595
+            ],
+            [
+              -121.39187,
+              37.15896
+            ],
+            [
+              -118.63693,
+              37.85744
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4284103888-ASF.html"
+        },
+        {
+          "id": "G4291604586-ASF",
+          "date": "2026-08-27",
+          "acquired": "2026-08-27T13:09:30.000Z",
+          "title": "NISAR_L2_PR_GCOV_029_034_A_021_4005_DHDH_A_20260827T130930_20260827T131005_P05023_N_F_J_001",
+          "image": "/observations/sacramento-2026-08-27.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.3%2C38.6%2C-121.3%2C39.4&WIDTH=1024&HEIGHT=900&TIME=2026-08-27",
+          "sha256": "5b9db5028d5e663dba36cd2baacf550ce79ed3951e4d77106cb2959f4c896ddd",
+          "bytes": 2353015,
+          "polygon": [
+            [
+              -118.64236,
+              37.87218
+            ],
+            [
+              -119.45239,
+              39.98135
+            ],
+            [
+              -122.28891,
+              39.26054
+            ],
+            [
+              -121.3972,
+              37.17375
+            ],
+            [
+              -118.64236,
+              37.87218
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4291604586-ASF.html"
+        },
+        {
+          "id": "G4306539999-ASF",
+          "date": "2026-09-08",
+          "acquired": "2026-09-08T13:09:30.000Z",
+          "title": "NISAR_L2_PR_GCOV_030_034_A_021_4005_DHDH_A_20260908T130930_20260908T131005_P05023_N_F_J_001",
+          "image": "/observations/sacramento-2026-09-08.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.3%2C38.6%2C-121.3%2C39.4&WIDTH=1024&HEIGHT=900&TIME=2026-09-08",
+          "sha256": "45a32a0cdb155a75399b53ec1249e270733ef6af4604dfa9e7c3588119fcf235",
+          "bytes": 2363781,
+          "polygon": [
+            [
+              -118.64542,
+              37.88059
+            ],
+            [
+              -119.45876,
+              39.98899
+            ],
+            [
+              -122.29287,
+              39.26872
+            ],
+            [
+              -121.40136,
+              37.18184
+            ],
+            [
+              -118.64542,
+              37.88059
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4306539999-ASF.html"
+        },
+        {
+          "id": "G4320019791-ASF",
+          "date": "2026-09-20",
+          "acquired": "2026-09-20T13:09:30.000Z",
+          "title": "NISAR_L2_PR_GCOV_031_034_A_021_4005_DHDH_A_20260920T130930_20260920T131005_P05023_N_F_J_001",
+          "image": "/observations/sacramento-2026-09-20.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.3%2C38.6%2C-121.3%2C39.4&WIDTH=1024&HEIGHT=900&TIME=2026-09-20",
+          "sha256": "348edd4d0514cda2db8533f72cf138f4b2cadd04eddd722f80004617b5b433d4",
+          "bytes": 2354472,
+          "polygon": [
+            [
+              -118.64379,
+              37.87404
+            ],
+            [
+              -119.45451,
+              39.98305
+            ],
+            [
+              -122.29053,
+              39.2623
+            ],
+            [
+              -121.39875,
+              37.17552
+            ],
+            [
+              -118.64379,
+              37.87404
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4320019791-ASF.html",
+          "thumbnail": "/observations/sacramento-thumbnail.png",
+          "thumbnailRequest": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.3%2C38.6%2C-121.3%2C39.4&WIDTH=320&HEIGHT=281&TIME=2026-09-20"
+        }
+      ]
+    },
+    {
+      "id": "nepal-rasuwa",
+      "name": "Rasuwa river corridor",
+      "country": "Nepal",
+      "topic": "August 2026 flood investigation",
+      "center": [
+        85.3,
+        28
+      ],
+      "bounds": [
+        85.05,
+        27.75,
+        85.55,
+        28.4
+      ],
+      "description": "Inspect the Rasuwa mountain river corridor around the reported 26 August 2026 flood. These browse images do not establish flood extent, depth, damage, or cause.",
+      "query": "https://cmr.earthdata.nasa.gov/search/granules.json?short_name=NISAR_L2_GCOV_PROVISIONAL_V1&page_size=100&sort_key=-start_date&point=85.3,28.0&temporal=2026-08-01T00:00:00Z,2026-09-20T23:59:59Z",
+      "observations": [
+        {
+          "id": "G4286846660-ASF",
+          "date": "2026-08-19",
+          "acquired": "2026-08-19T23:39:18.000Z",
+          "title": "NISAR_L2_PR_GCOV_028_098_A_016_4005_DHDH_A_20260819T233918_20260819T233953_P05023_N_F_J_001",
+          "image": "/observations/nepal-rasuwa-2026-08-19.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=85.05%2C27.75%2C85.55%2C28.4&WIDTH=1024&HEIGHT=900&TIME=2026-08-19",
+          "sha256": "d5142608ba90c5c367ac75eab34bcc47cad82c7818b0d3a2e6a09ddca815c9a5",
+          "bytes": 3045591,
+          "polygon": [
+            [
+              86.60648,
+              27.97942
+            ],
+            [
+              85.94647,
+              30.10547
+            ],
+            [
+              83.37345,
+              29.46177
+            ],
+            [
+              84.11993,
+              27.36049
+            ],
+            [
+              86.60648,
+              27.97942
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4286846660-ASF.html"
+        },
+        {
+          "id": "G4296206881-ASF",
+          "date": "2026-08-31",
+          "acquired": "2026-08-31T23:39:18.000Z",
+          "title": "NISAR_L2_PR_GCOV_029_098_A_016_4005_DHDH_A_20260831T233918_20260831T233952_P05023_N_F_J_001",
+          "image": "/observations/nepal-rasuwa-2026-08-31.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=85.05%2C27.75%2C85.55%2C28.4&WIDTH=1024&HEIGHT=900&TIME=2026-08-31",
+          "sha256": "9178f6b20c1513bf2e7faeea365f8f04da93014916a6758f625b902cee9b7c83",
+          "bytes": 3054873,
+          "polygon": [
+            [
+              86.60121,
+              27.99165
+            ],
+            [
+              85.95595,
+              30.05776
+            ],
+            [
+              83.38562,
+              29.41472
+            ],
+            [
+              84.11588,
+              27.37303
+            ],
+            [
+              86.60121,
+              27.99165
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4296206881-ASF.html"
+        },
+        {
+          "id": "G4311502130-ASF",
+          "date": "2026-09-12",
+          "acquired": "2026-09-12T23:39:18.000Z",
+          "title": "NISAR_L2_PR_GCOV_030_098_A_016_4005_DHDH_A_20260912T233918_20260912T233952_P05023_N_F_J_001",
+          "image": "/observations/nepal-rasuwa-2026-09-12.png",
+          "request": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=85.05%2C27.75%2C85.55%2C28.4&WIDTH=1024&HEIGHT=900&TIME=2026-09-12",
+          "sha256": "905e2e30e6945c2f0e217cb026649d60c8777133f8b598b02ac62f36479f646d",
+          "bytes": 3040823,
+          "polygon": [
+            [
+              86.59774,
+              28.00557
+            ],
+            [
+              85.95583,
+              30.0725
+            ],
+            [
+              83.38342,
+              29.42901
+            ],
+            [
+              84.11223,
+              27.38691
+            ],
+            [
+              86.59774,
+              28.00557
+            ]
+          ],
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4311502130-ASF.html",
+          "thumbnail": "/observations/nepal-rasuwa-thumbnail.png",
+          "thumbnailRequest": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=85.05%2C27.75%2C85.55%2C28.4&WIDTH=320&HEIGHT=281&TIME=2026-09-12"
+        }
+      ]
+    }
+  ]
+}
