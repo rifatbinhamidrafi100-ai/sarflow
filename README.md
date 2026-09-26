@@ -122,7 +122,11 @@ Playwright uses installed Chrome. Tests cover numerical invariants, missing-data
 
 ## Deployment
 
-Nothing has been published. To deploy after approval: provision Node, run `npm ci` and `npm run build`, set `SARFLOW_HOST=0.0.0.0` and a suitable `SARFLOW_PORT`, and run `npm start` behind an HTTPS reverse proxy with compression. Keep the working directory at `sarflow`. Serve frontend and `/api` from the same origin. Retain local `public` assets in the built `dist` folder. Use a persistent, access-controlled directory for reviewed imports. A static-only host needs a separately configured API and is not sufficient with the current API provider.
+Vercel deployment is configured in `vercel.json`: Vite builds the frontend, `api/index.ts` hosts the Express API, and SPA routes work when opened directly. Import this GitHub repository into Vercel, use the repository root, and deploy with the configured build command. No secrets or environment variables are needed for the public exploration and teaching workflows. The archived observatory manifest is included in the API function bundle.
+
+The serverless release excludes local datasets, logs, and Python environments. The calibrated-water processor requires registered local inputs, Python, persistent artifacts, and a long-lived process; it is not available on Vercel. The application reports this unavailable state rather than presenting generated measurements. Public upstream service availability and hosting quotas still apply; in-memory rate limits and caches are per function instance, not global abuse protection.
+
+For a full Node host: run `npm ci` and `npm run build`, set `SARFLOW_HOST=0.0.0.0` and a suitable `SARFLOW_PORT`, and run `npm start` behind an HTTPS reverse proxy with compression. Keep the working directory at `sarflow`. Serve frontend and `/api` from the same origin and use a persistent, access-controlled directory for reviewed imports. A static-only host is insufficient with the current API provider.
 
 ## Sources, attribution, and limits
 
