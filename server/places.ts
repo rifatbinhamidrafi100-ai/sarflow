@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import {englishPlace} from './english-place';
+import {englishPlace} from './english-place.js';
 const place=z.object({id:z.number(),name:z.string(),latitude:z.number().min(-90).max(90),longitude:z.number().min(-180).max(180),country:z.string().optional(),admin1:z.string().optional()});
 export function placesRouter(fetcher:typeof fetch=fetch){
  const router=Router(),cache=new Map<string,{at:number;results:z.infer<typeof place>[]}>();let next=0;

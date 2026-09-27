@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { observatorySchema } from '../shared/observatory';
+import { observatorySchema } from '../shared/observatory.js';
 export function globalRadarRouter(fetcher:typeof fetch=fetch){
  const router=Router(),cache=new Map<string,{at:number;data:unknown}>();let next=0;
  router.get('/',async(req,res)=>{

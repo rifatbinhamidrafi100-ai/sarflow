@@ -1,4 +1,4 @@
-import { datasetSchema, type Dataset } from './schema';
+import { datasetSchema, type Dataset } from './schema.js';
 
 const cases=[
  {id:'delta',title:'A wetland in transition',location:'Brahmaputra floodplain, Bangladesh',phenomenon:'wetland',bounds:[89.58,25.04,89.90,25.32],description:'A controlled teaching experiment: a growing low-backscatter zone, inspired by open-water change. Coordinates provide geographic context only. No flood occurred here is implied.'},

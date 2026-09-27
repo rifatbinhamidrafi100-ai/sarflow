@@ -1,4 +1,4 @@
-import type { Bounds, CatalogRecord } from '../shared/schema';
+import type { Bounds, CatalogRecord } from '../shared/schema.js';
 const endpoint='https://cmr.earthdata.nasa.gov/search/granules.json';
 export function cmrRecords(entries:any[],collection:string):CatalogRecord[]{
  return entries.map(e=>({id:e.id,title:e.title,date:e.time_start,collection,

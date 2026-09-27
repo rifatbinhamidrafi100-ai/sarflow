@@ -1,14 +1,14 @@
 import express from 'express';
 import path from 'node:path';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { boundsSchema, datasetSchema, type Bounds, type Dataset } from '../shared/schema';
-import { demoDatasets } from '../shared/demo';
-import { discover } from './catalog';
-import { observatorySchema } from '../shared/observatory';
-import { placesRouter } from './places';
-import { globalRadarRouter } from './global-radar';
-import { coverageRouter } from './coverage';
-import { waterRouter } from './water';
+import { boundsSchema, datasetSchema, type Bounds, type Dataset } from '../shared/schema.js';
+import { demoDatasets } from '../shared/demo.js';
+import { discover } from './catalog.js';
+import { observatorySchema } from '../shared/observatory.js';
+import { placesRouter } from './places.js';
+import { globalRadarRouter } from './global-radar.js';
+import { coverageRouter } from './coverage.js';
+import { waterRouter } from './water.js';
 
 export function createApp(options:{discover?:typeof discover;datasets?:Dataset[];production?:boolean}={}){
  const app=express();app.disable('x-powered-by');

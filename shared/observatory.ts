@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { boundsSchema } from './schema';
+import { boundsSchema } from './schema.js';
 export const actualFrameSchema=z.object({id:z.string(),date:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),acquired:z.string(),title:z.string(),image:z.string().refine(v=>/^\/observations\/[a-z0-9-]+\.png$/.test(v)||v.startsWith('https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?')),thumbnail:z.string().optional(),thumbnailRequest:z.url().optional(),request:z.url(),sha256:z.string().length(64).nullable(),bytes:z.number().nullable(),polygon:z.array(z.tuple([z.number(),z.number()])),source:z.url()});
 export const regionSchema=z.object({id:z.string(),name:z.string(),country:z.string(),topic:z.string(),center:z.tuple([z.number(),z.number()]),bounds:boundsSchema,description:z.string(),query:z.url(),observations:z.array(actualFrameSchema).min(2)});
 export const observatorySchema=z.object({version:z.number(),retrieved:z.string(),source:z.string(),layer:z.string(),collection:z.string(),status:z.string(),limitations:z.array(z.string()),regions:z.array(regionSchema).min(1)});

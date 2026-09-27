@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { coverageSchema, type Coverage } from '../shared/coverage';
+import { coverageSchema, type Coverage } from '../shared/coverage.js';
 
 /** Bounded global catalog sample, never an assertion of complete pixel coverage. */
 export function coverageRouter(fetcher:typeof fetch=fetch){
