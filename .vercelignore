@@ -12,7 +12,7 @@ dist
 artifacts
 test-results
 playwright-report
-data
+/data/
 __pycache__
 task_plan.md
 findings.md
