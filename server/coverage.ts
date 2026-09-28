@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { coverageSchema, type Coverage } from '../shared/coverage.js';
+import { GCOV_COLLECTION } from '../shared/collection-policy.js';
 
 /** Bounded global catalog sample, never an assertion of complete pixel coverage. */
 export function coverageRouter(fetcher:typeof fetch=fetch){
@@ -11,7 +12,7 @@ export function coverageRouter(fetcher:typeof fetch=fetch){
   const key=`${lat},${lon}`,hit=dateCache.get(key);
   if(hit&&Date.now()-hit.at<300000){res.json({dates:hit.dates});return;}
   const query=new URL('https://cmr.earthdata.nasa.gov/search/granules.json');
-  query.search=new URLSearchParams({short_name:'NISAR_L2_GCOV_PROVISIONAL_V1',page_size:'100',sort_key:'-start_date',point:`${lon},${lat}`}).toString();
+  query.search=new URLSearchParams({short_name:GCOV_COLLECTION,page_size:'100',sort_key:'-start_date',point:`${lon},${lat}`}).toString();
   try{
    const r=await fetcher(query,{signal:AbortSignal.timeout(20000)});if(!r.ok)throw Error();
    const body=await r.json();if(!Array.isArray(body.feed?.entry))throw Error();
@@ -27,7 +28,7 @@ export function coverageRouter(fetcher:typeof fetch=fetch){
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date))||new Date(date).toISOString().slice(0,10)!==date){res.status(400).json({error:'Choose a valid acquisition date (YYYY-MM-DD).'});return;}
   const hit=cache.get(date);if(hit&&Date.now()-hit.at<300000){res.json(hit.data);return;}
   if(Date.now()<next){res.status(429).json({error:'Wait a moment, then retry coverage discovery.'});return;}next=Date.now()+1500;
-  const collection='NISAR_L2_GCOV_PROVISIONAL_V1',query=new URL('https://cmr.earthdata.nasa.gov/search/granules.json');
+  const collection=GCOV_COLLECTION,query=new URL('https://cmr.earthdata.nasa.gov/search/granules.json');
   query.search=new URLSearchParams({short_name:collection,page_size:'100',sort_key:'-start_date',temporal:`${date}T00:00:00Z,${date}T23:59:59Z`}).toString();
   try{
    const r=await fetcher(query,{signal:AbortSignal.timeout(20000)});if(!r.ok)throw Error('Catalog unavailable');

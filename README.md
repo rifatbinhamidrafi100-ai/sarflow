@@ -163,3 +163,8 @@ Save 4K Earth PNG renders a separate 3840 ? 2160 map, then adds a 160-pixel attr
 ### Experimental Brahmaputra water candidates
 
 Open `/water`. Read [WATER_WORKFLOW.md](WATER_WORKFLOW.md) for project-local Python setup, measurement registration, GCOV/terrain-mask rules, bounded server jobs and exports. No real calibrated input series is bundled; the empty state is intentional. Software fixtures and browser tests are not real-event validation.
+
+
+## Automatic updates and persistent processing
+
+The selected radar location now checks NASA automatically and preserves earlier observations on failure. The optional persistent Python worker, collection policy, independent-reference evaluation and gated publication are documented in [Automatic monitoring](docs/automatic-monitoring.md). Calibrated ingestion and scientific publication require a separately connected processing host, manual Earthdata access and independently reviewed references; browser updates alone do not establish event detections.

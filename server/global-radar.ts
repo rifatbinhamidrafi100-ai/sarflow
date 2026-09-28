@@ -1,18 +1,21 @@
 import { Router } from 'express';
 import { observatorySchema } from '../shared/observatory.js';
+import { GCOV_COLLECTION, GCOV_LAYER, acquisitionDate } from '../shared/collection-policy.js';
 export function globalRadarRouter(fetcher:typeof fetch=fetch){
  const router=Router(),cache=new Map<string,{at:number;data:unknown}>();let next=0;
  router.get('/',async(req,res)=>{
   const lat=Number(req.query.lat),lon=Number(req.query.lon);
   if(typeof req.query.lat!=='string'||typeof req.query.lon!=='string'||!req.query.lat.trim()||!req.query.lon.trim()||!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>84.8||Math.abs(lon)>179.8){res.status(400).json({error:'Choose latitude −84.8 to 84.8 and longitude −179.8 to 179.8.'});return;}
-  const key=`${lat.toFixed(4)},${lon.toFixed(4)}`,hit=cache.get(key);if(hit&&Date.now()-hit.at<300000){res.json(hit.data);return;}
+  const requestedGroup=req.query.group;
+  if(requestedGroup!==undefined&&(typeof requestedGroup!=='string'||!/^\w{1,15}(?:_\w{1,15}){4}$/.test(requestedGroup))){res.status(400).json({error:'Invalid acquisition group.'});return;}
+  const key=`${lat.toFixed(4)},${lon.toFixed(4)},${requestedGroup??''}`,hit=cache.get(key);if(hit&&Date.now()-hit.at<300000){res.json(hit.data);return;}
   if(Date.now()<next){res.status(429).json({error:'Wait a moment and retry radar discovery.'});return;}next=Date.now()+1500;
   try{
-   const collection='NISAR_L2_GCOV_PROVISIONAL_V1',layer='NISAR_L2_Geocoded_Polarimetric_Covariance';
+   const collection=GCOV_COLLECTION,layer=GCOV_LAYER;
    const query=new URL('https://cmr.earthdata.nasa.gov/search/granules.json');query.search=new URLSearchParams({short_name:collection,page_size:'100',sort_key:'-start_date',point:`${lon},${lat}`}).toString();
    const r=await fetcher(query,{signal:AbortSignal.timeout(20000)});if(!r.ok)throw Error('Catalog unavailable');const body=await r.json();if(!Array.isArray(body.feed?.entry))throw Error('Invalid catalog');
-   const groups=new Map<string,any[]>();for(const e of body.feed.entry){if(typeof e.title!=='string'||typeof e.time_start!=='string'||!/^G\d+-ASF$/.test(e.id))continue;const k=e.title.split('_').slice(5,10).join('_'),g=groups.get(k)??[];if(!g.some(x=>x.time_start.slice(0,10)===e.time_start.slice(0,10)))g.push(e);groups.set(k,g);}
-   const selected=[...groups.values()].filter(g=>g.length>=2).sort((a,b)=>b[0].time_start.localeCompare(a[0].time_start))[0];
+   const groups=new Map<string,any[]>();for(const e of body.feed.entry){if(typeof e.title!=='string'||!acquisitionDate(e.time_start)||!/^G\d+-ASF$/.test(e.id))continue;const k=e.title.split('_').slice(5,10).join('_');if(e.title.split('_').length<11)continue;const g=groups.get(k)??[];if(!g.some(x=>x.time_start.slice(0,10)===e.time_start.slice(0,10)))g.push(e);groups.set(k,g);}for(const group of groups.values())group.sort((a,b)=>b.time_start.localeCompare(a.time_start));
+   const selected=[...groups.entries()].filter(([key,g])=>g.length>=2&&(!requestedGroup||key===requestedGroup)).map(([,g])=>g).sort((a,b)=>b[0].time_start.localeCompare(a[0].time_start))[0];
    if(!selected){res.json({empty:true,noObservations:body.feed.entry.length===0,message:'No repeat NISAR observation pair was found in the latest 100 matching catalog records. Try another location.',query:query.toString()});return;}
    const bounds=[lon-.15,lat-.15,lon+.15,lat+.15];
    const observations=selected.slice(0,8).reverse().map(e=>{

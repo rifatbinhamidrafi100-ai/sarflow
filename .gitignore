@@ -16,3 +16,7 @@ __pycache__/
 data/water-inputs/
 *.pem
 *.key
+data/monitoring/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

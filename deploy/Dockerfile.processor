@@ -1,0 +1,14 @@
+FROM python:3.12-slim
+WORKDIR /app
+COPY scripts/water-requirements.txt scripts/water-requirements.txt
+COPY processor/requirements.txt processor/requirements.txt
+RUN pip install --no-cache-dir -r processor/requirements.txt
+COPY scripts/gcov_reader.py scripts/water_algorithm.py scripts/water_pipeline.py scripts/
+COPY processor/ processor/
+COPY shared/collection-policy.json shared/collection-policy.json
+RUN useradd --uid 10001 --create-home processor && mkdir -p /var/lib/sarflow && chown processor:processor /var/lib/sarflow
+USER processor
+EXPOSE 8090
+HEALTHCHECK --interval=60s --timeout=5s CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8090/health', timeout=4)"
+ENTRYPOINT ["python", "-m", "processor.service"]
+CMD ["--bind", "0.0.0.0", "--storage", "/var/lib/sarflow"]

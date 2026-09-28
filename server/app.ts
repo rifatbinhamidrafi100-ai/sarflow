@@ -9,6 +9,7 @@ import { placesRouter } from './places.js';
 import { globalRadarRouter } from './global-radar.js';
 import { coverageRouter } from './coverage.js';
 import { waterRouter } from './water.js';
+import { monitoringRouter } from './monitoring.js';
 
 export function createApp(options:{discover?:typeof discover;datasets?:Dataset[];production?:boolean}={}){
  const app=express();app.disable('x-powered-by');
@@ -16,6 +17,7 @@ export function createApp(options:{discover?:typeof discover;datasets?:Dataset[]
  app.use('/api/global-radar',globalRadarRouter());
  app.use('/api/coverage',coverageRouter());
  app.use('/api/water',waterRouter());
+ app.use('/api/monitoring',monitoringRouter());
  app.use((_req,res,next)=>{res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');res.setHeader('X-Frame-Options','DENY');next();});
  app.get('/api/health',(_req,res)=>res.json({status:'ok',version:'1.0.0'}));
  app.get('/api/observatory',(_req,res)=>{

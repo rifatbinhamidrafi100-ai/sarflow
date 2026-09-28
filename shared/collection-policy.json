@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "active": "NISAR_L2_GCOV_PROVISIONAL_V1",
+  "reviewed": ["NISAR_L2_GCOV_PROVISIONAL_V1"],
+  "retired": ["NISAR_L2_GCOV_BETA_V1"],
+  "readerSpecifications": ["1.2.1"],
+  "provider": "ASF",
+  "pattern": "NISAR_L2_GCOV*",
+  "gibsLayer": "NISAR_L2_Geocoded_Polarimetric_Covariance",
+  "reviewedOn": "2026-09-28"
+}

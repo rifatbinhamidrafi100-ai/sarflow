@@ -2,6 +2,9 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeftRight, ArrowRight, Database, Download as DownloadIcon, Eye, FileText, Layers, MapPin, Pause, Play, Search, ShieldCheck, SkipBack, SkipForward, X } from 'lucide-react';
 import { useObservatory } from '../data/observatory';
+import { useRadarUpdates } from '../data/useRadarUpdates';
+import { appendLiveObservations, updatedSelection } from '../../shared/live-observations';
+import { MonitoringStatus } from '../components/MonitoringStatus';
 import { selectionReport } from '../../shared/observatory';
 import type { Observatory as ObservatoryArchive, Region } from '../../shared/observatory';
 import { date, Download, Empty, External } from '../components/ui';
@@ -19,7 +22,15 @@ export default function Observatory(){
  const region=data?.regions.find(r=>r.id===params.get('region'))??data?.regions.find(r=>r.id==='brahmaputra')??data?.regions[0];
  if(error)return <Empty title="Real observation archive unavailable" retry={retry}>{error} <Link to="/explore">Open the teaching lab</Link></Empty>;
  if(!data||!region)return <div className="empty" role="status">Loading actual NISAR observation archive…</div>;
- return <RegionWorkspace key={region.id} data={data} region={region} choose={id=>setParams({region:id})}/>;
+ return <><LiveRegion key={region.id} data={data} region={region} choose={id=>setParams({region:id})}/><div className="page"><MonitoringStatus/></div></>;
+}
+
+function LiveRegion({data,region,choose}:{data:ObservatoryArchive;region:Region;choose:(id:string)=>void}){
+ const updates=useRadarUpdates(String(region.center[1]),String(region.center[0]),true,region.observations.at(-1)!.title.split('_').slice(5,10).join('_'));
+ const [current,setCurrent]=useState(region);
+ useEffect(()=>{if(updates.data)setCurrent(previous=>appendLiveObservations(data,previous,updates.data));},[data,updates.data]);
+ const merged=current===region?data:{...data,source:'NASA CMR / NASA GIBS - archive with newly discovered dates',regions:data.regions.map(r=>r.id===region.id?current:r)};
+ return <><div className="page" role="status"><p>{updates.busy?'Checking NASA for new dates…':updates.message} {updates.checked&&`Last checked: ${new Date(updates.checked).toLocaleString()}.`}</p><button disabled={updates.busy} onClick={updates.refresh}>Check new dates now</button></div><RegionWorkspace data={merged} region={current} choose={choose}/></>;
 }
 
 export function RegionWorkspace({data,region,choose}:{data:ObservatoryArchive;region:Region;choose:(id:string)=>void}){
@@ -29,6 +40,16 @@ export function RegionWorkspace({data,region,choose}:{data:ObservatoryArchive;re
  const [compare,setCompare]=useState(false),[split,setSplit]=useState(50),[opacity,setOpacity]=useState(1),[footprint,setFootprint]=useState(false);
  const [query,setQuery]=useState(''),[status,setStatus]=useState('Loading observations'),[point,setPoint]=useState<[number,number]|null>(null),[note,setNote]=useState('');
  const [archiveView,setArchiveView]=useState(false);
+ const previousIds=useRef(region.observations.map(f=>f.id));
+ const ids=region.observations.map(f=>f.id).join(',');
+ useEffect(()=>{
+  const next=region.observations.map(f=>f.id),previous=previousIds.current;
+  if(previous.join(',')!==next.join(',')){
+   setIndex(i=>updatedSelection(previous,next,i,true));
+   setReference(i=>updatedSelection(previous,next,i,false));
+   setPlaying(false);previousIds.current=next;
+  }
+ },[ids,region]);
  const evidence=useRef<HTMLDialogElement>(null);
  const frame=region?.observations[Math.min(index,region.observations.length-1)];
  const before=region?.observations[Math.min(reference,region.observations.length-1)];
@@ -59,7 +80,7 @@ export function RegionWorkspace({data,region,choose}:{data:ObservatoryArchive;re
     <div className="obs-map-wrap">{archiveView?<ArchiveCompare frame={frame} before={before} compare={compare} split={split} mode={studio} onStatus={setStatus}/>:<Suspense fallback={<div className="empty">Loading the geographic canvas…</div>}><ObservationMap region={region} frame={frame} before={before} compare={compare} mode={studio} split={studio==='split'?50:split} opacity={opacity} footprint={footprint} onStatus={setStatus} onPoint={setPoint}/></Suspense>}<div className="obs-image-label"><span className="real-pill">Actual NISAR imagery</span><strong key={`${frame.id}-${compare}`}>{compare?`${date(before.date)} / ${date(frame.date)}`:date(frame.date)}</strong><span>False-color visualization · not optical imagery</span></div><div className="obs-north" aria-hidden="true">N ↑</div><div className="obs-coordinates">{archiveView?`Archived bounds: ${region.bounds.join(', ')}`:point?`${point[1].toFixed(5)}°, ${point[0].toFixed(5)}°`:'Click anywhere on the map to inspect coordinates'}</div></div>
     {compare&&<div className="real-compare-controls"><label>Studio mode<select aria-label="Comparison studio mode" value={studio} onChange={e=>setStudio(e.target.value as typeof studio)}><option value="swipe">Swipe</option><option value="split">Split screen</option><option value="opacity">Opacity blend</option></select></label><label>Reference date<select aria-label="Reference acquisition" value={reference} onChange={e=>setReference(Number(e.target.value))}>{region.observations.map((f,i)=><option key={f.id} value={i}>{date(f.date)}</option>)}</select></label><label>{studio==='opacity'?'After image opacity':'Swipe comparison'}<input disabled={studio==='split'} type="range" aria-label="Real imagery swipe" min="0" max="100" value={split} onChange={e=>setSplit(Number(e.target.value))}/></label><span className="tiny">Left / base: reference date. Right / overlay: selected date. {archiveView?'Fixed archived bounds.':'Shared zoom and pan.'}<br/>{reference===index?'Same acquisition selected on both sides.':'Visual comparison only; no numerical detection.'}</span></div>}
     <div className="obs-play-progress" data-running={playing&&status.endsWith('imagery loaded')} aria-hidden="true"><span key={`${index}-${playing}-${status}-${speed}`} style={{animationDuration:`${2200/speed}ms`}}/></div><div className="observation-timebar"><div className="obs-player"><button aria-label="Previous acquisition" disabled={index===0} onClick={()=>{setPlaying(false);setIndex(index-1);}}><SkipBack size={16}/></button><button className="primary" aria-label={playing?'Pause observations':'Play observations'} onClick={()=>{if(!playing&&index===region.observations.length-1)setIndex(0);setCompare(false);setPlaying(!playing);}}>{playing?<Pause size={17}/>:<Play size={17}/>}</button><button aria-label="Next acquisition" disabled={index===region.observations.length-1} onClick={()=>{setPlaying(false);setIndex(index+1);}}><SkipForward size={16}/></button><select aria-label="Observation playback speed" value={speed} onChange={e=>setSpeed(Number(e.target.value))}><option value="0.5">0.5×</option><option value="1">1×</option><option value="2">2×</option></select></div><div className="real-timeline"><input type="range" aria-label="Real acquisition timeline" min="0" max={region.observations.length-1} value={index} onChange={e=>{setPlaying(false);setIndex(Number(e.target.value));}}/><div>{region.observations.map((f,i)=><button key={f.id} className={i===index?'selected':''} onClick={()=>{setPlaying(false);setIndex(i);}}>{date(f.date)}</button>)}</div></div><span className="obs-frame-number">{index+1}<small>/ {region.observations.length}</small></span></div>
-    <div className="observation-status"><span role="status"><i/>{status}</span><span>NASA GIBS / ASF · {frame.sha256?'archived':'queried'} {date(data.retrieved)}</span><button onClick={()=>evidence.current?.showModal()}>View processing & source<FileText size={13}/></button></div>
+    <div className="observation-status"><span role="status"><i/>{status}</span><span>NASA GIBS / ASF · {frame.sha256?'archived':'queried'} {date(frame.retrieved??data.retrieved)}</span><button onClick={()=>evidence.current?.showModal()}>View processing & source<FileText size={13}/></button></div>
    </section>
   </div>
   <ChangeTracker region={region} before={reference} after={index} onCompare={(a,b)=>{setPlaying(false);setReference(a);setIndex(b);setCompare(true);setLens('comparison');}}/>

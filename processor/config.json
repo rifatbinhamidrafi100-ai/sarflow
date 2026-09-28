@@ -1,0 +1,17 @@
+{
+  "intervalSeconds": 21600,
+  "lookbackDays": 365,
+  "maxPages": 5,
+  "pageSize": 100,
+  "maxDownloadsPerCycle": 4,
+  "maxFileBytes": 12000000000,
+  "maxStorageBytes": 80000000000,
+  "processTimeoutSeconds": 900,
+  "windowPixels": 256,
+  "locations": [
+    {"id":"seattle","name":"Puget Sound","lon":-122.33,"lat":47.6},
+    {"id":"brahmaputra","name":"Brahmaputra floodplain","lon":89.72,"lat":25.15},
+    {"id":"sacramento","name":"Sacramento Valley","lon":-121.8,"lat":39.0},
+    {"id":"nepal-rasuwa","name":"Rasuwa, Nepal","lon":85.3,"lat":28.0}
+  ]
+}

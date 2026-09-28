@@ -1,9 +1,10 @@
 import fs from 'node:fs/promises';
 import crypto from 'node:crypto';
+const policy=JSON.parse(await fs.readFile(new URL('../shared/collection-policy.json',import.meta.url),'utf8'));
 
 // Explicit event window; leave the other archived regions unchanged.
 const region={id:'nepal-rasuwa',name:'Rasuwa river corridor',country:'Nepal',topic:'August 2026 flood investigation',center:[85.3,28.0],bounds:[85.05,27.75,85.55,28.4],description:'Inspect the Rasuwa mountain river corridor around the reported 26 August 2026 flood. These browse images do not establish flood extent, depth, damage, or cause.'};
-const query='https://cmr.earthdata.nasa.gov/search/granules.json?short_name=NISAR_L2_GCOV_PROVISIONAL_V1&page_size=100&sort_key=-start_date&point=85.3,28.0&temporal=2026-08-01T00:00:00Z,2026-09-20T23:59:59Z';
+const query=`https://cmr.earthdata.nasa.gov/search/granules.json?short_name=${policy.active}&page_size=100&sort_key=-start_date&point=85.3,28.0&temporal=2026-08-01T00:00:00Z,2026-09-20T23:59:59Z`;
 const response=await fetch(query,{signal:AbortSignal.timeout(30000)});
 if(!response.ok)throw Error(`CMR HTTP ${response.status}`);
 const {feed}=await response.json();

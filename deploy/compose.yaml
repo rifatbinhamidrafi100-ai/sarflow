@@ -1,0 +1,24 @@
+services:
+  processor:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.processor
+    init: true
+    ports:
+      - "127.0.0.1:8090:8090"
+    volumes:
+      - sarflow-data:/var/lib/sarflow
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 4g
+    cpus: 2
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+    # Explicit operator start; no hidden host startup installation or credentials.
+volumes:
+  sarflow-data:

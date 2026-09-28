@@ -1,0 +1,2 @@
+-r ../scripts/water-requirements.txt
+earthaccess>=0.15,<0.17
