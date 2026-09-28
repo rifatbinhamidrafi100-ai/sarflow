@@ -8,7 +8,7 @@ from collections import defaultdict
 from datetime import datetime,timedelta,timezone
 from pathlib import Path
 from . import catalog
-from .ingest import download, inspect, AuthenticationRequired, file_hash, storage_used
+from .ingest import download, inspect, AuthenticationRequired, DownloadUnavailable, StorageLimit, file_hash, storage_used
 from .store import now
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -171,6 +171,12 @@ def cycle(store, config, policy, ingest=False, session=None, fetch=catalog.get_j
             except AuthenticationRequired:
                 store.update(row,state='authentication-required',message='Manual Earthdata sign-in required')
                 store.location(loc,'authentication-required','Manual Earthdata sign-in required for calibrated downloads')
+            except StorageLimit:
+                store.update(row,state='retry',message='Download/storage limit reached; waiting for capacity or operator review')
+                store.location(loc,'storage-limit','Download/storage budget reached; operator review required')
+                break
+            except DownloadUnavailable:
+                store.update(row,state='retry',message='Temporary download failure; retry next cycle')
             except (ValueError,KeyError,OSError):
                 store.update(row,state='rejected',message='Measurement unavailable, over budget or incompatible; operator review required')
             except Exception:

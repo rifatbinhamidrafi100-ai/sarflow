@@ -131,6 +131,12 @@ class MonitoringTests(unittest.TestCase):
         self.assertIn('NISAR_L2_GCOV_NEW', status['collections']['unreviewed'])
         self.assertNotIn('url', json.dumps(status))
 
+    def test_transient_and_storage_download_failures_remain_retryable(self):
+        for error in (ingest.DownloadUnavailable('temporary'),ingest.StorageLimit('capacity')):
+            with patch.object(worker,'download',side_effect=error):
+                worker.cycle(self.store,self.config,self.policy,ingest=True,fetch=self.fetch)
+            self.assertEqual(self.store.pending('fixture',10)[0]['state'],'retry')
+
     def test_compatibility_signature_and_missing_baseline(self):
         self.ready_fixtures()
         rows = self.store.ready('fixture')

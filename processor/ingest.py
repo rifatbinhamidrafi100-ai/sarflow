@@ -5,7 +5,7 @@ import shutil
 import sys
 import time
 from pathlib import Path
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 import h5py
 import numpy as np
@@ -17,6 +17,14 @@ from gcov_reader import metadata, acquisition, coordinates, file_hash, BASE
 
 
 class AuthenticationRequired(Exception):
+    pass
+
+
+class DownloadUnavailable(Exception):
+    pass
+
+
+class StorageLimit(Exception):
     pass
 
 
@@ -36,7 +44,7 @@ def download(url, target, root, config, session=None):
     if not safe_download_url(url):raise ValueError('No unambiguous approved HDF5 data link')
     target=Path(target);target.parent.mkdir(parents=True,exist_ok=True)
     remaining=min(config['maxFileBytes'],config['maxStorageBytes']-storage_used(root),shutil.disk_usage(root).free-1_000_000_000)
-    if remaining<=0:raise ValueError('Storage budget reached; operator archival required')
+    if remaining<=0:raise StorageLimit('Storage budget reached; operator archival required')
     part=target.with_suffix('.part');size=0;deadline=time.monotonic()+1800
     try:
         if session is None:
@@ -47,24 +55,28 @@ def download(url, target, root, config, session=None):
             response=session.get(url,stream=True,timeout=60,allow_redirects=False)
             if response.status_code in (301,302,303,307,308,401,403):
                 response.close();raise AuthenticationRequired('Authorized download session is unavailable')
-            response.raise_for_status()
+            if response.status_code>=400:
+                response.close();raise DownloadUnavailable('NASA file download unavailable')
         with response:
             length=response.headers.get('Content-Length')
-            if length and int(length)>remaining:raise ValueError('Product exceeds configured download/storage limit')
+            if length and int(length)>remaining:raise StorageLimit('Product exceeds configured download/storage limit')
             if 'html' in response.headers.get('Content-Type','').lower():raise AuthenticationRequired('Manual Earthdata sign-in required')
             with part.open('wb') as f:
                 chunks=response.iter_content(1024*1024) if session is not None else iter(lambda:response.read(1024*1024),b'')
                 for chunk in chunks:
                     size+=len(chunk)
-                    if size>remaining or time.monotonic()>deadline:raise ValueError('Download exceeded byte/time budget')
+                    if size>remaining:raise StorageLimit('Download exceeded byte budget')
+                    if time.monotonic()>deadline:raise DownloadUnavailable('Download exceeded time budget')
                     f.write(chunk)
-            if length and int(length)!=size:raise ValueError('Incomplete download')
+            if length and int(length)!=size:raise DownloadUnavailable('Incomplete download')
         if not h5py.is_hdf5(part):raise ValueError('Downloaded response is not an HDF5 measurement')
         part.replace(target)
         return file_hash(target)
     except HTTPError as e:
         if e.code in (401,403):raise AuthenticationRequired('Manual Earthdata sign-in required') from None
-        raise ValueError('NASA file download unavailable') from None
+        raise DownloadUnavailable('NASA file download unavailable') from None
+    except (URLError,TimeoutError,ConnectionError):
+        raise DownloadUnavailable('NASA file download unavailable') from None
     finally:
         if part.exists():part.unlink()
 
