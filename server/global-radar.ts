@@ -32,7 +32,7 @@ export function globalRadarRouter(fetcher: typeof fetch = fetch) {
       res.status(400).json({ error: 'Invalid acquisition group.' });
       return;
     }
-    const key = `${lat.toFixed(4)},${lon.toFixed(4)},${requestedGroup ?? ''}`,
+    const key = `${lat},${lon},${requestedGroup ?? ''}`,
       hit = cache.get(key);
     if (hit && Date.now() - hit.at < 300000) {
       res.json(hit.data);

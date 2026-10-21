@@ -609,7 +609,18 @@ export function RegionWorkspace({
                   opacity={opacity}
                   footprint={footprint}
                   studyArea={studyArea}
-                  onStatus={setStatus}
+                  onStatus={(next) => {
+                    setStatus(next);
+                    if (next.endsWith('unavailable')) setPlaying(false);
+                  }}
+                  onPrevious={
+                    index > 0
+                      ? () => {
+                          setPlaying(false);
+                          setIndex((value) => value - 1);
+                        }
+                      : undefined
+                  }
                   onPoint={setPoint}
                   referenceData={externalReference}
                   referenceFocus={referenceFocus}
@@ -617,7 +628,11 @@ export function RegionWorkspace({
               </Suspense>
             )}
             <div className="obs-image-label">
-              <span className="real-pill">Actual NISAR imagery</span>
+              <span className="real-pill">
+                {status === 'Browse coverage unavailable'
+                  ? 'No browse pixels for this date'
+                  : 'Actual NISAR imagery'}
+              </span>
               <strong key={`${frame.id}-${compare}`}>
                 {compare ? `${date(before.date)} / ${date(frame.date)}` : date(frame.date)}
               </strong>

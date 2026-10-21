@@ -1,7 +1,17 @@
 import * as ml from 'maplibre-gl';
+import { basemaps, placeLabels, type Basemap } from '../../shared/basemaps';
+
+export function exportCameraZoom(viewZoom: number, viewWidth: number): number {
+  if (viewWidth <= 0) throw Error('Open the map before exporting its view.');
+  return viewZoom + Math.log2(3840 / viewWidth);
+}
 
 /** Re-render the current center/projection at output resolution; never upscale a screenshot. */
-export async function exportEarth(source: ml.Map): Promise<void> {
+export async function exportEarth(
+  source: ml.Map,
+  basemap: Basemap = basemaps.sentinel,
+  labels = false,
+): Promise<void> {
   const host = document.createElement('div');
   Object.assign(host.style, {
     position: 'fixed',
@@ -15,15 +25,15 @@ export async function exportEarth(source: ml.Map): Promise<void> {
   let output: ml.Map | undefined;
   try {
     const style = source.getStyle();
-    const zoom = Math.min(
-      14,
-      source.getZoom() + Math.log2(3840 / source.getContainer().clientWidth),
-    );
+    // Preserve horizontal extent. Native raster limits belong to the sources,
+    // not the camera: clamping here silently zooms out a close-up export.
+    const zoom = exportCameraZoom(source.getZoom(), source.getContainer().clientWidth);
     output = new ml.Map({
       container: host,
       style,
       center: source.getCenter(),
       zoom,
+      maxZoom: Math.max(24, zoom),
       bearing: source.getBearing(),
       pitch: source.getPitch(),
       pixelRatio: 1,
@@ -60,12 +70,13 @@ export async function exportEarth(source: ml.Map): Promise<void> {
     ctx.fillRect(0, 2160, 3840, 160);
     ctx.fillStyle = '#fff';
     ctx.font = '24px sans-serif';
-    [
-      'SARFlow | 3840 × 2160 map render | 2024 optical mosaic, not NISAR or live imagery',
+    const lines = [
+      `SARFlow | 3840 × 2160 map render | ${basemap.name}, not NISAR or live imagery`,
       `Center ${source.getCenter().lat.toFixed(5)}, ${source.getCenter().wrap().lng.toFixed(5)} | Detail is limited by source imagery`,
-      'Sentinel-2 cloudless https://s2maps.eu by EOX IT Services GmbH https://eox.at',
-      'Contains modified Copernicus Sentinel data 2024 | CC BY-NC-SA 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/',
-    ].forEach((line, i) => ctx.fillText(line, 28, 2194 + i * 34));
+      ...basemap.exportAttribution,
+      ...(labels ? [placeLabels.attribution] : []),
+    ];
+    lines.forEach((line, i) => ctx.fillText(line, 28, 2187 + i * 29, 3784));
     const blob = await new Promise<Blob>((resolve, reject) =>
       canvas.toBlob((b) => (b ? resolve(b) : reject(Error('PNG encoding failed.'))), 'image/png'),
     );

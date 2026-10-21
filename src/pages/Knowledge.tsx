@@ -4,6 +4,11 @@ import { External } from '../components/ui';
 import { nepalEvent } from '../../shared/nepal-event';
 export const sources = [
   [
+    'Esri World Imagery',
+    'https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9',
+    'Detailed optical basemap with mixed acquisition dates; source credits and Esri terms apply. Not NISAR measurements.',
+  ],
+  [
     'EOX world imagery and attribution',
     'https://maps.eox.at/',
     'Sentinel-2 cloudless optical context, service terms, and attribution.',

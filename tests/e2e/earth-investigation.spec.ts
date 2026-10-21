@@ -5,7 +5,7 @@ const archive=JSON.parse(readFileSync('public/data/observatory.json','utf8'));
 const fixture=readFileSync('public/observations/nepal-rasuwa-thumbnail.png');
 test('globe → location → acquisitions → previous comparison → receipts',async({page})=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
- await page.route('https://tiles.maps.eox.at/**',r=>r.fulfill({contentType:'image/png',body:fixture}));
+ await page.route(/^https:\/\/(?:tiles\.maps\.eox\.at|services\.arcgisonline\.com)\//,r=>r.fulfill({contentType:'image/png',body:fixture}));
  await page.route('**/api/global-radar?*',r=>r.fulfill({json:{...archive,regions:[archive.regions[0]]}}));
  await page.route('**/api/coverage/dates?*',r=>r.fulfill({json:{dates:[archive.regions[0].observations[0].date]}}));
  const frame=archive.regions[0].observations[0];
@@ -27,7 +27,7 @@ test('globe → location → acquisitions → previous comparison → receipts',
  await page.getByLabel('World latitude').fill('0');await expect(page.getByRole('button',{name:'Play observations'})).toHaveCount(0);expect(errors).toEqual([]);
 });
 test('empty and failed location discovery retain honest recovery states',async({page})=>{
- await page.route('https://tiles.maps.eox.at/**',r=>r.fulfill({contentType:'image/png',body:fixture}));
+ await page.route(/^https:\/\/(?:tiles\.maps\.eox\.at|services\.arcgisonline\.com)\//,r=>r.fulfill({contentType:'image/png',body:fixture}));
  await page.route('**/api/global-radar?*',r=>r.fulfill({json:{empty:true,noObservations:true,message:'No matching records in this collection.'}}));
  await page.goto('/world');await page.getByRole('button',{name:'Discover observations here'}).click();await expect(page.getByText(/NO OBSERVATION AVAILABLE FOR THIS LOCATION/)).toBeVisible();await expect(page.getByRole('button',{name:'Play observations'})).toHaveCount(0);
  await page.unroute('**/api/global-radar?*');await page.route('**/api/global-radar?*',r=>r.fulfill({status:502,json:{error:'NASA catalog temporarily unavailable'}}));await page.getByRole('button',{name:'Discover observations here'}).click();await expect(page.getByRole('button',{name:'Retry observation discovery'})).toBeVisible();

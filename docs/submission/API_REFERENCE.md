@@ -1,6 +1,6 @@
 # API and data-source reference
 
-Audited October 20, 2026. Active integration means there is an implementation in the source; it does not guarantee an upstream service is always reachable or coverage exists at every coordinate.
+Updated October 22, 2026. Active integration means there is an implementation in the source; it does not guarantee an upstream service is always reachable or coverage exists at every coordinate.
 
 ## External services used
 
@@ -9,6 +9,8 @@ Audited October 20, 2026. Active integration means there is an implementation in
 | NASA CMR | `https://cmr.earthdata.nasa.gov/search/granules.json`; Python also uses `/search/collections.json` | Public catalogue metadata; collection `NISAR_L2_GCOV_PROVISIONAL_V1`; identifiers, dates and footprints, not calibrated pixels | No key in current public discovery requests | `server/catalog.ts`, `server/global-radar.ts`, `server/coverage.ts`, `server/place-observatory.ts`, `processor/catalog.py` |
 | NASA GIBS WMS | `https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi`; `NISAR_L2_Geocoded_Polarimetric_Covariance` | Dated NISAR RGB browse imagery; visualization only | No key in current browse requests | `server/global-radar.ts`, `server/coverage.ts`, archive scripts and `public/data/observatory.json` |
 | EOX Sentinel-2 cloudless | `https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/g/{z}/{y}/{x}.jpg` | Fixed 2024 optical mosaic background, not NISAR or a current observation | No key in the configured URL | `src/pages/World.tsx` |
+| Esri World Imagery | `https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}` | Detailed optical background; dates, sources and resolution vary geographically; visualization only | Public service verified October 22; no key in configured URL; source terms apply | `shared/basemaps.ts`, `src/pages/World.tsx` |
+| Esri reference labels | `https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}` | Optional geographic labels over the optical background | Public service; Esri/HERE/Garmin/OSM attribution applies | `shared/basemaps.ts` |
 | Open-Meteo geocoding | `https://geocoding-api.open-meteo.com/v1/search` | Place-name search; GeoNames-based geographic context, not weather measurements | No key in current requests | `server/places.ts` |
 | OSM Nominatim | `https://nominatim.openstreetmap.org/reverse` | Reverse-geocoded place label | No key; upstream request pacing applies | `server/places.ts` |
 | OpenStreetMap tiles | `https://tile.openstreetmap.org/{z}/{x}/{y}.png` | Optional street-map background | No key; tile policy applies | `src/components/GeoMap.tsx` |
@@ -17,13 +19,15 @@ CMR product records link to `https://cmr.earthdata.nasa.gov/search/concepts/{con
 
 GIBS requests use WMS 1.1.1 `GetMap`, `SRS=EPSG:4326`, `BBOX`, `TIME`, width, height and PNG output. Requested raster dimensions are display dimensions, not claims about instrument ground resolution. No quantitative backscatter or water area is derived from RGB browse colors.
 
+The geographic viewer checks the returned image's alpha channel before rendering it. A successful HTTP response can contain only transparent pixels even when CMR lists an acquisition. That state is shown as unavailable browse coverage, with a previous-observation action; it does not mean no change occurred. Esri native requests are capped at level 19 and request `blankTile=false`, so missing tiles are reported rather than silently presented as valid imagery.
+
 ## Static external data and optional access
 
 - `public/data/observatory.json`: 15 archived NISAR browse scenes across Puget Sound, Brahmaputra, Sacramento and Rasuwa. These are bundled files with source provenance, not a continuously rewritten archive. Original PNG and lossless WebP display derivatives remain distinguishable.
 - `public/data/references/rasuwa-emsr927.json`: imported Copernicus EMSR927 AOI01 GRA PRODUCT v1 reference. The source is optical interpretation of a mass-movement event, dated August 27, 2026. It is not a live EMS API, a flood mask, field verification or SARFlow's own detection. [Reference source](https://ihp-wins.unesco.org/en/dataset/damage-grading-syapru-besi-and-timure-rasuwa-district-nepal-27-august-2026), [official activation](https://mapping.emergency.copernicus.eu/activations/EMSR927/).
 - `public/data/image-source.json`: static NASA/JPL-Caltech mission-context imagery, separate from analysis inputs.
 - Natural Earth land context and bundled Inter font: static assets; retain attribution and font license.
-- Optional calibrated download: Python `earthaccess` can access approved Earthdata/ASF products after manual interactive sign-in, without persisting credentials. No successful actual calibrated processing run is established here. Do not place credentials in the app, source ZIP or submission.
+- Optional calibrated download: Python `earthaccess` can access approved Earthdata/ASF products after manual interactive sign-in, without persisting credentials. One quality-masked, single-acquisition reader check is documented in `public/data/reader-verification.json`. No real two-date calibrated comparison or flood validation is established. Do not place credentials in the app, source ZIP or submission.
 
 ## Services not connected as measurement APIs
 

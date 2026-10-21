@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import * as ml from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -10,10 +10,8 @@ import { exportEarth } from '../components/exportEarth';
 import WorldLayers, { type WorldObservationState } from '../components/WorldLayers';
 import LocationInvestigation from '../components/LocationInvestigation';
 import type { ObservationSelection } from './Observatory';
+import { basemaps, placeLabels, type BasemapId } from '../../shared/basemaps';
 ml.setWorkerUrl(workerUrl);
-const tile = 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/g/{z}/{y}/{x}.jpg';
-const attribution =
-  '<a href="https://s2maps.eu">Sentinel-2 cloudless</a> by <a href="https://eox.at">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data 2024) · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>';
 type Place = {
   id: number;
   name: string;
@@ -23,6 +21,32 @@ type Place = {
   admin1?: string;
 };
 export default function World() {
+  const [params] = useSearchParams();
+  const [initialView] = useState(() => {
+    const latitude = Number(params.get('lat'));
+    const longitude = Number(params.get('lon'));
+    const hasPoint =
+      params.has('lat') &&
+      params.has('lon') &&
+      Number.isFinite(latitude) &&
+      Math.abs(latitude) <= 85 &&
+      Number.isFinite(longitude) &&
+      Math.abs(longitude) <= 180;
+    const requestedZoom = Number(params.get('zoom') ?? 16);
+    return {
+      center: (hasPoint ? [longitude, latitude] : [30, 20]) as [number, number],
+      zoom:
+        hasPoint && Number.isFinite(requestedZoom) ? Math.max(1, Math.min(20, requestedZoom)) : 1.4,
+      latitude: hasPoint ? String(latitude) : '28',
+      longitude: hasPoint ? String(longitude) : '85.3',
+    };
+  });
+  const [basemap, setBasemap] = useState<BasemapId>('satellite');
+  const [labels, setLabels] = useState(true);
+  const base = basemaps[basemap];
+  const background = useRef({ basemap, labels });
+  background.current = { basemap, labels };
+  const imageryFailed = useRef(false);
   const [hd, setHd] = useState(true),
     [exporting, setExporting] = useState(false),
     [exportMessage, setExportMessage] = useState('');
@@ -52,10 +76,14 @@ export default function World() {
     [results, setResults] = useState<Place[]>([]),
     [searchStatus, setSearchStatus] = useState(''),
     [searching, setSearching] = useState(false);
-  const [lat, setLat] = useState('28'),
-    [lon, setLon] = useState('85.3'),
+  const [lat, setLat] = useState(initialView.latitude),
+    [lon, setLon] = useState(initialView.longitude),
     [coordinateError, setCoordinateError] = useState(''),
-    [view, setView] = useState({ longitude: 30, latitude: 20, zoom: 1.4 });
+    [view, setView] = useState({
+      longitude: initialView.center[0],
+      latitude: initialView.center[1],
+      zoom: initialView.zoom,
+    });
   const [namedLocation, setNamedLocation] = useState<{
     name: string;
     latitude: number;
@@ -114,7 +142,7 @@ export default function World() {
     setReady(false);
     setError('');
     setStatus('Loading world imagery');
-    let failed = false;
+    imageryFailed.current = false;
     const timeout = setTimeout(() => {
       if (!canceled) {
         setError('Imagery is taking too long to load. Retry the connection.');
@@ -125,12 +153,13 @@ export default function World() {
     try {
       m = new ml.Map({
         container: container.current,
-        center: camera.current?.center ?? [30, 20],
-        zoom: camera.current?.zoom ?? 1.4,
+        center: camera.current?.center ?? initialView.center,
+        zoom: camera.current?.zoom ?? initialView.zoom,
         bearing: camera.current?.bearing ?? 0,
         pitch: camera.current?.pitch ?? 0,
         pixelRatio: hd ? Math.min(3, Math.max(2, window.devicePixelRatio)) : 1,
-        maxZoom: 14,
+        maxZoom: 20,
+        attributionControl: { compact: false },
         canvasContextAttributes: { preserveDrawingBuffer: true },
         style: {
           version: 8,
@@ -138,15 +167,53 @@ export default function World() {
           sources: {
             earth: {
               type: 'raster',
-              tiles: [tile],
-              tileSize: hd ? 128 : 256,
+              tiles: [basemaps.sentinel.tile],
+              tileSize: 256,
               maxzoom: 14,
-              attribution,
+              attribution: basemaps.sentinel.attribution,
+            },
+            satellite: {
+              type: 'raster',
+              tiles: [basemaps.satellite.tile],
+              tileSize: 256,
+              maxzoom: basemaps.satellite.maxZoom,
+              attribution: basemaps.satellite.attribution,
+            },
+            'place-labels': {
+              type: 'raster',
+              tiles: [placeLabels.tile],
+              tileSize: 256,
+              maxzoom: 19,
+              attribution: placeLabels.attribution,
             },
           },
           layers: [
             { id: 'ocean', type: 'background', paint: { 'background-color': '#112a3b' } },
-            { id: 'earth', type: 'raster', source: 'earth', paint: { 'raster-fade-duration': 0 } },
+            {
+              id: 'earth',
+              type: 'raster',
+              source: 'earth',
+              layout: {
+                visibility: background.current.basemap === 'sentinel' ? 'visible' : 'none',
+              },
+              paint: { 'raster-fade-duration': 0 },
+            },
+            {
+              id: 'satellite',
+              type: 'raster',
+              source: 'satellite',
+              layout: {
+                visibility: background.current.basemap === 'satellite' ? 'visible' : 'none',
+              },
+              paint: { 'raster-fade-duration': 0 },
+            },
+            {
+              id: 'place-labels',
+              type: 'raster',
+              source: 'place-labels',
+              layout: { visibility: background.current.labels ? 'visible' : 'none' },
+              paint: { 'raster-fade-duration': 0 },
+            },
           ],
         },
       });
@@ -156,11 +223,34 @@ export default function World() {
       return;
     }
     map.current = m;
+    m.on('style.load', () => {
+      const active = background.current;
+      m.setLayoutProperty(
+        'satellite',
+        'visibility',
+        active.basemap === 'satellite' ? 'visible' : 'none',
+      );
+      m.setLayoutProperty(
+        'earth',
+        'visibility',
+        active.basemap === 'sentinel' ? 'visible' : 'none',
+      );
+      m.setLayoutProperty('place-labels', 'visibility', active.labels ? 'visible' : 'none');
+    });
     setGlobe(camera.current?.globe ?? true);
     m.addControl(new ml.NavigationControl(), 'top-right');
     m.addControl(new ml.ScaleControl(), 'bottom-left');
-    m.on('error', () => {
-      failed = true;
+    m.on('error', (event) => {
+      const active = background.current;
+      const sourceId =
+        'sourceId' in event && typeof event.sourceId === 'string' ? event.sourceId : null;
+      if (
+        sourceId &&
+        sourceId !== (active.basemap === 'satellite' ? 'satellite' : 'earth') &&
+        !(sourceId === 'place-labels' && active.labels)
+      )
+        return;
+      imageryFailed.current = true;
       clearTimeout(timeout);
       setReady(false);
       setError('Some imagery tiles could not load. Retry the connection.');
@@ -180,7 +270,7 @@ export default function World() {
     });
     m.on('idle', () => {
       clearTimeout(timeout);
-      if (!failed) {
+      if (!imageryFailed.current) {
         setReady(true);
         setStatus('World imagery loaded');
         setError('');
@@ -205,6 +295,29 @@ export default function World() {
       map.current = null;
     };
   }, [attempt, hd]);
+  useEffect(() => {
+    const m = map.current;
+    if (!m || !m.getLayer('satellite')) return;
+    imageryFailed.current = false;
+    setError('');
+    setStatus('Loading world imagery');
+    setReady(false);
+    m.setLayoutProperty('satellite', 'visibility', basemap === 'satellite' ? 'visible' : 'none');
+    m.setLayoutProperty('earth', 'visibility', basemap === 'sentinel' ? 'visible' : 'none');
+    m.setLayoutProperty('place-labels', 'visibility', labels ? 'visible' : 'none');
+    const timer = setTimeout(() => {
+      imageryFailed.current = true;
+      setReady(false);
+      setError('Imagery is taking too long to load. Retry or choose another background.');
+      setStatus('Imagery unavailable');
+    }, 20000);
+    const finished = () => clearTimeout(timer);
+    m.once('idle', finished);
+    return () => {
+      clearTimeout(timer);
+      m.off('idle', finished);
+    };
+  }, [basemap, labels, attempt, hd]);
   useEffect(() => () => request.current?.abort(), []);
   useEffect(() => {
     const element = container.current;
@@ -213,7 +326,12 @@ export default function World() {
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
-  function go(latitude: number, longitude: number, zoom = 11, name?: string) {
+  function go(
+    latitude: number,
+    longitude: number,
+    zoom = basemap === 'satellite' ? 18 : 14,
+    name?: string,
+  ) {
     if (
       !Number.isFinite(latitude) ||
       !Number.isFinite(longitude) ||
@@ -284,11 +402,10 @@ export default function World() {
       ctx.fillStyle = '#fff';
       ctx.font = `${Math.max(10, Math.min(18, canvas.width / 60))}px sans-serif`;
       [
-        'SARFlow · 2024 optical mosaic · not NISAR / not live',
+        `SARFlow · ${base.name} · not NISAR / not live`,
         `Center: ${view.latitude}, ${view.longitude}; zoom ${view.zoom}`,
-        'Sentinel-2 cloudless https://s2maps.eu by EOX IT Services GmbH https://eox.at',
-        'Contains modified Copernicus Sentinel data 2024 · CC BY-NC-SA 4.0',
-        'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        ...base.exportAttribution,
+        ...(labels ? [placeLabels.attribution] : []),
       ].forEach((t, i) => ctx.fillText(t, 12, original.height + 23 + i * 23, canvas.width - 24));
       canvas.toBlob((blob) => {
         if (!blob) return;
@@ -371,7 +488,7 @@ export default function World() {
               <button
                 key={p.id}
                 onClick={() =>
-                  go(p.latitude, p.longitude, 11, [p.name, p.country].filter(Boolean).join(', '))
+                  go(p.latitude, p.longitude, 14, [p.name, p.country].filter(Boolean).join(', '))
                 }
               >
                 {p.name}
@@ -385,7 +502,7 @@ export default function World() {
               {recent.map((p) => (
                 <button
                   key={`${p.latitude},${p.longitude}`}
-                  onClick={() => go(p.latitude, p.longitude, 11, p.name)}
+                  onClick={() => go(p.latitude, p.longitude, 14, p.name)}
                 >
                   {p.name}
                 </button>
@@ -395,8 +512,8 @@ export default function World() {
           <section className="world-datasets">
             <h3>Available datasets</h3>
             <div>
-              <strong>Sentinel-2 optical mosaic</strong>
-              <span>2024 · background context</span>
+              <strong>{base.source}</strong>
+              <span>{base.year ?? 'Mixed acquisition dates'} · background context</span>
             </div>
             <div>
               <strong>NISAR radar catalog</strong>
@@ -481,7 +598,7 @@ export default function World() {
                 ['Country', 4],
                 ['Region', 7],
                 ['City', 10],
-                ['Exact location', 14],
+                ['Exact location', basemap === 'satellite' ? 18 : 14],
               ].map(([label, zoom]) => (
                 <button key={label} onClick={() => go(Number(lat), Number(lon), Number(zoom))}>
                   {label}
@@ -519,7 +636,7 @@ export default function World() {
                   disabled={exporting}
                   onChange={(e) => setHd(e.target.value === 'hd')}
                 >
-                  <option value="hd">HD · finer tiles</option>
+                  <option value="hd">HD · sharper rendering</option>
                   <option value="standard">Standard · lower data use</option>
                 </select>
               </label>
@@ -530,7 +647,7 @@ export default function World() {
                   setExporting(true);
                   setExportMessage('Rendering 4K imagery...');
                   try {
-                    await exportEarth(map.current);
+                    await exportEarth(map.current, base, labels);
                     setExportMessage('4K PNG saved with source attribution.');
                   } catch (e) {
                     setExportMessage(e instanceof Error ? e.message : 'Export failed. Retry.');
@@ -550,10 +667,12 @@ export default function World() {
                 value={{
                   ...view,
                   projection: globe ? 'globe' : 'mercator',
-                  layer: tile,
-                  year: 2024,
-                  source: 'EOX / Copernicus Sentinel-2',
-                  license: 'CC BY-NC-SA 4.0',
+                  layer: base.tile,
+                  year: base.year,
+                  source: base.source,
+                  license: base.license,
+                  terms: base.terms,
+                  labels: labels ? placeLabels : null,
                   measurementType: 'Optical visualization, not SAR',
                   quantitativeResult: null,
                 }}
@@ -561,17 +680,15 @@ export default function World() {
             </div>
             <details>
               <summary>Image source & technical details</summary>
+              <p>{base.description}</p>
               <p>
-                Sentinel-2 cloudless 2024 is a multi-acquisition optical mosaic. It is not NISAR, a
-                photograph of today, or a flood-detection layer.
+                Satellite imagery may include aerial photography. Coverage, image dates and ground
+                detail vary by location. HD improves rendering density; it does not create new
+                measurements. Sentinel-2 tiles stop at level 14. Polar caps and source gaps are not
+                filled.
               </p>
-              <p>
-                HD requests finer tiles with at least 2× rendering density. The 4K export renders a
-                new map. Zoom is capped at 14; enlargement cannot create ground detail. Polar caps
-                and source gaps are not filled.
-              </p>
-              <External href="https://maps.eox.at/">EOX maps & attribution</External>
-              <p>CC BY-NC-SA 4.0 · non-commercial use. Internet required.</p>
+              <External href={base.terms}>{base.source} · source and terms</External>
+              <p>{base.license}. Internet required; no offline tile archive is created.</p>
             </details>
           </details>
           {!locationName && nameState === 'Location name unavailable' && (
@@ -587,7 +704,28 @@ export default function World() {
         </aside>
         <section ref={stage} className="world-stage" aria-label="Global satellite map">
           <div className="world-toolbar">
-            <span className="world-map-source">Optical context · 2024</span>
+            <label className="world-basemap">
+              Background
+              <select
+                aria-label="Earth basemap"
+                value={basemap}
+                disabled={exporting}
+                onChange={(e) => setBasemap(e.target.value as BasemapId)}
+              >
+                <option value="satellite">Detailed satellite</option>
+                <option value="sentinel">Sentinel-2 mosaic · 2024</option>
+              </select>
+            </label>
+            <label className="world-basemap world-labels">
+              <input
+                type="checkbox"
+                checked={labels}
+                disabled={exporting}
+                onChange={(e) => setLabels(e.target.checked)}
+              />
+              Place labels
+            </label>
+            <button onClick={() => go(Number(lat), Number(lon))}>Zoom to selected location</button>
             <button
               onClick={() => map.current?.flyTo({ center: [30, 20], zoom: 1.4, duration: 0 })}
             >
@@ -614,7 +752,7 @@ export default function World() {
           <div className="world-status">
             <span role="status">{status}</span>
             <span>
-              {view.latitude}°, {view.longitude}° · zoom {view.zoom}
+              Map center {view.latitude}°, {view.longitude}° · zoom {view.zoom}
             </span>
           </div>
           {error && (
@@ -691,8 +829,7 @@ export default function World() {
               <summary>Understand the layers</summary>
               <p>
                 Cyan: catalog footprints. White: prepared studies. Amber: reported Nepal event, not
-                a radar detection. Blue: selected location. The background mosaic combines
-                acquisitions from 2024.
+                a radar detection. Blue: selected location. {base.description}
               </p>
             </details>
           </section>

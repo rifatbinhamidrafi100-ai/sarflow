@@ -67,11 +67,13 @@ def write_api_inventory() -> None:
         ('NASA CMR collections', 'https://cmr.earthdata.nasa.gov/search/collections.json', 'optional processor collection review', 'no key for public discovery', 'processor/catalog.py'),
         ('NASA GIBS', 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi', 'NISAR browse visualization; not calibrated measurements', 'no key in configured requests', 'server/global-radar.ts'),
         ('EOX Sentinel-2 cloudless', 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/g/{z}/{y}/{x}.jpg', 'static 2024 optical background', 'no key in configured URL', 'src/pages/World.tsx'),
+        ('Esri World Imagery', 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?blankTile=false', 'mixed-date detailed optical context; not NISAR measurements', 'public service; source terms apply', 'shared/basemaps.ts'),
+        ('Esri reference labels', 'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', 'optional geographic labels', 'public service; source attribution applies', 'shared/basemaps.ts'),
         ('Open-Meteo geocoding', 'https://geocoding-api.open-meteo.com/v1/search', 'dynamic place-name search; not weather', 'no key in configured requests', 'server/places.ts'),
         ('OSM Nominatim', 'https://nominatim.openstreetmap.org/reverse', 'dynamic place labels', 'no key; paced upstream requests', 'server/places.ts'),
         ('OSM tiles', 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', 'street map context', 'no key; usage policy applies', 'src/components/GeoMap.tsx'),
         ('Copernicus EMS / UNESCO', 'https://mapping.emergency.copernicus.eu/activations/EMSR927/', 'static imported optical reference; not live API or water truth', 'not applicable to bundled reference', 'public/data/references/rasuwa-emsr927.json'),
-        ('Earthdata / ASF', 'https://nisar-docs.asf.alaska.edu/earthaccess/', 'optional local calibrated file access; actual processing not completed', 'manual interactive login; not persisted', 'processor/ingest.py'),
+        ('Earthdata / ASF', 'https://nisar-docs.asf.alaska.edu/earthaccess/', 'local calibrated access; single-acquisition reader verified; no temporal comparison', 'manual interactive login; not persisted', 'processor/ingest.py;public/data/reader-verification.json'),
     ]
     with (DOCS / 'API_INVENTORY.csv').open('w', encoding='utf-8', newline='') as handle:
         writer = csv.writer(handle)

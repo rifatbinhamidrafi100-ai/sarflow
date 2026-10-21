@@ -363,6 +363,31 @@
   padding: 7px 9px;
   min-height: 32px;
 }
+.world-basemap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  font-size: 12px;
+}
+.world-basemap select {
+  width: auto;
+  min-width: 0;
+  max-width: 190px;
+  margin: 0;
+  padding: 6px;
+  background: #213c4d;
+  color: #fff;
+  border-color: #496171;
+}
+.world-labels input {
+  width: auto;
+  margin: 0;
+}
+.world-canvas .maplibregl-ctrl-attrib-inner {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
 .world-map-source {
   color: #e1e9ec;
   font-size: 11px;

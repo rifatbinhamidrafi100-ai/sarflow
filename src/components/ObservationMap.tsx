@@ -5,6 +5,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { observationDisplayImage, type Region, type ActualFrame } from '../../shared/observatory';
 import { referenceBounds, type ExternalReference } from '../../shared/external-reference';
 import { LocateFixed, Maximize2, Minus, Plus } from 'lucide-react';
+import { loadObservationPixels, MissingBrowsePixels } from './observationImage';
 ml.setWorkerUrl(workerUrl);
 type Props = {
   region: Region;
@@ -20,6 +21,7 @@ type Props = {
   referenceFocus?: number;
   onStatus: (status: string) => void;
   onPoint: (p: [number, number]) => void;
+  onPrevious?: () => void;
 };
 export default function ObservationMap(props: Props) {
   const root = useRef<HTMLDivElement>(null),
@@ -193,15 +195,23 @@ export default function ObservationMap(props: Props) {
         [b[0], b[1]],
       ];
     let canceled = false;
+    const controller = new AbortController();
     props.onStatus('Loading observation');
     setError('');
     const images = [props.compare ? props.before : props.frame, props.frame];
     const pending: (() => void)[] = [];
+    const checks = new Map<string, Promise<ImageData>>();
+    for (const m of maps.current)
+      if (m.getLayer('radar')) m.setLayoutProperty('radar', 'visibility', 'none');
     Promise.all(
       maps.current.map(async (m, i) => {
         const frame = images[i];
+        const url = observationDisplayImage(frame);
+        if (!checks.has(url)) checks.set(url, loadObservationPixels(url, controller.signal));
+        const image = await checks.get(url)!;
+        if (canceled || controller.signal.aborted) return;
         if (!m.getSource('radar')) {
-          m.addSource('radar', { type: 'image', url: observationDisplayImage(frame), coordinates });
+          m.addSource('radar', { type: 'image', coordinates });
           m.addLayer({
             id: 'radar',
             type: 'raster',
@@ -212,12 +222,11 @@ export default function ObservationMap(props: Props) {
               'raster-resampling': 'linear',
             },
           });
-        } else {
-          (m.getSource('radar') as ml.ImageSource).updateImage({
-            url: observationDisplayImage(frame),
-            coordinates,
-          });
         }
+        // Reuse the inspected pixels. A second URL load could fail or briefly
+        // display the prior date's texture beneath the new acquisition label.
+        (m.getSource('radar') as ml.ImageSource).updateImage({ image, coordinates });
+        m.setLayoutProperty('radar', 'visibility', 'visible');
         if (m.getLayer('external-reference-fill')) m.moveLayer('radar', 'external-reference-fill');
         const geo = {
           type: 'Feature' as const,
@@ -238,6 +247,7 @@ export default function ObservationMap(props: Props) {
           const finish = () => {
             clearTimeout(timeout);
             m.off('idle', loaded);
+            m.off('sourcedata', loaded);
             m.off('error', failed);
           };
           const loaded = () => {
@@ -256,7 +266,9 @@ export default function ObservationMap(props: Props) {
             resolve();
           });
           m.on('idle', loaded);
+          m.on('sourcedata', loaded);
           m.on('error', failed);
+          queueMicrotask(loaded);
           m.triggerRepaint();
         });
       }),
@@ -265,14 +277,27 @@ export default function ObservationMap(props: Props) {
         if (!canceled)
           props.onStatus(props.frame.sha256 ? 'Archived imagery loaded' : 'NASA imagery loaded');
       })
-      .catch(() => {
+      .catch((cause) => {
         if (!canceled) {
-          setError('The archived image is unavailable. Retry or choose another acquisition.');
-          props.onStatus('Image unavailable');
+          controller.abort();
+          pending.forEach((cancel) => cancel());
+          for (const m of maps.current)
+            if (m.getLayer('radar')) m.setLayoutProperty('radar', 'visibility', 'none');
+          setError(
+            cause instanceof MissingBrowsePixels
+              ? cause.message
+              : 'The observation image is unavailable. Retry or choose another acquisition.',
+          );
+          props.onStatus(
+            cause instanceof MissingBrowsePixels
+              ? 'Browse coverage unavailable'
+              : 'Image unavailable',
+          );
         }
       });
     return () => {
       canceled = true;
+      controller.abort();
       pending.forEach((cancel) => cancel());
     };
   }, [ready, props.region.id, props.frame.id, props.before.id, props.compare]);
@@ -404,6 +429,9 @@ export default function ObservationMap(props: Props) {
       {error && (
         <div className="obs-map-error" role="alert">
           <p>{error}</p>
+          {props.onPrevious && (
+            <button onClick={props.onPrevious}>Show previous observation</button>
+          )}
           <button onClick={() => setRetry((v) => v + 1)}>Retry map</button>
         </div>
       )}

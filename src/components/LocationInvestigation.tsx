@@ -25,6 +25,15 @@ export default function LocationInvestigation({
   const request = useRef<AbortController | null>(null);
   const [catalogRevision, setCatalogRevision] = useState(0);
   useEffect(() => {
+    if (!data || !workspaceTarget) return;
+    workspaceTarget.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'instant'
+        : 'smooth',
+      block: 'start',
+    });
+  }, [data, workspaceTarget]);
+  useEffect(() => {
     request.current?.abort();
     setData(null);
     setBusy(false);

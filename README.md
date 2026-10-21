@@ -149,7 +149,9 @@ Next scientific milestone: acquire and quality-review a real calibrated temporal
 
 ## World Explorer
 
-Open `/world` for a globe/flat map with EOX Sentinel-2 cloudless 2024 optical imagery, zoom-dependent tiles, global place search, coordinate navigation, full screen, and attributed PNG/view-metadata export. This is a multi-acquisition optical mosaic, not NISAR data or current flood imagery. Zoom is capped at 14; polar caps and source gaps are not represented as observed coverage. Exports preserve the rendered canvas resolution, not a promised sensor ground resolution.
+Open `/world` for a globe/flat map with detailed Esri World Imagery, optional place labels, global search, coordinate navigation, full screen, and attributed PNG/view-metadata exports. Use the Background selector to retain the EOX Sentinel-2 cloudless 2024 mosaic. Optical context is distinct from dated NISAR observations. Imagery dates and detail vary geographically; the map does not imply live coverage or a flood result. Satellite navigation supports zoom20; the Sentinel-2 source stops at14 and overzooming does not add detail. Polar caps and source gaps remain explicit.
+
+The screenshot-reference location opens at `/world?lat=24.895&lon=91.887&zoom=18.95`. Background and label changes preserve the current camera. Esri imagery and labels use their source terms and visible attribution; no API key is embedded and no offline tile archive is created. Esri source: https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9.
 
 Source: https://maps.eox.at/ and https://eox.at/2025/03/sentinel-2-cloudless-2024/. Attribution: Sentinel-2 cloudless ? https://s2maps.eu by EOX IT Services GmbH https://eox.at (Contains modified Copernicus Sentinel data 2024). Layer license: CC BY-NC-SA 4.0, https://creativecommons.org/licenses/by-nc-sa/4.0/. This setup is for non-commercial research/education; commercial use requires an appropriate imagery arrangement. Tiles load from the provider; the application does not bulk-download them.
 
@@ -167,9 +169,9 @@ Playback advances through discrete acquisitions after rendering; it does not syn
 
 ## HD Earth viewing and 4K export
 
-World Explorer now defaults to HD: at least 2? canvas pixel density (capped at 3?) and a smaller display tile size that requests finer available pyramid tiles. Standard mode uses 1? density and fewer tiles. Quality changes preserve center, zoom, bearing, pitch, and projection. Both modes use the existing EOX 2024 optical mosaic; no new acquisition or ground-resolution claim is implied.
+World Explorer defaults to HD: at least2× canvas pixel density (capped at3×). Standard mode uses1× rendering density. Both use correctly declared256-pixel tile matrices; display density does not create source detail. Quality changes preserve center, zoom, bearing, pitch, and projection. The selected background determines attribution, license and date metadata in exports.
 
-Save 4K Earth PNG renders a separate 3840 ? 2160 map, then adds a 160-pixel attribution strip (final PNG 3840 ? 2320). It waits for rendering and rejects tile failures or a 60-second timeout. The export keeps the current center and approximate horizontal extent, adapting to a 16:9 map aspect ratio. It does not upscale a screenshot or synthesize detail. Higher quality uses more network and GPU resources. Existing CC BY-NC-SA attribution and use restrictions apply.
+Save 4K Earth PNG renders a separate 3840 ? 2160 map, then adds a 160-pixel attribution strip (final PNG 3840 ? 2320). It waits for rendering and rejects tile failures or a 60-second timeout. The export keeps the current center and approximate horizontal extent, adapting to a 16:9 map aspect ratio. It does not upscale a screenshot or synthesize detail. Higher quality uses more network and GPU resources. The selected provider’s attribution and use restrictions apply.
 
 
 ### Experimental Brahmaputra water candidates

@@ -5,7 +5,7 @@ const tile=readFileSync('public/observations/nepal-rasuwa-thumbnail.png');
 
 test('collapsible Earth panels preserve state, resize the map and expand on mobile',async({page})=>{
  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
- await page.route('https://tiles.maps.eox.at/**',r=>r.fulfill({contentType:'image/png',body:tile}));
+ await page.route(/^https:\/\/(?:tiles\.maps\.eox\.at|services\.arcgisonline\.com)\//,r=>r.fulfill({contentType:'image/png',body:tile}));
  await page.route('**/api/coverage/dates?*',r=>r.fulfill({json:{dates:['2026-08-31','2026-08-19']}}));
  await page.route('**/api/places/reverse?*',r=>r.fulfill({json:{name:'Rasuwa, Nepal'}}));
  await page.route('**/api/places?*',r=>r.fulfill({json:{results:[{id:1,name:'Kathmandu',country:'Nepal',latitude:27.7,longitude:85.3}]}}));
