@@ -16,10 +16,10 @@ test('new dates update automatically, retain history and notes, and fail without
  // Existing archived PNG stands in for NASA network rendering in this UI-only test.
  await page.route('https://gibs.earthdata.nasa.gov/**',r=>r.fulfill({contentType:'image/png',body:readFileSync('public'+region.observations[0].image)}));
  await page.goto('/observatory?region=brahmaputra');
- await expect(page.getByText(/NASA dates checked/)).toBeVisible();
+ await page.getByText('Observation updates',{exact:true}).click();await expect(page.getByText(/NASA dates checked/)).toBeVisible();
  expect(requests).toBe(1);
- await page.getByRole('button',{name:'Use archived image viewer'}).click();
- await page.locator('.acquisition-list button').first().click();
+ await page.locator('.obs-advanced > summary').click();await page.getByRole('button',{name:'Use archived image viewer'}).click();
+ await page.locator('.obs-acquisition-details > summary').click();await page.locator('.acquisition-list button').first().click();
  await page.getByRole('textbox',{name:'Your visual interpretation'}).fill('Preserve my historical comparison.');
  await page.getByRole('button',{name:'Check new dates now'}).click();
  await expect(page.locator('.acquisition-list button')).toHaveCount(5);

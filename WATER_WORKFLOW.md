@@ -55,6 +55,10 @@ Reruns clear the previous job/result, abort prior requests and invalidate older 
 
 ## Validation and limitations
 
+Water job mutations require an exact allowed browser Origin. Local development origins are configured by default; set `SARFLOW_ALLOWED_ORIGINS` for a different origin. Missing origins and cross-site browser requests are rejected. This is browser request protection, not user authentication: keep processing local or place the entire water API behind an authenticated proxy. Set `SARFLOW_TRUSTED_PROXIES` only to controlled proxy addresses/CIDRs for client rate limits.
+
+Generated jobs are bounded to 20 stored folders. On a new submission, marked output folders older than 24 hours are removed, unless their job is running. Download results that must be retained. Existing unmarked folders are not deleted automatically and require operator review. Failed submissions do not accumulate in the in-memory job registry.
+
 Software tests use constructed HDF5 and terrain files. They establish arithmetic, mask, API, export and state-machine behavior—not real NISAR product integration or Earth-event accuracy. No real calibrated GCOV measurements or independent reference labels were supplied. No accuracy evaluator, trained model, independent event validation, calibrated probability, terrain-mask generation, or justified physical-area estimation is implemented.
 
 Next inputs: at least three compatible pre-event GCOV acquisitions plus a later target over Brahmaputra; documented product maturity/calibration and source URLs; aligned terrain exclusions with validity metadata; independent dated water/non-water reference labels with their source, resolution and uncertainty. Reserve disjoint location/event/date groups for evaluation before tuning. Precision, recall, F1, IoU and false-detection rates must not be reported until that reference evaluation is performed.

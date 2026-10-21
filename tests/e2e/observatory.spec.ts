@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+test.beforeEach(async({page})=>{await page.route('**/api/global-radar?*',r=>r.fulfill({json:{empty:true,message:'No additional eligible observations in this UI test.'}}));});
+
 test('actual imagery workflow, geographic comparison, evidence and export',async({page})=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
  await page.goto('/');await page.getByRole('link',{name:'Explore real observations',exact:true}).click();

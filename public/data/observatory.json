@@ -61,7 +61,13 @@
               47.74712
             ]
           ],
-          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4282892788-ASF.html"
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4282892788-ASF.html",
+          "display": {
+            "image": "/observations/seattle-2026-08-13.webp",
+            "sha256": "f5fd8e91d3c85fcab2d5a3d7f8347da7d7c77dbd2d4f6966029ccd79c36581f8",
+            "bytes": 1638368,
+            "encoding": "lossless-webp"
+          }
         },
         {
           "id": "G4291243822-ASF",
@@ -94,7 +100,13 @@
               47.75809
             ]
           ],
-          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4291243822-ASF.html"
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4291243822-ASF.html",
+          "display": {
+            "image": "/observations/seattle-2026-08-25.webp",
+            "sha256": "7bd8411f57693d22e52fa46c6e0a5593ae3ac0af203469a48b3f9ca4fb0aef92",
+            "bytes": 1284930,
+            "encoding": "lossless-webp"
+          }
         },
         {
           "id": "G4308306301-ASF",
@@ -127,7 +139,13 @@
               47.7666
             ]
           ],
-          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4308306301-ASF.html"
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4308306301-ASF.html",
+          "display": {
+            "image": "/observations/seattle-2026-09-06.webp",
+            "sha256": "d118b09e98aeec449cdb48abfe961763e253ff9655fec92f15673b32769225d6",
+            "bytes": 1639856,
+            "encoding": "lossless-webp"
+          }
         },
         {
           "id": "G4317652789-ASF",
@@ -162,7 +180,13 @@
           ],
           "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4317652789-ASF.html",
           "thumbnail": "/observations/seattle-thumbnail.png",
-          "thumbnailRequest": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.85%2C47.15%2C-121.8%2C48&WIDTH=320&HEIGHT=281&TIME=2026-09-18"
+          "thumbnailRequest": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.85%2C47.15%2C-121.8%2C48&WIDTH=320&HEIGHT=281&TIME=2026-09-18",
+          "display": {
+            "image": "/observations/seattle-2026-09-18.webp",
+            "sha256": "0aa94732c30b367734a1c877bf7c18a7430def1a2b47b91d8e33d599ae4cfc51",
+            "bytes": 1659502,
+            "encoding": "lossless-webp"
+          }
         }
       ]
     },
@@ -215,7 +239,13 @@
               23.9961
             ]
           ],
-          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4261131483-ASF.html"
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4261131483-ASF.html",
+          "display": {
+            "image": "/observations/brahmaputra-2026-07-24.webp",
+            "sha256": "e9c4a80504e6a6bc73333c453d0dfb0a176f2b427444b46245def4eafa3888b5",
+            "bytes": 2357468,
+            "encoding": "lossless-webp"
+          }
         },
         {
           "id": "G4285744971-ASF",
@@ -248,7 +278,13 @@
               23.99567
             ]
           ],
-          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4285744971-ASF.html"
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4285744971-ASF.html",
+          "display": {
+            "image": "/observations/brahmaputra-2026-08-17.webp",
+            "sha256": "75e9c3bda8ffdd691d5997df2289230abd8bf2f7cab8607726d738711824c2f8",
+            "bytes": 2256786,
+            "encoding": "lossless-webp"
+          }
         },
         {
           "id": "G4294032847-ASF",
@@ -281,7 +317,13 @@
               24.0173
             ]
           ],
-          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4294032847-ASF.html"
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4294032847-ASF.html",
+          "display": {
+            "image": "/observations/brahmaputra-2026-08-29.webp",
+            "sha256": "0b853713897d734dd05e9706a291bc8fc538db7deb1c2432270c4c1eceaadb7e",
+            "bytes": 2284846,
+            "encoding": "lossless-webp"
+          }
         },
         {
           "id": "G4310083498-ASF",
@@ -316,7 +358,13 @@
           ],
           "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4310083498-ASF.html",
           "thumbnail": "/observations/brahmaputra-thumbnail.png",
-          "thumbnailRequest": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=89.3%2C24.75%2C90.15%2C25.55&WIDTH=320&HEIGHT=281&TIME=2026-09-10"
+          "thumbnailRequest": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=89.3%2C24.75%2C90.15%2C25.55&WIDTH=320&HEIGHT=281&TIME=2026-09-10",
+          "display": {
+            "image": "/observations/brahmaputra-2026-09-10.webp",
+            "sha256": "4aa0e8e5c190d572ad01f8167cfe48d04636294671a3c237643d473fa2293d29",
+            "bytes": 2279994,
+            "encoding": "lossless-webp"
+          }
         }
       ]
     },
@@ -369,7 +417,13 @@
               37.85744
             ]
           ],
-          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4284103888-ASF.html"
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4284103888-ASF.html",
+          "display": {
+            "image": "/observations/sacramento-2026-08-15.webp",
+            "sha256": "b1cb1a6d07582791933a1b24819bf7c892b822b8a6ea3b498043af3290a8e239",
+            "bytes": 1410360,
+            "encoding": "lossless-webp"
+          }
         },
         {
           "id": "G4291604586-ASF",
@@ -402,7 +456,13 @@
               37.87218
             ]
           ],
-          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4291604586-ASF.html"
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4291604586-ASF.html",
+          "display": {
+            "image": "/observations/sacramento-2026-08-27.webp",
+            "sha256": "7fe97810133128f6b7cec0c534a93c299eecd0a5580b20352dd62037961f1c4d",
+            "bytes": 1444190,
+            "encoding": "lossless-webp"
+          }
         },
         {
           "id": "G4306539999-ASF",
@@ -435,7 +495,13 @@
               37.88059
             ]
           ],
-          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4306539999-ASF.html"
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4306539999-ASF.html",
+          "display": {
+            "image": "/observations/sacramento-2026-09-08.webp",
+            "sha256": "fe79dcbc421d068a9031849a472290f695e9106d330fb335881920f3a9f2f546",
+            "bytes": 1438132,
+            "encoding": "lossless-webp"
+          }
         },
         {
           "id": "G4320019791-ASF",
@@ -470,7 +536,13 @@
           ],
           "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4320019791-ASF.html",
           "thumbnail": "/observations/sacramento-thumbnail.png",
-          "thumbnailRequest": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.3%2C38.6%2C-121.3%2C39.4&WIDTH=320&HEIGHT=281&TIME=2026-09-20"
+          "thumbnailRequest": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=-122.3%2C38.6%2C-121.3%2C39.4&WIDTH=320&HEIGHT=281&TIME=2026-09-20",
+          "display": {
+            "image": "/observations/sacramento-2026-09-20.webp",
+            "sha256": "46c70fdeee4b97850a8402a9c9871d3cd26d8451ff9d4cb4794be89092c2810a",
+            "bytes": 1455982,
+            "encoding": "lossless-webp"
+          }
         }
       ]
     },
@@ -523,7 +595,13 @@
               27.97942
             ]
           ],
-          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4286846660-ASF.html"
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4286846660-ASF.html",
+          "display": {
+            "image": "/observations/nepal-rasuwa-2026-08-19.webp",
+            "sha256": "043a7585febd6500c64e948fe21c32bcdaa5a2f31035696fea7f83b42bacd458",
+            "bytes": 2196736,
+            "encoding": "lossless-webp"
+          }
         },
         {
           "id": "G4296206881-ASF",
@@ -556,7 +634,13 @@
               27.99165
             ]
           ],
-          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4296206881-ASF.html"
+          "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4296206881-ASF.html",
+          "display": {
+            "image": "/observations/nepal-rasuwa-2026-08-31.webp",
+            "sha256": "f66f9fb652b22d8efd02f5aa0e0ea8700346432b11bd8395e4d277181b89d8e1",
+            "bytes": 2188458,
+            "encoding": "lossless-webp"
+          }
         },
         {
           "id": "G4311502130-ASF",
@@ -591,7 +675,13 @@
           ],
           "source": "https://cmr.earthdata.nasa.gov/search/concepts/G4311502130-ASF.html",
           "thumbnail": "/observations/nepal-rasuwa-thumbnail.png",
-          "thumbnailRequest": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=85.05%2C27.75%2C85.55%2C28.4&WIDTH=320&HEIGHT=281&TIME=2026-09-12"
+          "thumbnailRequest": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=NISAR_L2_Geocoded_Polarimetric_Covariance&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SRS=EPSG%3A4326&BBOX=85.05%2C27.75%2C85.55%2C28.4&WIDTH=320&HEIGHT=281&TIME=2026-09-12",
+          "display": {
+            "image": "/observations/nepal-rasuwa-2026-09-12.webp",
+            "sha256": "43f86e281f107d1a4410ffcbbe10bf5a7d08982e58ec117189b4d764a84ed282",
+            "bytes": 2241768,
+            "encoding": "lossless-webp"
+          }
         }
       ]
     }

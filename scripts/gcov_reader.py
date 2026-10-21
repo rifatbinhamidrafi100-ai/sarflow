@@ -1,4 +1,4 @@
-"""Conservative GCOV Rev E reader. No downloads, credentials, or implicit masks."""
+"""Bounded GCOV Rev E/F reader. No downloads, credentials, or implicit masks."""
 import hashlib
 from datetime import datetime, timezone
 import h5py
@@ -8,6 +8,7 @@ from pyproj import CRS
 BASE = '/science/LSAR/GCOV'
 IDENTITY = '/science/LSAR/identification'
 PARAMS = BASE + '/metadata/processingInformation/parameters'
+REVIEWED_SPECIFICATIONS = ('1.2.1', '1.5.0')
 
 
 def scalar(group, key, required=True):
@@ -34,6 +35,13 @@ def file_hash(path):
         return hashlib.file_digest(f, 'sha256').hexdigest()
 
 
+def specification(f):
+    version = scalar(f[IDENTITY], 'productSpecificationVersion')
+    if version not in REVIEWED_SPECIFICATIONS:
+        raise ValueError('Only reviewed GCOV specifications 1.2.1 and 1.5.0 are supported; review newer specifications before adding them')
+    return version
+
+
 def metadata(f, frequency, co, cross=None):
     identity = f[IDENTITY]
     if scalar(identity, 'productType') != 'GCOV':
@@ -41,8 +49,7 @@ def metadata(f, frequency, co, cross=None):
     keys = ['productVersion', 'productSpecificationVersion', 'trackNumber', 'frameNumber',
             'lookDirection', 'orbitPassDirection', 'radarBand', 'processingType', 'isGeocoded']
     result = {k: scalar(identity, k) for k in keys}
-    if result['productSpecificationVersion'] != '1.2.1':
-        raise ValueError('Only reviewed GCOV specification 1.2.1 is supported; review newer specifications before adding them')
+    version = specification(f)
     if result['radarBand'] != 'L' or flag(result['isGeocoded']) is not True:
         raise ValueError('Require geocoded L-SAR GCOV')
     if result['lookDirection'] not in ('Left', 'Right') or result['orbitPassDirection'] not in ('Ascending', 'Descending'):
@@ -53,10 +60,11 @@ def metadata(f, frequency, co, cross=None):
     if result['radiometricTerrainCorrectionApplied'] is not True:
         raise ValueError('Radiometric terrain correction must be explicitly applied')
     normalization = scalar(p, 'rtc/outputBackscatterNormalizationConvention').lower().replace('_', '').replace('-', '')
-    expression = scalar(p, 'rtc/outputBackscatterExpressionConvention').lower()
-    if normalization not in ('gamma0', 'gamma naught', 'gamma-naught') or expression != 'linear':
+    expression = scalar(p, 'rtc/outputBackscatterExpressionConvention').lower().strip()
+    accepted_expressions = ('linear', 'linear power') if version == '1.5.0' else ('linear',)
+    if normalization not in ('gamma0', 'gamma naught', 'gamma-naught') or expression not in accepted_expressions:
         raise ValueError('Require explicit linear gamma0 radiometry; no conversion is guessed')
-    result.update(frequency=frequency, co=co, cross=cross, normalization=normalization, expression=expression,
+    result.update(frequency=frequency, co=co, cross=cross, normalization=normalization, expression='linear',
                   softwareVersion=scalar(f[BASE + '/metadata/processingInformation/algorithms'], 'softwareVersion'))
     grid = f[f'{BASE}/grids/frequency{frequency}']
     epsg = int(grid['projection'][()]); crs = CRS.from_epsg(epsg)
@@ -76,6 +84,7 @@ def metadata(f, frequency, co, cross=None):
 
 
 def read_tile(f, frequency, channel, row, col, height, width):
+    version = specification(f)
     grid = f[f'{BASE}/grids/frequency{frequency}']; window = np.s_[row:row+height, col:col+width]
     raster = grid[channel]; values = np.asarray(raster[window], dtype=np.float64)
     if values.shape != (height, width):
@@ -84,12 +93,24 @@ def read_tile(f, frequency, channel, row, col, height, width):
     fill = raster.attrs.get('_FillValue')
     if fill is not None:
         valid &= values != fill
-    quality_known = 'mask' in grid and 'numberOfLooks' in grid
+    required_quality = ['mask', 'numberOfLooks']
+    if version == '1.5.0':
+        required_quality.append('inputDataExceptionMask')
+    quality_known = all(key in grid for key in required_quality)
     if quality_known:
+        if any(grid[key].shape != raster.shape for key in required_quality):
+            raise ValueError('Quality grid shape mismatch')
         mask = np.asarray(grid['mask'][window]); looks = np.asarray(grid['numberOfLooks'][window])
         if mask.shape != values.shape or looks.shape != values.shape:
             raise ValueError('Quality grid shape mismatch')
         valid &= np.isin(mask, [1, 2, 3, 4, 5]) & np.isfinite(looks) & (looks > 0)
+        if version == '1.5.0':
+            # Rev F Table 5-3: zero is no anomaly; exclude all exception bits,
+            # including unknown future codes, rather than interpreting them.
+            exceptions = grid['inputDataExceptionMask']
+            if exceptions.dtype.kind != 'u' or exceptions.dtype.itemsize != 1:
+                raise ValueError('Require unsigned-byte input data exception mask')
+            valid &= np.asarray(exceptions[window]) == 0
     else:
         valid[:] = False
     return np.where(valid, values, np.nan), valid, quality_known

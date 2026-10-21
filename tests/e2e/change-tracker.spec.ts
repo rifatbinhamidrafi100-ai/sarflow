@@ -2,7 +2,7 @@
 import fs from 'node:fs/promises';
 import AxeBuilder from '@axe-core/playwright';
 test('observation tracking changes pairs and exports unknown metrics without invented percentages',async({page})=>{
- await page.goto('/observatory?region=brahmaputra');const panel=page.getByRole('region',{name:'Observation change report'});
+ await page.route('**/api/global-radar?*',r=>r.fulfill({json:{empty:true,message:'No additional eligible observations in this UI test.'}}));await page.goto('/observatory?region=brahmaputra');await page.getByText('Investigation summary & exports',{exact:true}).click();const panel=page.getByRole('region',{name:'Observation change report'});
  await expect(panel).toContainText('Air and water pollution:');await expect(panel).toContainText('not measured');
  await panel.getByText('Details: source and missing evidence').click();await expect(panel.getByText(/needs separate air or water measurements/)).toBeVisible();await panel.getByText('Details: source and missing evidence').click();
  await panel.getByText('Compare other dates').click();await panel.getByRole('button',{name:'Compare interval 2',exact:true}).click();

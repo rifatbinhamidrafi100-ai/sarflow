@@ -1,11 +1,13 @@
 import {test,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import fs from 'node:fs/promises';
+test.beforeEach(async({page})=>{await page.route('**/api/global-radar?*',r=>r.fulfill({json:{empty:true,message:'No additional eligible observations in this UI test.'}}));});
+
 test('archived Brahmaputra comparison and evidence work without external services',async({page})=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
- await page.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());
+ await page.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.fallback():r.abort());
  await page.goto('/observatory?region=brahmaputra');
- await page.getByRole('button',{name:'Use archived image viewer'}).click();
+ await page.locator('.obs-advanced > summary').click();await page.getByRole('button',{name:'Use archived image viewer'}).click();
  await expect(page.getByText('Archived imagery loaded',{exact:true})).toBeVisible();
  await expect(page.getByLabel('Radar opacity')).toBeDisabled();
  await page.getByRole('button',{name:'Play observations',exact:true}).click();
@@ -24,11 +26,11 @@ test('archived Brahmaputra comparison and evidence work without external service
  await expect(page.getByText(/No calibrated GCOV measurements are registered/)).toBeVisible();expect(errors).toEqual([]);
 });
 test('archived image failure is explicit and retry recovers',async({page})=>{
- await page.route('**/observations/*.png',r=>r.abort());
+ await page.route('**/observations/*',r=>r.abort());
  await page.goto('/observatory?region=brahmaputra');
- await page.getByRole('button',{name:'Use archived image viewer'}).click();
+ await page.locator('.obs-advanced > summary').click();await page.getByRole('button',{name:'Use archived image viewer'}).click();
  await expect(page.getByRole('button',{name:'Retry archived images'})).toBeVisible();
- await page.unroute('**/observations/*.png');
+ await page.unroute('**/observations/*');
  await page.getByRole('button',{name:'Retry archived images'}).click();
  await expect(page.getByText('Archived imagery loaded',{exact:true})).toBeVisible();
 });

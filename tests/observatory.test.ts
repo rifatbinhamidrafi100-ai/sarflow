@@ -1,9 +1,22 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { observatorySchema, selectionReport } from '../shared/observatory';
+import { observatorySchema, selectionReport, observationDisplayImage } from '../shared/observatory';
 const archive=observatorySchema.parse(JSON.parse(readFileSync('public/data/observatory.json','utf8')));
 describe('actual NISAR archive integrity',()=>{
+ it('verifies smaller display derivatives separately from original evidence',()=>{
+  for(const frame of archive.regions.flatMap(r=>r.observations)){
+   expect(frame.display).toBeDefined();
+   const bytes=readFileSync(`public${frame.display!.image}`);
+   expect(bytes.length).toBe(frame.display!.bytes);
+   expect(bytes.length).toBeLessThan(frame.bytes!);
+   expect(createHash('sha256').update(bytes).digest('hex')).toBe(frame.display!.sha256);
+   expect(bytes.subarray(0,4).toString()).toBe('RIFF');
+   expect(bytes.subarray(8,12).toString()).toBe('WEBP');
+   expect(observationDisplayImage(frame)).toBe(frame.display!.image);
+   expect(observationDisplayImage({...frame,display:undefined})).toBe(frame.image);
+  }
+ });
  it('contains four regions and fifteen chronological real catalog records',()=>{
   expect(archive.regions).toHaveLength(4);expect(archive.collection).toBe('NISAR_L2_GCOV_PROVISIONAL_V1');
   expect(archive.regions.flatMap(r=>r.observations)).toHaveLength(15);

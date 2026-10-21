@@ -7,6 +7,7 @@ test('global map navigation, place search, projection and attributed export',asy
  await page.route('https://tiles.maps.eox.at/**',r=>r.fulfill({contentType:'image/png',body:image}));
  await page.route('**/api/places?*',r=>r.fulfill({json:{results:[{id:1,name:'Kathmandu',latitude:27.7,longitude:85.3,country:'Nepal'}]}}));
  await page.goto('/world');await expect(page.getByText('World imagery loaded',{exact:true})).toBeVisible();
+ await page.getByText('Advanced Settings',{exact:true}).click();
  await expect(page.getByLabel('Earth image quality')).toHaveValue('hd');
  expect(await page.locator('.world-canvas canvas').evaluate(c=>(c as HTMLCanvasElement).width/c.clientWidth)).toBeGreaterThanOrEqual(2);
  const highDownload=page.waitForEvent('download');await page.getByRole('button',{name:'Save 4K Earth PNG',exact:true}).click();
@@ -22,7 +23,7 @@ test('global map navigation, place search, projection and attributed export',asy
 });
 test('world imagery and place search failures have explicit recovery',async({page})=>{
  await page.route('https://tiles.maps.eox.at/**',r=>r.abort());await page.route('**/api/places?*',r=>r.fulfill({status:502,json:{error:'Place search unavailable'}}));
- await page.goto('/world');await expect(page.getByRole('button',{name:'Retry world imagery'})).toBeVisible();await expect(page.getByRole('button',{name:'Save map PNG'})).toBeDisabled();
+ await page.goto('/world');await expect(page.getByRole('button',{name:'Retry world imagery'})).toBeVisible();await page.getByText('Advanced Settings',{exact:true}).click();await expect(page.getByRole('button',{name:'Save map PNG'})).toBeDisabled();
  await page.getByLabel('City or place name').fill('Paris');await page.getByRole('button',{name:'Search',exact:true}).click();await expect(page.getByText('Place search unavailable',{exact:true})).toBeVisible();
  await page.unroute('https://tiles.maps.eox.at/**');await page.route('https://tiles.maps.eox.at/**',r=>r.fulfill({contentType:'image/png',body:image}));await page.getByRole('button',{name:'Retry world imagery'}).click();await expect(page.getByText('World imagery loaded',{exact:true})).toBeVisible();
 });

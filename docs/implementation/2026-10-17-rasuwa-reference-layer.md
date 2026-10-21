@@ -1,0 +1,9 @@
+# Rasuwa external reference evidence
+
+Choose the existing Rasuwa investigation because dated NISAR visualization scenes and an externally published Copernicus EMS product can be inspected together. The calibrated NASA file probe returned HTTP 302 requiring manual authentication; no redirect/session/credential was followed. Official challenge detail and current FAQ remained unavailable through the web tool; eligibility is not established.
+
+Implement the authorized external-reference layer as a bounded extension to the existing Nepal case and observation map. Archive publicly downloadable Copernicus EMSR927 AOI01 v1 observed-event and AOI layers distributed by UNESCO IHP-WINS. Validate EPSG:4326, archive/file bounds, polygons and source properties; preserve exact coordinates and record hashes. Source attributes label the event footprint as mass movement / landslide from photo-interpretation. Do not relabel it as floodwater or SARFlow detection.
+
+Display a loadable reference panel with actual source polygons, dates, attribution, feature inspection and limitations. Optionally overlay it on the existing geographic radar map in a distinct color. Explicitly show temporal differences relative to the chosen radar pair. Reference date is an optical source date, not a NISAR acquisition. Keep pixel measurements, event detection, damage, numerical agreement and model confidence unavailable. Empty/missing mapping must not become a negative reference label.
+
+Export the source manifest and polygons independently, and attach them to the visual investigation export only when loaded/enabled. Existing synthetic numerical analysis retains its separate contract. Test real archived source schema/geometry, failure/retry behavior, truthful wording, overlay toggling, exports, desktop/mobile accessibility and existing workflows.

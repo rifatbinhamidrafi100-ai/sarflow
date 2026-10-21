@@ -19,8 +19,14 @@ const SAFE_MESSAGES: Record<string, string> = {
 function statusUrl(base: string): URL {
   const url = new URL(base);
   const local = ['localhost', '127.0.0.1'].includes(url.hostname);
-  if ((url.protocol !== 'https:' && !(url.protocol === 'http:' && local)) ||
-      url.username || url.password || url.search || url.hash) throw Error('Invalid configuration');
+  if (
+    (url.protocol !== 'https:' && !(url.protocol === 'http:' && local)) ||
+    url.username ||
+    url.password ||
+    url.search ||
+    url.hash
+  )
+    throw Error('Invalid configuration');
   url.pathname = `${url.pathname.replace(/\/$/, '')}/status`;
   return url;
 }
@@ -28,10 +34,14 @@ function statusUrl(base: string): URL {
 async function readBounded(response: Response) {
   if (!response.ok || !response.body) throw Error('Unavailable');
   const length = response.headers.get('content-length');
-  if (length && Number(length) > MAX_BYTES) { await response.body.cancel(); throw Error('Oversized'); }
+  if (length && Number(length) > MAX_BYTES) {
+    await response.body.cancel();
+    throw Error('Oversized');
+  }
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
-  let size = 0, text = '';
+  let size = 0,
+    text = '';
   try {
     while (true) {
       const { done, value } = await reader.read();
@@ -41,7 +51,10 @@ async function readBounded(response: Response) {
       text += decoder.decode(value, { stream: true });
     }
     return JSON.parse(text + decoder.decode());
-  } finally { await reader.cancel().catch(() => {}); reader.releaseLock(); }
+  } finally {
+    await reader.cancel().catch(() => {});
+    reader.releaseLock();
+  }
 }
 
 /** Read-only public status proxy. Never forward credentials or processor diagnostics. */
@@ -51,17 +64,26 @@ export function monitoringRouter(options: { baseUrl?: string; fetcher?: typeof f
     res.setHeader('Cache-Control', 'no-store');
     const base = options.baseUrl ?? process.env.SARFLOW_PROCESSOR_URL;
     if (!base) {
-      res.json({ configured: false, status: 'not-configured', message: 'Scheduled processor is not connected.' });
+      res.json({
+        configured: false,
+        status: 'not-configured',
+        message: 'Scheduled processor is not connected.',
+      });
       return;
     }
     try {
       const response = await (options.fetcher ?? fetch)(statusUrl(base), {
-        signal: AbortSignal.timeout(10_000), redirect: 'error', credentials: 'omit',
+        signal: AbortSignal.timeout(10_000),
+        redirect: 'error',
+        credentials: 'omit',
         headers: { Accept: 'application/json' },
       });
       const data = processorStatusSchema.parse(await readBounded(response));
-      data.locations = data.locations.map(location => ({ ...location,
-        message: SAFE_MESSAGES[location.state] ?? 'See processing counts; event publication requires reference evaluation.',
+      data.locations = data.locations.map((location) => ({
+        ...location,
+        message:
+          SAFE_MESSAGES[location.state] ??
+          'See processing counts; event publication requires reference evaluation.',
       }));
       res.json(data);
     } catch {

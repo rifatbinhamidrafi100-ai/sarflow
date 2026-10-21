@@ -1,0 +1,410 @@
+{
+  "preparedAt": "2026-10-17T07:31:28.565290+00:00",
+  "status": "metadata-only-access-plan",
+  "source": "NASA CMR public metadata already stored by the local processor",
+  "guide": "https://nisar-docs.asf.alaska.edu/earthaccess/",
+  "limitations": [
+    "These are access candidates, not reviewed compatible observations or a selected disaster case.",
+    "Filename grouping does not verify projected grid, calibration, masking, processing version compatibility or temporal suitability.",
+    "No calibrated products have been downloaded by this script. Use official tools with manual Earthdata authentication.",
+    "Flood evaluation also needs an aligned documented terrain mask and independent event/date-matched reference evidence."
+  ],
+  "locations": [
+    {
+      "id": "brahmaputra",
+      "name": "Brahmaputra floodplain",
+      "checked": "2026-10-16T20:49:01.468314+00:00",
+      "state": "metadata-only",
+      "discoveredMetadataRecords": 21,
+      "candidateGroups": [
+        {
+          "filenameGroup": "019_D_076_4005_DHDH_A_P05023",
+          "availableDistinctTimes": 4,
+          "accessCandidates": [
+            {
+              "id": "G4246377813-ASF",
+              "revision": "000000000000:2026-07-14T03:25:58.437Z:0dcd551dcdc26c9c",
+              "acquired": "2026-07-09T12:42:52+00:00",
+              "title": "NISAR_L2_PR_GCOV_025_019_D_076_4005_DHDH_A_20260709T124252_20260709T124317_P05023_N_P_J_001"
+            },
+            {
+              "id": "G4258947133-ASF",
+              "revision": "000000000000:2026-07-24T13:06:04.259Z:288471376e078bfa",
+              "acquired": "2026-07-21T12:42:41+00:00",
+              "title": "NISAR_L2_PR_GCOV_026_019_D_076_4005_DHDH_A_20260721T124241_20260721T124316_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4283574680-ASF",
+              "revision": "000000000000:2026-08-20T07:46:12.570Z:b7b88d460ea7725b",
+              "acquired": "2026-08-14T12:42:40+00:00",
+              "title": "NISAR_L2_PR_GCOV_028_019_D_076_4005_DHDH_A_20260814T124240_20260814T124315_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4367606240-ASF",
+              "revision": "000000000000:2026-10-15T13:10:48.835Z:31852b806a136439",
+              "acquired": "2026-10-13T12:42:50+00:00",
+              "title": "NISAR_L2_PR_GCOV_033_019_D_076_4005_DHDH_A_20261013T124250_20261013T124315_P05023_N_P_J_001"
+            }
+          ]
+        },
+        {
+          "filenameGroup": "019_D_076_2005_DHDH_M_P05023",
+          "availableDistinctTimes": 5,
+          "accessCandidates": [
+            {
+              "id": "G4246365963-ASF",
+              "revision": "000000000000:2026-07-14T03:10:15.310Z:c56d62a576587e80",
+              "acquired": "2026-07-09T12:42:42+00:00",
+              "title": "NISAR_L2_PR_GCOV_025_019_D_076_2005_DHDH_M_20260709T124242_20260709T124317_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4304331062-ASF",
+              "revision": "000000000000:2026-09-10T00:05:31.361Z:a0e54377888bf9fd",
+              "acquired": "2026-09-07T12:42:40+00:00",
+              "title": "NISAR_L2_PR_GCOV_030_019_D_076_2005_DHDH_M_20260907T124240_20260907T124314_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4336656949-ASF",
+              "revision": "000000000000:2026-10-03T10:56:26.118Z:4dd6f421ea64497d",
+              "acquired": "2026-10-01T12:42:40+00:00",
+              "title": "NISAR_L2_PR_GCOV_032_019_D_076_2005_DHDH_M_20261001T124240_20261001T124314_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4367592137-ASF",
+              "revision": "000000000000:2026-10-15T13:01:25.740Z:e1ff8ad73d4b18d3",
+              "acquired": "2026-10-13T12:42:40+00:00",
+              "title": "NISAR_L2_PR_GCOV_033_019_D_076_2005_DHDH_M_20261013T124240_20261013T124315_P05023_N_F_J_001"
+            }
+          ]
+        },
+        {
+          "filenameGroup": "069_A_014_4005_DHDH_A_P05023",
+          "availableDistinctTimes": 9,
+          "accessCandidates": [
+            {
+              "id": "G4294032847-ASF",
+              "revision": "000000000000:2026-08-31T21:41:42.517Z:467ce41a11c6329e",
+              "acquired": "2026-08-29T23:21:32+00:00",
+              "title": "NISAR_L2_PR_GCOV_029_069_A_014_4005_DHDH_A_20260829T232132_20260829T232206_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4310083498-ASF",
+              "revision": "000000000000:2026-09-13T22:03:22.531Z:f445d60fe3629291",
+              "acquired": "2026-09-10T23:21:31+00:00",
+              "title": "NISAR_L2_PR_GCOV_030_069_A_014_4005_DHDH_A_20260910T232131_20260910T232206_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4322620068-ASF",
+              "revision": "000000000000:2026-09-24T20:49:05.391Z:6c6c14945246c98c",
+              "acquired": "2026-09-22T23:21:32+00:00",
+              "title": "NISAR_L2_PR_GCOV_031_069_A_014_4005_DHDH_A_20260922T232132_20260922T232206_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4345771157-ASF",
+              "revision": "000000000000:2026-10-07T00:36:28.829Z:d7a21772978cb992",
+              "acquired": "2026-10-04T23:21:32+00:00",
+              "title": "NISAR_L2_PR_GCOV_032_069_A_014_4005_DHDH_A_20261004T232132_20261004T232206_P05023_N_F_J_001"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nepal-rasuwa",
+      "name": "Rasuwa, Nepal",
+      "checked": "2026-10-16T20:49:04.992528+00:00",
+      "state": "metadata-only",
+      "discoveredMetadataRecords": 47,
+      "candidateGroups": [
+        {
+          "filenameGroup": "098_A_016_4005_DHDH_A_P05023",
+          "availableDistinctTimes": 9,
+          "accessCandidates": [
+            {
+              "id": "G4296206881-ASF",
+              "revision": "000000000000:2026-09-02T11:44:04.261Z:12b17aa747df9178",
+              "acquired": "2026-08-31T23:39:18+00:00",
+              "title": "NISAR_L2_PR_GCOV_029_098_A_016_4005_DHDH_A_20260831T233918_20260831T233952_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4311502130-ASF",
+              "revision": "000000000000:2026-09-15T09:58:14.688Z:0dca54cd311d7be4",
+              "acquired": "2026-09-12T23:39:18+00:00",
+              "title": "NISAR_L2_PR_GCOV_030_098_A_016_4005_DHDH_A_20260912T233918_20260912T233952_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4324047986-ASF",
+              "revision": "000000000000:2026-09-26T01:45:04.513Z:7246c085fe7f81d9",
+              "acquired": "2026-09-24T23:39:18+00:00",
+              "title": "NISAR_L2_PR_GCOV_031_098_A_016_4005_DHDH_A_20260924T233918_20260924T233952_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4350937998-ASF",
+              "revision": "000000000000:2026-10-08T21:53:16.461Z:870b3cde15c1357c",
+              "acquired": "2026-10-06T23:39:18+00:00",
+              "title": "NISAR_L2_PR_GCOV_032_098_A_016_4005_DHDH_A_20261006T233918_20261006T233952_P05023_N_F_J_001"
+            }
+          ]
+        },
+        {
+          "filenameGroup": "048_D_074_4005_DHDH_A_P05023",
+          "availableDistinctTimes": 5,
+          "accessCandidates": [
+            {
+              "id": "G4260458285-ASF",
+              "revision": "000000000000:2026-07-26T03:54:06.329Z:460b788f2abe2699",
+              "acquired": "2026-07-23T12:58:13+00:00",
+              "title": "NISAR_L2_PR_GCOV_026_048_D_074_4005_DHDH_A_20260723T125813_20260723T125848_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4284786693-ASF",
+              "revision": "000000000000:2026-08-21T19:14:49.413Z:e203530dc42eec44",
+              "acquired": "2026-08-16T12:58:12+00:00",
+              "title": "NISAR_L2_PR_GCOV_028_048_D_074_4005_DHDH_A_20260816T125812_20260816T125846_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4311788597-ASF",
+              "revision": "000000000000:2026-09-15T13:35:15.259Z:858ba6d978dbd4dd",
+              "acquired": "2026-09-09T12:58:11+00:00",
+              "title": "NISAR_L2_PR_GCOV_030_048_D_074_4005_DHDH_A_20260909T125811_20260909T125846_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4341383694-ASF",
+              "revision": "000000000000:2026-10-05T10:27:31.451Z:cff4ce3f31cb759e",
+              "acquired": "2026-10-03T12:58:12+00:00",
+              "title": "NISAR_L2_PR_GCOV_032_048_D_074_4005_DHDH_A_20261003T125812_20261003T125846_P05023_N_F_J_001"
+            }
+          ]
+        },
+        {
+          "filenameGroup": "098_A_016_4005_DHDH_A_X05026",
+          "availableDistinctTimes": 24,
+          "accessCandidates": [
+            {
+              "id": "G4315938600-ASF",
+              "revision": "000000000000:2026-09-18T21:12:49.393Z:b52834d4469abce9",
+              "acquired": "2026-07-26T23:39:19+00:00",
+              "title": "NISAR_L2_PR_GCOV_026_098_A_016_4005_DHDH_A_20260726T233919_20260726T233954_X05026_N_F_J_001"
+            },
+            {
+              "id": "G4315938525-ASF",
+              "revision": "000000000000:2026-09-18T21:12:25.552Z:94831820668f466b",
+              "acquired": "2026-08-19T23:39:18+00:00",
+              "title": "NISAR_L2_PR_GCOV_028_098_A_016_4005_DHDH_A_20260819T233918_20260819T233953_X05026_N_F_J_001"
+            },
+            {
+              "id": "G4315924849-ASF",
+              "revision": "000000000000:2026-09-18T20:54:44.498Z:13181a7dde0a2eee",
+              "acquired": "2026-08-31T23:39:18+00:00",
+              "title": "NISAR_L2_PR_GCOV_029_098_A_016_4005_DHDH_A_20260831T233918_20260831T233952_X05026_N_F_J_001"
+            },
+            {
+              "id": "G4315921357-ASF",
+              "revision": "000000000000:2026-09-18T20:50:01.196Z:29d53664eba34373",
+              "acquired": "2026-09-12T23:39:18+00:00",
+              "title": "NISAR_L2_PR_GCOV_030_098_A_016_4005_DHDH_A_20260912T233918_20260912T233952_X05026_N_F_J_001"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sacramento",
+      "name": "Sacramento Valley",
+      "checked": "2026-10-16T20:49:03.321801+00:00",
+      "state": "metadata-only",
+      "discoveredMetadataRecords": 80,
+      "candidateGroups": [
+        {
+          "filenameGroup": "034_A_021_4005_DHDH_A_P05023",
+          "availableDistinctTimes": 27,
+          "accessCandidates": [
+            {
+              "id": "G4306539999-ASF",
+              "revision": "000000000000:2026-09-11T06:00:21.398Z:c8ad6dc1f3d4aeb9",
+              "acquired": "2026-09-08T13:09:30+00:00",
+              "title": "NISAR_L2_PR_GCOV_030_034_A_021_4005_DHDH_A_20260908T130930_20260908T131005_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4320019791-ASF",
+              "revision": "000000000000:2026-09-22T18:43:51.563Z:6be982ee6e91270b",
+              "acquired": "2026-09-20T13:09:30+00:00",
+              "title": "NISAR_L2_PR_GCOV_031_034_A_021_4005_DHDH_A_20260920T130930_20260920T131005_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4339699770-ASF",
+              "revision": "000000000000:2026-10-04T18:11:38.736Z:2ca02935d5a1b42d",
+              "acquired": "2026-10-02T13:09:30+00:00",
+              "title": "NISAR_L2_PR_GCOV_032_034_A_021_4005_DHDH_A_20261002T130930_20261002T131005_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4370164371-ASF",
+              "revision": "000000000000:2026-10-16T12:18:47.111Z:7f0b68777fa840b0",
+              "acquired": "2026-10-14T13:09:30+00:00",
+              "title": "NISAR_L2_PR_GCOV_033_034_A_021_4005_DHDH_A_20261014T130930_20261014T131005_P05023_N_F_J_001"
+            }
+          ]
+        },
+        {
+          "filenameGroup": "143_D_069_4005_DHDH_A_P05023",
+          "availableDistinctTimes": 24,
+          "accessCandidates": [
+            {
+              "id": "G4288168518-ASF",
+              "revision": "000000000000:2026-08-26T05:27:09.056Z:7f6c7e0122119a68",
+              "acquired": "2026-08-23T03:04:24+00:00",
+              "title": "NISAR_L2_PR_GCOV_028_143_D_069_4005_DHDH_A_20260823T030424_20260823T030459_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4299906761-ASF",
+              "revision": "000000000000:2026-09-06T07:05:28.089Z:af257842c3749b38",
+              "acquired": "2026-09-04T03:04:24+00:00",
+              "title": "NISAR_L2_PR_GCOV_029_143_D_069_4005_DHDH_A_20260904T030424_20260904T030459_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4318830883-ASF",
+              "revision": "000000000000:2026-09-21T18:30:49.866Z:dd907fdadd749255",
+              "acquired": "2026-09-16T03:04:24+00:00",
+              "title": "NISAR_L2_PR_GCOV_030_143_D_069_4005_DHDH_A_20260916T030424_20260916T030459_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4359777691-ASF",
+              "revision": "000000000000:2026-10-12T09:43:22.447Z:ac47cc7fa81f0e44",
+              "acquired": "2026-10-10T03:04:24+00:00",
+              "title": "NISAR_L2_PR_GCOV_032_143_D_069_4005_DHDH_A_20261010T030424_20261010T030459_P05023_N_F_J_001"
+            }
+          ]
+        },
+        {
+          "filenameGroup": "135_A_021_4005_DHDH_A_P05023",
+          "availableDistinctTimes": 26,
+          "accessCandidates": [
+            {
+              "id": "G4299136632-ASF",
+              "revision": "000000000000:2026-09-05T11:27:10.230Z:2eb43f2e90ced28c",
+              "acquired": "2026-09-03T13:17:50+00:00",
+              "title": "NISAR_L2_PR_GCOV_029_135_A_021_4005_DHDH_A_20260903T131750_20260903T131824_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4314293111-ASF",
+              "revision": "000000000000:2026-09-17T11:30:59.483Z:e02fe6a50033c664",
+              "acquired": "2026-09-15T13:17:49+00:00",
+              "title": "NISAR_L2_PR_GCOV_030_135_A_021_4005_DHDH_A_20260915T131749_20260915T131824_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4327909713-ASF",
+              "revision": "000000000000:2026-09-29T11:14:05.240Z:b1655f7b0a78f495",
+              "acquired": "2026-09-27T13:17:49+00:00",
+              "title": "NISAR_L2_PR_GCOV_031_135_A_021_4005_DHDH_A_20260927T131749_20260927T131824_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4357862210-ASF",
+              "revision": "000000000000:2026-10-11T14:45:59.960Z:b7f6958c0faea21c",
+              "acquired": "2026-10-09T13:17:50+00:00",
+              "title": "NISAR_L2_PR_GCOV_032_135_A_021_4005_DHDH_A_20261009T131750_20261009T131824_P05023_N_F_J_001"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "seattle",
+      "name": "Puget Sound",
+      "checked": "2026-10-16T20:49:00.145673+00:00",
+      "state": "metadata-only",
+      "discoveredMetadataRecords": 28,
+      "candidateGroups": [
+        {
+          "filenameGroup": "005_A_026_4005_DHDH_A_P05023",
+          "availableDistinctTimes": 9,
+          "accessCandidates": [
+            {
+              "id": "G4308306301-ASF",
+              "revision": "000000000000:2026-09-12T07:21:19.799Z:5d6ac75266e0361c",
+              "acquired": "2026-09-06T12:55:41+00:00",
+              "title": "NISAR_L2_PR_GCOV_030_005_A_026_4005_DHDH_A_20260906T125541_20260906T125616_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4317652789-ASF",
+              "revision": "000000000000:2026-09-20T13:23:27.598Z:54422e322962a0f5",
+              "acquired": "2026-09-18T12:55:41+00:00",
+              "title": "NISAR_L2_PR_GCOV_031_005_A_026_4005_DHDH_A_20260918T125541_20260918T125616_P05023_F_F_J_001"
+            },
+            {
+              "id": "G4334215790-ASF",
+              "revision": "000000000000:2026-10-02T13:11:39.799Z:c11321fb1221d097",
+              "acquired": "2026-09-30T12:55:41+00:00",
+              "title": "NISAR_L2_PR_GCOV_032_005_A_026_4005_DHDH_A_20260930T125541_20260930T125616_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4364961592-ASF",
+              "revision": "000000000000:2026-10-14T13:29:27.616Z:7554a746650521f6",
+              "acquired": "2026-10-12T12:55:41+00:00",
+              "title": "NISAR_L2_PR_GCOV_033_005_A_026_4005_DHDH_A_20261012T125541_20261012T125616_P05023_N_F_J_001"
+            }
+          ]
+        },
+        {
+          "filenameGroup": "172_D_064_4005_DHDH_A_P05023",
+          "availableDistinctTimes": 9,
+          "accessCandidates": [
+            {
+              "id": "G4308694161-ASF",
+              "revision": "000000000000:2026-09-12T13:04:06.495Z:1f79d1afc2698f99",
+              "acquired": "2026-09-06T03:18:13+00:00",
+              "title": "NISAR_L2_PR_GCOV_029_172_D_064_4005_DHDH_A_20260906T031813_20260906T031848_P05023_N_F_J_002"
+            },
+            {
+              "id": "G4317136821-ASF",
+              "revision": "000000000000:2026-09-20T02:46:41.481Z:8d31871b66e86342",
+              "acquired": "2026-09-18T03:18:13+00:00",
+              "title": "NISAR_L2_PR_GCOV_030_172_D_064_4005_DHDH_A_20260918T031813_20260918T031848_P05023_F_F_J_001"
+            },
+            {
+              "id": "G4332988408-ASF",
+              "revision": "000000000000:2026-10-02T01:43:07.096Z:e3ebc0c2d25a33ac",
+              "acquired": "2026-09-30T03:18:13+00:00",
+              "title": "NISAR_L2_PR_GCOV_031_172_D_064_4005_DHDH_A_20260930T031813_20260930T031848_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4363965476-ASF",
+              "revision": "000000000000:2026-10-14T04:50:26.716Z:3fdea05311ddde44",
+              "acquired": "2026-10-12T03:18:13+00:00",
+              "title": "NISAR_L2_PR_GCOV_032_172_D_064_4005_DHDH_A_20261012T031813_20261012T031848_P05023_N_F_J_001"
+            }
+          ]
+        },
+        {
+          "filenameGroup": "106_A_026_4005_DHDH_A_P05023",
+          "availableDistinctTimes": 9,
+          "accessCandidates": [
+            {
+              "id": "G4297418057-ASF",
+              "revision": "000000000000:2026-09-03T11:37:05.012Z:0c0f8c6a9521ec7f",
+              "acquired": "2026-09-01T13:04:00+00:00",
+              "title": "NISAR_L2_PR_GCOV_029_106_A_026_4005_DHDH_A_20260901T130400_20260901T130436_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4312045881-ASF",
+              "revision": "000000000000:2026-09-15T18:52:17.691Z:5d3961a82f69c9dd",
+              "acquired": "2026-09-13T13:04:00+00:00",
+              "title": "NISAR_L2_PR_GCOV_030_106_A_026_4005_DHDH_A_20260913T130400_20260913T130435_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4326014954-ASF",
+              "revision": "000000000000:2026-09-27T20:05:10.979Z:b7c430ba59c2801d",
+              "acquired": "2026-09-25T13:04:00+00:00",
+              "title": "NISAR_L2_PR_GCOV_031_106_A_026_4005_DHDH_A_20260925T130400_20260925T130436_P05023_N_F_J_001"
+            },
+            {
+              "id": "G4352276109-ASF",
+              "revision": "000000000000:2026-10-09T12:14:40.946Z:2854ac50524d165b",
+              "acquired": "2026-10-07T13:04:00+00:00",
+              "title": "NISAR_L2_PR_GCOV_032_106_A_026_4005_DHDH_A_20261007T130400_20261007T130436_P05023_N_F_J_001"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

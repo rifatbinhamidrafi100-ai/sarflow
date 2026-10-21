@@ -14,7 +14,8 @@ describe('physical arithmetic and masks',()=>{
  it('rejects reversed and invalid pairs',()=>{expect(()=>analyze(tiny(),1,0,3,false)).toThrow();expect(()=>analyze(tiny(),0,4,3,false)).toThrow();expect(()=>analyze(tiny(),0,1,NaN,false)).toThrow();});
  it('rejects all-invalid support and nonpositive power',()=>{const d=tiny();d.observations[0].power=Array(9).fill(null);expect(()=>analyze(d,0,1,3,false)).toThrow('No overlapping');d.observations[0].power[0]=0;expect(()=>analyze(d,0,1,3,false)).toThrow('Invalid linear power');});
  it('reports sensitivity monotonically and histogram conservation',()=>{const r=analyze(createDemo(0),0,5,3,true);expect(r.sensitivity[0].count).toBeGreaterThanOrEqual(r.sensitivity[1].count);expect(r.sensitivity[1].count).toBeGreaterThanOrEqual(r.sensitivity[2].count);expect(r.histogram.reduce((s,b)=>s+b.count,0)).toBe(r.valid);expect(r.increase+r.decrease).toBe(r.changed);});
- it('uses supplied projected area only',()=>{const d=tiny();d.pixelAreaM2=100;expect(analyze(d,0,1,3,false).areaKm2).toBe(.0009);});
+ it('uses supplied projected area only for observed input',()=>{const d=tiny();d.status='observed';d.pixelAreaM2=100;expect(analyze(d,0,1,3,false).areaKm2).toBe(.0009);});
+ it('withholds synthetic physical area even if supplied by the input',()=>{const d=tiny();d.pixelAreaM2=100;expect(analyze(d,0,1,3,false).areaKm2).toBeNull();});
 });
 describe('fixture and contract integrity',()=>{
  it('is deterministic and explicitly synthetic',()=>{expect(createDemo(0)).toEqual(createDemo(0));demoDatasets.forEach(d=>{expect(d.status).toBe('synthetic');expect(d.pixelAreaM2).toBeNull();expect(datasetSchema.parse(d)).toEqual(d);});});

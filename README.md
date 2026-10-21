@@ -4,9 +4,16 @@ An independent Earth-change investigation application built around the supplied 
 
 **Scientific status:** A working research/education demonstrator with **15 actual NISAR visualization scenes** from NASA GIBS, matching provisional GCOV catalog records, and preserved source requests/hashes. The real-observation workspace supports geographic exploration, playback, synchronized swipe comparison, and investigation export. Built-in quantitative analyses use clearly labeled **synthetic teaching arrays**, not orbital NISAR measurements. RGB visualization colors are never treated as calibrated power. No real-event classification has been validated.
 
+**Current calibrated-data check:** the `/study` page also includes a verified single-acquisition
+Arctic GCOV 1.5.0 reader check, with source checksum, quality-mask rules and measured HH/HV
+power summaries. It is separate from the Brahmaputra investigation. A temporal result and
+independent event validation remain unavailable. See the [reader verification](docs/implementation/2026-10-21-gcov-150-reader.md).
+
 ## Real-observation workspace
 
-Open `/observatory` (or choose **Explore**). Three regions—Brahmaputra floodplain, Puget Sound, and Sacramento Valley—each contain four actual dated daily mosaics. Scenes are archived locally for a reliable judge experience; this is not a live satellite feed. Features include scene search, geographic pan/zoom, full screen, matching-granule footprints, coordinate inspection, time playback, shared-camera swipe comparison, layer opacity, user interpretation notes, original-image downloads, and evidence export.
+**Place Observatory:** the global discovery page and globe investigation now expose the source catalog independently of the browse archive. Single acquisitions remain visible even without a repeat pair. Select a source record to inspect acquisition time, catalog update, product metadata, local numerical-input candidates, unrecorded processing/validation stages and exportable evidence. Prepared regions expose the same component under **Place evidence record**. Queries are bounded to 100 records per page and 10 pages; this is not an exhaustive all-mission history. See [implementation and verification](docs/implementation/2026-10-20-place-observatory.md).
+
+Open `/observatory` (or choose **Explore**). Four prepared regions—Brahmaputra floodplain, Puget Sound, Sacramento Valley, and Rasuwa—contain dated visualization mosaics; available dates differ by region. Scenes are archived locally for a reliable judge experience; this is not a live satellite feed. Features include scene search, geographic pan/zoom, full screen, matching-granule footprints, coordinate inspection, time playback, shared-camera swipe comparison, layer opacity, user interpretation notes, original-image downloads, and evidence export.
 
 `public/data/observatory.json` records the collection, full acquisition identifiers, exact NASA WMS requests, bounds, dates, and file hashes. The daily mosaic can contain multiple products; a matching granule does not establish the source of every displayed pixel. The archive chooses repeated track/frame/mode groups, but this alone does not establish quantitative comparability of rendered mosaics.
 
@@ -17,7 +24,7 @@ Reproduce the public archive with `node scripts/archive-observatory.mjs`, then `
 Requires Node 22.12+ (tested with Node 24.19), npm, and a modern WebGL-capable browser.
 
 ```powershell
-cd C:\Users\rifat\Downloads\files\sarflow
+# From the cloned repository directory:
 npm ci
 npm run dev
 ```
@@ -79,7 +86,7 @@ No model runs in the product. “Ask the data” is a deterministic question rou
 
 ## Real NISAR data
 
-Live discovery currently queries `NISAR_L2_GCOV_BETA_V1`, up to 20 newest records per selected extent. An empty result only concerns that collection/query, not all mission coverage. The global archived catalog contains six actual CMR records. ASF browse access required authentication during preparation; those images were not cached or analyzed.
+Live discovery currently queries `NISAR_L2_GCOV_PROVISIONAL_V1`, up to 20 newest records per selected extent. An empty result only concerns that collection/query, not all mission coverage. The global archived catalog contains six actual CMR records. ASF browse access required authentication during preparation; those images were not cached or analyzed.
 
 The optional importer accepts compatible **local** L-SAR GCOV HDF5 products. It does not download products or manage authentication. Obtain products manually through official NASA/ASF tools, then independently review product calibration, geometry, and quality masks.
 
@@ -95,7 +102,7 @@ Example with your actual paths, offsets, and scientifically reviewed pair:
 .\.venv\Scripts\python scripts/import_gcov.py before.h5 after.h5 --id my-study --title "Reviewed GCOV window" --location "Study location" --row 100 --col 100 --size 128 --quality-reviewed --output data/imported/my-study.json
 ```
 
-The API validates imported JSON. The importer rejects differing grids/tracks/frames/look directions, non-GCOV input, irregular grids, and existing output paths. It records full-file SHA-256 hashes. It does not automatically apply RFI/layover/shadow masks or verify operator review. Its map envelope is approximate for projected-grid rotation; physical area remains withheld. **Only CLI help and Python syntax have been tested here; no real HDF5 pair was available for end-to-end importer validation.**
+The API validates imported JSON. The importer rejects differing grids/tracks/frames/look directions, non-GCOV input, irregular grids, and existing output paths. It records full-file SHA-256 hashes. It does not automatically apply RFI/layover/shadow masks or verify operator review. Its map envelope is approximate for projected-grid rotation; physical area remains withheld. **The importer and pipeline pass synthetic HDF5 regression tests. No real calibrated HDF5 pair has been processed in this checkout.** Use `--check-only` without `--output` to inspect compatibility before import.
 
 ## Configuration and security
 
@@ -103,12 +110,17 @@ The API validates imported JSON. The importer rejects differing grids/tracks/fra
 |---|---|---|
 | `SARFLOW_PORT` | `5187` | API / production server port |
 | `SARFLOW_HOST` | `127.0.0.1` | Bind interface |
+| `SARFLOW_ALLOWED_ORIGINS` | Local ports 5186/5187 | Comma-separated exact browser origins for water mutations; not authentication |
+| `SARFLOW_TRUSTED_PROXIES` | Empty (none) | Explicit proxy IPs/CIDRs; only set for controlled proxies that replace forwarded headers |
 
-No credentials are required. No environment file is read automatically. Local imports remain on the server; there is no upload route. All API routes are read-only. Source links must be HTTPS. Never put Earthdata credentials in frontend variables. Public deployment needs TLS and host-level rate limiting; the in-memory limiter is intended for a small single-process application.
+No credentials are required. No environment file is read automatically. Local imports remain on the server; there is no upload route. Public discovery routes are read-only; the local water API creates and cancels processing jobs. Source links must be HTTPS. Never put Earthdata credentials in frontend variables. Public deployment needs TLS and host-level rate limiting; the in-memory limiter is intended for a small single-process application.
 
 ## Tests
 
+Source formatting uses two-space indentation, single quotes and a 100-column line width. Run `npm run format` to format application source, or `npm run format:check` to check it. CI checks formatting alongside lint and tests. Keep names descriptive, functions focused and comments tied to the reason for a decision.
+
 ```powershell
+npm run lint
 npm test
 npm run build
 # Start npm run dev separately, then:
@@ -118,7 +130,7 @@ node scripts/browser-audit.mjs
 npm audit
 ```
 
-Playwright uses installed Chrome. Tests cover numerical invariants, missing-data handling, contracts, API failures/cache/validation, components, the full judge flow, downloads, retries, all major pages at desktop/mobile widths, and automated accessibility. See [QA_REPORT.md](QA_REPORT.md) for measured outcomes and limits. Screenshots/reports are stored in ignored `artifacts/`, `test-results/`, and `playwright-report/` directories.
+Playwright uses installed Chrome. Tests cover numerical invariants, missing-data handling, contracts, API failures/cache/validation, components, the full judge flow, downloads, retries, all major pages at desktop/mobile widths, and automated accessibility. See [verification notes](docs/VERIFICATION-2026-10-17.md) for measured outcomes and limits. Screenshots/reports are stored in ignored `artifacts/`, `test-results/`, and `playwright-report/` directories.
 
 ## Deployment
 
@@ -168,3 +180,13 @@ Open `/water`. Read [WATER_WORKFLOW.md](WATER_WORKFLOW.md) for project-local Pyt
 ## Automatic updates and persistent processing
 
 The selected radar location now checks NASA automatically and preserves earlier observations on failure. The optional persistent Python worker, collection policy, independent-reference evaluation and gated publication are documented in [Automatic monitoring](docs/automatic-monitoring.md). Calibrated ingestion and scientific publication require a separately connected processing host, manual Earthdata access and independently reviewed references; browser updates alone do not establish event detections.
+
+## Backend hardening and maintenance
+
+Security headers precede all API routers. Successful public discovery responses advertise five-minute shared-cache freshness; errors and water results are not cacheable. A CDN must actually be configured by the host for edge caching to occur. Per-client cooldowns use the socket IP unless specific trusted proxies are configured; limits and caches remain per process. Nominatim reverse naming retains its shared upstream protection. Invalid individual imported datasets are skipped and counted in `X-SARFlow-Skipped-Imports`.
+
+Water mutations require a configured Origin and reject cross-site browser requests. This is CSRF protection, not authentication: a non-browser client can forge Origin. Keep the worker local or protect the entire water API with authenticated access at the reverse proxy. Generated, marked job folders expire after 24 hours when another job is submitted; active and unmarked folders are preserved. Download needed results before expiry.
+
+CI is defined in `.github/workflows/ci.yml` for lint, TypeScript/build, JavaScript and Python fixture tests. It has not run on GitHub until these changes are pushed with approval. The linter starts with correctness rules; broad formatting/type-style cleanup remains separate.
+
+Archived map and comparison displays use lossless WebP derivatives when available: 27,777,376 bytes across 15 scenes versus 41,103,700 original PNG bytes (32.42% fewer transfer bytes). Every RGBA pixel is verified against its original. Original PNG downloads, source requests, and original hashes are preserved; display hashes are stored separately. Both versions remain in the repository, so this reduces viewing transfers, not repository size. Reproduce with `scripts/optimize_observation_display.py` after installing `scripts/image-requirements.txt`. Derivatives are display encodings, not new measurements.

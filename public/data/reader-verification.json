@@ -1,0 +1,68 @@
+{
+  "sourceFile": "NISAR_L2_PR_GCOV_033_056_D_051_4005_DHDH_A_20261016T020420_20261016T020437_P05023_N_P_J_001.h5",
+  "sourceBytes": 3296722944,
+  "sourceSha256": "f44be3425f68b905413676420d388ce833373b2295cb67ce65c1bd2896f69d19",
+  "acquisition": {
+    "id": "NISAR_L2_PR_GCOV_033_056_D_051_4005_DHDH_A_20261016T020420_20261016T020437_P05023_N_P_J_001",
+    "date": "2026-10-16T02:04:20+00:00",
+    "processingDateTime": "2026-10-20T20:54:36"
+  },
+  "metadata": {
+    "productVersion": "1.0.11",
+    "productSpecificationVersion": "1.5.0",
+    "trackNumber": "56",
+    "frameNumber": "51",
+    "lookDirection": "Left",
+    "orbitPassDirection": "Descending",
+    "radarBand": "L",
+    "processingType": "Nominal",
+    "isGeocoded": "True",
+    "radiometricTerrainCorrectionApplied": true,
+    "shadowMaskingApplied": false,
+    "rfiMitigationApplied": false,
+    "noiseCorrectionApplied": false,
+    "frequency": "A",
+    "co": "HHHH",
+    "cross": "HVHV",
+    "normalization": "gamma0",
+    "expression": "linear",
+    "softwareVersion": "0.25.16",
+    "epsg": 3413
+  },
+  "readerAccepted": true,
+  "window": {
+    "row": 11450,
+    "col": 5785,
+    "height": 64,
+    "width": 64,
+    "selection": "First fully supported diagnostic window in retained mask probe; no event-based selection",
+    "centerLonLat": [-76.29143659562295, 71.89532760070442],
+    "pixelSpacingMetres": [10.0, -10.0]
+  },
+  "qualityRule": "Finite positive power; mask code 1-5; positive finite looks; inputDataExceptionMask == 0",
+  "channels": {
+    "HHHH": {
+      "qualityKnown": true,
+      "validPixels": 4096,
+      "totalPixels": 4096,
+      "meanLinearGamma0": 0.05997100727108773,
+      "decibelsOfMeanPower": -12.220586567049681
+    },
+    "HVHV": {
+      "qualityKnown": true,
+      "validPixels": 4096,
+      "totalPixels": 4096,
+      "meanLinearGamma0": 0.009510211948509095,
+      "decibelsOfMeanPower": -20.2180980408864
+    }
+  },
+  "changeCalculated": false,
+  "independentValidation": false,
+  "limitations": [
+    "A single acquisition provides no temporal change result.",
+    "Valid GCOV support does not establish water, flooding, damage, or cause.",
+    "Shadow masking, noise correction, and RFI mitigation are false in this product.",
+    "Polar projected pixel spacing does not establish ground surface area.",
+    "This Arctic window is a reader verification case, separate from Brahmaputra."
+  ]
+}

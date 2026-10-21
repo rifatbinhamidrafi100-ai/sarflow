@@ -1,0 +1,28 @@
+name: Local software checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: npm ci
+      - name: Prepare local raster worker for software fixtures
+        run: |
+          python -m venv .venv-water
+          .venv-water/bin/python -m pip install -r processor/requirements.txt -r scripts/image-requirements.txt
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run check
+      - run: .venv-water/bin/python -m unittest discover -s tests -p 'test_*.py'

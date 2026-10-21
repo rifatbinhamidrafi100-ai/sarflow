@@ -17,6 +17,9 @@ test('judge critical flow, evidence, timeline, comparison and export',async({pag
  await page.getByRole('slider',{name:'Change threshold'}).fill('4');await expect(page.getByRole('heading',{name:'No analysis for these settings'})).toBeVisible();expect(errors).toEqual([]);
 });
 test('major pages, desktop/mobile overflow, accessibility and local network',async({page})=>{
+ // Keep this archive/layout regression independent of newly discovered NASA dates.
+ // Live refresh behavior has dedicated automatic-updates and live-observations tests.
+ await page.route('**/api/global-radar?*',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({empty:true,message:'No new observations in this archive UI test.'})}));
  const failures:string[]=[];page.on('response',r=>{if(r.url().startsWith('http://127.0.0.1:5186')&&r.status()>=400)failures.push(`${r.status()} ${r.url()}`);});
  for(const width of [1440,390]){await page.setViewportSize({width,height:900});for(const route of ['/','/observatory','/explore','/time-machine','/compare','/analysis','/cases','/cases/nepal-rasuwa-2026','/cases/delta','/cases/fields','/cases/forest','/science','/data','/methodology','/about']){
   await page.goto(route);await expect(page.locator('main h1')).toBeVisible();await expect(page.locator('main')).not.toContainText('Something interrupted');if(route==='/observatory')await expect(page.getByText('Archived imagery loaded',{exact:true})).toBeVisible();else await page.waitForTimeout(150);
