@@ -59,6 +59,7 @@ export function selectionReport(
   before: number,
   after: number,
   note: string,
+  maxPixels = 768,
 ) {
   return {
     format: 'SARFlow visual investigation v1',
@@ -69,8 +70,10 @@ export function selectionReport(
     before: region.observations[before],
     after: region.observations[after],
     displayRequests: {
-      before: observationDisplayImage(region.observations[before]),
-      after: observationDisplayImage(region.observations[after]),
+      before: observationDisplayImage(region.observations[before], maxPixels),
+      after: observationDisplayImage(region.observations[after], maxPixels),
+      previewBefore: observationDisplayImage(region.observations[before], 384),
+      previewAfter: observationDisplayImage(region.observations[after], 384),
     },
     userInterpretation: note,
     limitations: archive.limitations,

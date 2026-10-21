@@ -64,3 +64,18 @@ it('honors cancellation even when a date is cached', async () => {
   await expect(loadObservationPixels('/cached.png', canceled.signal)).rejects.toThrow();
   expect(fetcher).toHaveBeenCalledTimes(1);
 });
+
+it('shares a prefetch with a visible consumer without canceling the other consumer', async () => {
+  let complete!: (value: unknown) => void;
+  fetcher.mockImplementation(() => new Promise(resolve => { complete = resolve; }));
+  const { loadObservationPixels } = await import('../src/components/observationImage');
+  const background = new AbortController();
+  const prefetched = loadObservationPixels('/shared.png', background.signal);
+  const abandoned = expect(prefetched).rejects.toThrow();
+  const visible = loadObservationPixels('/shared.png', new AbortController().signal);
+  background.abort();
+  complete({ok:true,blob:async()=>new Blob()});
+  await abandoned;
+  expect(await visible).toBe(pixels);
+  expect(fetcher).toHaveBeenCalledTimes(1);
+});

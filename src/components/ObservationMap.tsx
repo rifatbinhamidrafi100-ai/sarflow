@@ -22,6 +22,7 @@ type Props = {
   onStatus: (status: string) => void;
   onPoint: (p: [number, number]) => void;
   onPrevious?: () => void;
+  detailPixels?: number;
 };
 export default function ObservationMap(props: Props) {
   const root = useRef<HTMLDivElement>(null),
@@ -31,6 +32,7 @@ export default function ObservationMap(props: Props) {
     latest = useRef(props);
   latest.current = props;
   const [ready, setReady] = useState(false),
+    [progress, setProgress] = useState(''),
     [error, setError] = useState(''),
     [retry, setRetry] = useState(0);
   useEffect(() => {
@@ -197,90 +199,133 @@ export default function ObservationMap(props: Props) {
     let canceled = false;
     const controller = new AbortController();
     props.onStatus('Loading observation');
+    setProgress('Loading selected observation preview…');
     setError('');
     const images = [props.compare ? props.before : props.frame, props.frame];
     const pending: (() => void)[] = [];
     const checks = new Map<string, Promise<ImageData>>();
     for (const m of maps.current)
       if (m.getLayer('radar')) m.setLayoutProperty('radar', 'visibility', 'none');
-    Promise.all(
-      maps.current.map(async (m, i) => {
-        const frame = images[i];
-        const url = observationDisplayImage(frame);
-        if (!checks.has(url)) checks.set(url, loadObservationPixels(url, controller.signal));
-        const image = await checks.get(url)!;
-        if (canceled || controller.signal.aborted) return;
-        if (!m.getSource('radar')) {
-          m.addSource('radar', { type: 'image', coordinates });
-          m.addLayer({
-            id: 'radar',
-            type: 'raster',
-            source: 'radar',
-            paint: {
-              'raster-fade-duration': 0,
-              'raster-opacity': props.opacity,
-              'raster-resampling': 'linear',
-            },
-          });
-        }
-        // Reuse the inspected pixels. A second URL load could fail or briefly
-        // display the prior date's texture beneath the new acquisition label.
-        (m.getSource('radar') as ml.ImageSource).updateImage({ image, coordinates });
-        m.setLayoutProperty('radar', 'visibility', 'visible');
-        if (m.getLayer('external-reference-fill')) m.moveLayer('radar', 'external-reference-fill');
-        const geo = {
-          type: 'Feature' as const,
-          properties: {},
-          geometry: { type: 'Polygon' as const, coordinates: [frame.polygon] },
-        };
-        if (m.getSource('scene')) (m.getSource('scene') as ml.GeoJSONSource).setData(geo);
-        else {
-          m.addSource('scene', { type: 'geojson', data: geo });
-          m.addLayer({
-            id: 'scene',
-            type: 'line',
-            source: 'scene',
-            paint: { 'line-color': '#ffe3a5', 'line-width': 2, 'line-dasharray': [3, 2] },
-          });
-        }
-        await new Promise<void>((resolve, reject) => {
-          const finish = () => {
-            clearTimeout(timeout);
-            m.off('idle', loaded);
-            m.off('sourcedata', loaded);
-            m.off('error', failed);
+    let generation = 0;
+    async function display(maxPixels: number) {
+      const phase = ++generation;
+      await Promise.all(
+        maps.current.map(async (m, i) => {
+          const frame = images[i];
+          const url = observationDisplayImage(frame, maxPixels);
+          if (!checks.has(url)) checks.set(url, loadObservationPixels(url, controller.signal));
+          const image = await checks.get(url)!;
+          if (canceled || controller.signal.aborted || phase !== generation) return;
+          if (!m.getSource('radar')) {
+            m.addSource('radar', { type: 'image', coordinates });
+            m.addLayer({
+              id: 'radar',
+              type: 'raster',
+              source: 'radar',
+              paint: {
+                'raster-fade-duration': 0,
+                'raster-opacity': props.opacity,
+                'raster-resampling': 'linear',
+              },
+            });
+          }
+          // Reuse the inspected pixels. A second URL load could fail or briefly
+          // display the prior date's texture beneath the new acquisition label.
+          (m.getSource('radar') as ml.ImageSource).updateImage({ image, coordinates });
+          m.setLayoutProperty('radar', 'visibility', 'visible');
+          if (m.getLayer('external-reference-fill'))
+            m.moveLayer('radar', 'external-reference-fill');
+          const geo = {
+            type: 'Feature' as const,
+            properties: {},
+            geometry: { type: 'Polygon' as const, coordinates: [frame.polygon] },
           };
-          const loaded = () => {
-            if (m.isSourceLoaded('radar')) {
+          if (m.getSource('scene')) (m.getSource('scene') as ml.GeoJSONSource).setData(geo);
+          else {
+            m.addSource('scene', { type: 'geojson', data: geo });
+            m.addLayer({
+              id: 'scene',
+              type: 'line',
+              source: 'scene',
+              paint: { 'line-color': '#ffe3a5', 'line-width': 2, 'line-dasharray': [3, 2] },
+            });
+          }
+          await new Promise<void>((resolve, reject) => {
+            const finish = () => {
+              clearTimeout(timeout);
+              m.off('idle', loaded);
+              m.off('sourcedata', loaded);
+              m.off('error', failed);
+            };
+            const loaded = () => {
+              if (m.isSourceLoaded('radar')) {
+                finish();
+                resolve();
+              }
+            };
+            const failed = () => {
+              finish();
+              reject(Error('Image unavailable'));
+            };
+            const timeout = setTimeout(failed, 30000);
+            pending.push(() => {
               finish();
               resolve();
-            }
-          };
-          const failed = () => {
-            finish();
-            reject(Error('Image unavailable'));
-          };
-          const timeout = setTimeout(failed, 30000);
-          pending.push(() => {
-            finish();
-            resolve();
+            });
+            m.on('idle', loaded);
+            m.on('sourcedata', loaded);
+            m.on('error', failed);
+            queueMicrotask(loaded);
+            m.triggerRepaint();
           });
-          m.on('idle', loaded);
-          m.on('sourcedata', loaded);
-          m.on('error', failed);
-          queueMicrotask(loaded);
-          m.triggerRepaint();
-        });
-      }),
-    )
+        }),
+      );
+    }
+    let previewVisible = false;
+    const detail = props.detailPixels ?? 768;
+    (async () => {
+      const needsDetail = images.some(
+        (frame) => observationDisplayImage(frame, 384) !== observationDisplayImage(frame, detail),
+      );
+      if (needsDetail) {
+        try {
+          await display(384);
+          if (canceled) return;
+          previewVisible = true;
+          setProgress('Preview visible · loading full detail…');
+          props.onStatus('Preview visible; loading detail');
+        } catch (cause) {
+          if (!(cause instanceof MissingBrowsePixels)) throw cause;
+          // A small preview can miss tiny coverage; inspect the requested detail before declaring a gap.
+        }
+      }
+      await display(detail);
+    })()
       .then(() => {
-        if (!canceled)
-          props.onStatus(props.frame.sha256 ? 'Archived imagery loaded' : 'NASA imagery loaded');
+        if (!canceled) {
+          setProgress('');
+          props.onStatus(
+            props.frame.sha256
+              ? 'Archived imagery loaded'
+              : detail === 384
+                ? 'NASA preview imagery loaded'
+                : 'NASA imagery loaded',
+          );
+        }
       })
       .catch((cause) => {
         if (!canceled) {
           controller.abort();
           pending.forEach((cancel) => cancel());
+          if (previewVisible) {
+            setProgress('Preview retained · requested detail unavailable');
+            setError(
+              'The preview is available, but the detailed image could not load. Retry the map to request it again.',
+            );
+            props.onStatus('Preview visible; detail unavailable');
+            return;
+          }
+          setProgress('');
           for (const m of maps.current)
             if (m.getLayer('radar')) m.setLayoutProperty('radar', 'visibility', 'none');
           setError(
@@ -300,7 +345,7 @@ export default function ObservationMap(props: Props) {
       controller.abort();
       pending.forEach((cancel) => cancel());
     };
-  }, [ready, props.region.id, props.frame.id, props.before.id, props.compare]);
+  }, [ready, props.region.id, props.frame.id, props.before.id, props.compare, props.detailPixels]);
   useEffect(() => {
     if (!ready) return;
     for (const m of maps.current) {
@@ -373,6 +418,11 @@ export default function ObservationMap(props: Props) {
   return (
     <div className="observation-map" ref={root}>
       <div ref={baseEl} className="observation-map-canvas" />
+      {progress && (
+        <div className="obs-map-progress" role="status">
+          {progress}
+        </div>
+      )}
       <div
         className="observation-map-overlay"
         style={{

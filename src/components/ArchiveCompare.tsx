@@ -9,6 +9,7 @@ export default function ArchiveCompare({
   split,
   mode,
   onStatus,
+  maxPixels = 768,
 }: {
   frame: ActualFrame;
   before: ActualFrame;
@@ -16,6 +17,7 @@ export default function ArchiveCompare({
   split: number;
   mode: string;
   onStatus: (status: string) => void;
+  maxPixels?: number;
 }) {
   const [error, setError] = useState(false),
     [retry, setRetry] = useState(0);
@@ -31,7 +33,7 @@ export default function ArchiveCompare({
           new Promise<void>((resolve, reject) => {
             img.onload = () => resolve();
             img.onerror = () => reject();
-            img.src = observationDisplayImage(frames[i]);
+            img.src = observationDisplayImage(frames[i], maxPixels);
           }),
       ),
     )
@@ -59,17 +61,18 @@ export default function ArchiveCompare({
     compare,
     retry,
     onStatus,
+    maxPixels,
   ]);
   return (
     <div className="archive-compare" aria-label="Archived image comparison">
       <img
-        src={observationDisplayImage(compare ? before : frame)}
+        src={observationDisplayImage(compare ? before : frame, maxPixels)}
         alt={`Archived false-color radar visualization, ${compare ? before.date : frame.date}`}
       />
       {compare && (
         <img
           className="archive-after"
-          src={observationDisplayImage(frame)}
+          src={observationDisplayImage(frame, maxPixels)}
           alt={`After visualization, ${frame.date}`}
           style={{
             clipPath:

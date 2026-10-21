@@ -24,6 +24,7 @@ import { useObservatory } from '../data/observatory';
 import { useRadarUpdates } from '../data/useRadarUpdates';
 import { appendLiveObservations, updatedSelection } from '../../shared/live-observations';
 import { MonitoringStatus } from '../components/MonitoringStatus';
+import { loadObservationPixels } from '../components/observationImage';
 import { selectionReport, observationDisplayImage } from '../../shared/observatory';
 import type { Observatory as ObservatoryArchive, Region } from '../../shared/observatory';
 import { date, Download, Empty, External } from '../components/ui';
@@ -165,6 +166,7 @@ export function RegionWorkspace({
   const [index, setIndex] = useState(region.observations.length - 1),
     [reference, setReference] = useState(0);
   const [playing, setPlaying] = useState(false),
+    [detailPixels, setDetailPixels] = useState(1536),
     [speed, setSpeed] = useState(1);
   const [studio, setStudio] = useState<'swipe' | 'split' | 'opacity'>('swipe'),
     [lens, setLens] = useState('processed');
@@ -195,6 +197,26 @@ export function RegionWorkspace({
   const evidence = useRef<HTMLDialogElement>(null);
   const frame = region?.observations[Math.min(index, region.observations.length - 1)];
   const before = region?.observations[Math.min(reference, region.observations.length - 1)];
+  const prefetch = useRef<{ controller: AbortController; requested: Set<string> } | null>(null);
+  useEffect(() => {
+    if (!playing || archiveView) return;
+    const session = { controller: new AbortController(), requested: new Set<string>() };
+    prefetch.current = session;
+    return () => {
+      session.controller.abort();
+      prefetch.current = null;
+    };
+  }, [playing, archiveView, region.id]);
+  useEffect(() => {
+    const session = prefetch.current;
+    const next = region.observations[index + 1];
+    if (!session || !next || !status.endsWith('imagery loaded')) return;
+    const url = observationDisplayImage(next, 384);
+    if (session.requested.has(url)) return;
+    session.requested.add(url);
+    // One next-date preview, only during playback. Errors remain visible if that date is selected.
+    void loadObservationPixels(url, session.controller.signal).catch(() => {});
+  }, [playing, index, status, region]);
   useEffect(() => {
     onSelection?.({
       date: frame.acquired,
@@ -221,7 +243,8 @@ export function RegionWorkspace({
     return () => document.removeEventListener('visibilitychange', hide);
   }, []);
   const report = {
-    ...selectionReport(data, region, reference, index, note),
+    ...selectionReport(data, region, reference, index, note, playing ? 384 : detailPixels),
+    displayState: status,
     externalMappingReference: externalReference
       ? {
           ...externalReference,
@@ -244,8 +267,11 @@ export function RegionWorkspace({
           <h1>Earth, in motion.</h1>
         </div>
         <div className="actions">
-          <Link className="button" to="/world">
-            World imagery
+          <Link
+            className="button"
+            to={`/world?lat=${region.center[1]}&lon=${region.center[0]}&zoom=16`}
+          >
+            Satellite photo
           </Link>
           <button onClick={() => evidence.current?.showModal()}>
             <ShieldCheck size={16} />
@@ -255,8 +281,8 @@ export function RegionWorkspace({
       </div>
       <p className="obs-context-note">
         NISAR radar imagery for visual comparison. Flood extent and damage have not been calculated.{' '}
-        On-demand previews are limited to 768 pixels per side; original requests are retained in
-        Evidence.
+        A quick preview appears first. Pause playback to load your selected detail. For photographic
+        context, open Satellite photo. Radar colors and texture are not an optical photograph.
       </p>
       <nav className="obs-panel-toggles" aria-label="Observation workspace panels">
         <button
@@ -571,6 +597,21 @@ export function RegionWorkspace({
               <span>{region.topic}</span>
             </div>
             <div className="obs-view-modes">
+              <label className="obs-detail-control">
+                Image detail
+                <select
+                  aria-label="Radar image detail"
+                  value={detailPixels}
+                  onChange={(e) => {
+                    setPlaying(false);
+                    setDetailPixels(Number(e.target.value));
+                  }}
+                >
+                  <option value="1536">Detailed · source size</option>
+                  <option value="768">Balanced · 768 px</option>
+                  <option value="384">Quick · 384 px</option>
+                </select>
+              </label>
               <button
                 className={!compare ? 'selected' : ''}
                 aria-pressed={!compare}
@@ -600,6 +641,7 @@ export function RegionWorkspace({
                 compare={compare}
                 split={split}
                 mode={studio}
+                maxPixels={playing ? 384 : detailPixels}
                 onStatus={setStatus}
               />
             ) : (
@@ -607,6 +649,7 @@ export function RegionWorkspace({
                 <ObservationMap
                   region={region}
                   frame={frame}
+                  detailPixels={playing ? 384 : detailPixels}
                   before={before}
                   compare={compare}
                   mode={studio}

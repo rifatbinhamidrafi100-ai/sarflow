@@ -452,3 +452,25 @@
 .obs-supporting-tools > .investigation {
   margin-top: 18px;
 }
+.obs-detail-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+.obs-detail-control select {
+  width: auto;
+  max-width: 180px;
+}
+.obs-map-progress {
+  position: absolute;
+  left: 16px;
+  bottom: 60px;
+  z-index: 4;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #112c46;
+  color: white;
+  font-size: 12px;
+  pointer-events: none;
+}

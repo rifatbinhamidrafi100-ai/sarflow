@@ -22,7 +22,7 @@ function forget(url: string) {
   images.delete(url);
 }
 
-export async function loadObservationPixels(url: string, signal: AbortSignal): Promise<ImageData> {
+async function fetchPixels(url: string, signal: AbortSignal): Promise<ImageData> {
   signal.throwIfAborted();
   const cached = images.get(url);
   if (cached && cached.expires > Date.now()) {
@@ -57,4 +57,50 @@ export async function loadObservationPixels(url: string, signal: AbortSignal): P
   } finally {
     image.close();
   }
+}
+
+type PendingImage = { promise: Promise<ImageData>; controller: AbortController; users: number };
+const pending = new Map<string, PendingImage>();
+
+/** Share in-flight previews; cancel the download only after its last consumer leaves. */
+export function loadObservationPixels(url: string, signal: AbortSignal): Promise<ImageData> {
+  if (signal.aborted) return Promise.reject(signal.reason);
+  let entry = pending.get(url);
+  if (!entry) {
+    const controller = new AbortController();
+    const created: PendingImage = {
+      controller,
+      users: 0,
+      promise: fetchPixels(url, controller.signal).finally(() => {
+        if (pending.get(url) === created) pending.delete(url);
+      }),
+    };
+    entry = created;
+    pending.set(url, entry);
+  }
+  const shared = entry;
+  shared.users++;
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    function finish(error: unknown, value?: ImageData) {
+      if (settled) return;
+      settled = true;
+      signal.removeEventListener('abort', aborted);
+      if (--shared.users === 0) {
+        if (pending.get(url) === shared) pending.delete(url);
+        shared.controller.abort();
+      }
+      if (error) reject(error);
+      else resolve(value!);
+    }
+    function aborted() {
+      finish(signal.reason ?? new DOMException('Canceled', 'AbortError'));
+    }
+    signal.addEventListener('abort', aborted, { once: true });
+    shared.promise.then(
+      (value) => finish(null, value),
+      (error) => finish(error),
+    );
+    if (signal.aborted) aborted();
+  });
 }
