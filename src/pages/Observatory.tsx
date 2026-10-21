@@ -24,7 +24,7 @@ import { useObservatory } from '../data/observatory';
 import { useRadarUpdates } from '../data/useRadarUpdates';
 import { appendLiveObservations, updatedSelection } from '../../shared/live-observations';
 import { MonitoringStatus } from '../components/MonitoringStatus';
-import { selectionReport } from '../../shared/observatory';
+import { selectionReport, observationDisplayImage } from '../../shared/observatory';
 import type { Observatory as ObservatoryArchive, Region } from '../../shared/observatory';
 import { date, Download, Empty, External } from '../components/ui';
 import './observatory.css';
@@ -254,7 +254,9 @@ export function RegionWorkspace({
         </div>
       </div>
       <p className="obs-context-note">
-        NISAR radar imagery for visual comparison. Flood extent and damage have not been calculated.
+        NISAR radar imagery for visual comparison. Flood extent and damage have not been calculated.{' '}
+        On-demand previews are limited to 768 pixels per side; original requests are retained in
+        Evidence.
       </p>
       <nav className="obs-panel-toggles" aria-label="Observation workspace panels">
         <button
@@ -305,7 +307,10 @@ export function RegionWorkspace({
                     onClick={() => choose(r.id)}
                   >
                     <img
-                      src={r.observations.at(-1)!.thumbnail ?? r.observations.at(-1)!.image}
+                      src={
+                        r.observations.at(-1)!.thumbnail ??
+                        observationDisplayImage(r.observations.at(-1)!, 160)
+                      }
                       alt=""
                       loading="lazy"
                     />

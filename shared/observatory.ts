@@ -68,13 +68,29 @@ export function selectionReport(
     region: { name: region.name, bounds: region.bounds },
     before: region.observations[before],
     after: region.observations[after],
+    displayRequests: {
+      before: observationDisplayImage(region.observations[before]),
+      after: observationDisplayImage(region.observations[after]),
+    },
     userInterpretation: note,
     limitations: archive.limitations,
     quantitativeResult: null,
   };
 }
 
-/** Display encoding only; original source bytes and hashes remain authoritative. */
-export function observationDisplayImage(frame: ActualFrame) {
-  return frame.display?.image ?? frame.image;
+/** Display derivatives only; original source requests and hashes remain authoritative. */
+export function observationDisplayImage(frame: ActualFrame, maxPixels = 768) {
+  if (frame.display) return frame.display.image;
+  if (!frame.image.startsWith('https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?'))
+    return frame.image;
+  const preview = new URL(frame.image);
+  const width = Number(preview.searchParams.get('WIDTH'));
+  const height = Number(preview.searchParams.get('HEIGHT'));
+  if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0)
+    return frame.image;
+  const scale = Math.min(1, maxPixels / Math.max(width, height));
+  if (scale === 1) return frame.image;
+  preview.searchParams.set('WIDTH', String(Math.max(1, Math.round(width * scale))));
+  preview.searchParams.set('HEIGHT', String(Math.max(1, Math.round(height * scale))));
+  return preview.toString();
 }

@@ -4,6 +4,15 @@ import { createHash } from 'node:crypto';
 import { observatorySchema, selectionReport, observationDisplayImage } from '../shared/observatory';
 const archive=observatorySchema.parse(JSON.parse(readFileSync('public/data/observatory.json','utf8')));
 describe('actual NISAR archive integrity',()=>{
+ it('reduces on-demand previews while retaining dates, bounds and original evidence',()=>{
+  const url=new URL(archive.regions[0].observations[0].request);
+  url.searchParams.set('WIDTH','1536');url.searchParams.set('HEIGHT','768');
+  const frame={...archive.regions[0].observations[0],display:undefined,image:url.toString()};
+  const preview=new URL(observationDisplayImage(frame));
+  expect(preview.searchParams.get('WIDTH')).toBe('768');expect(preview.searchParams.get('HEIGHT')).toBe('384');
+  for(const key of ['TIME','BBOX','LAYERS','SRS'])expect(preview.searchParams.get(key)).toBe(url.searchParams.get(key));
+  expect(frame.image).toBe(url.toString());expect(frame.request).toBe(archive.regions[0].observations[0].request);
+ });
  it('verifies smaller display derivatives separately from original evidence',()=>{
   for(const frame of archive.regions.flatMap(r=>r.observations)){
    expect(frame.display).toBeDefined();
