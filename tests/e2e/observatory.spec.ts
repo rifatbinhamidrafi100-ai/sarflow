@@ -4,7 +4,7 @@ test.beforeEach(async({page})=>{await page.route('**/api/global-radar?*',r=>r.fu
 
 test('actual imagery workflow, geographic comparison, evidence and export',async({page})=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
- await page.goto('/');await page.getByRole('link',{name:'Explore real observations',exact:true}).click();
+ await page.goto('/');await page.getByRole('link',{name:'Explore Brahmaputra NISAR imagery',exact:true}).click();
  await expect(page.getByText('Archived imagery loaded',{exact:true})).toBeVisible();await expect(page.locator('.obs-map-error')).toHaveCount(0);
  await page.getByRole('button',{name:'Previous acquisition'}).click();await expect(page.getByRole('slider',{name:'Real acquisition timeline'})).toHaveValue('2');
  await page.getByRole('button',{name:'Compare',exact:true}).click();await page.getByRole('slider',{name:'Real imagery swipe'}).fill('30');await expect(page.locator('.observation-map-overlay')).toHaveCSS('clip-path','inset(0px 0px 0px 30%)');

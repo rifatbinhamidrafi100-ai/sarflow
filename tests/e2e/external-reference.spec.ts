@@ -52,10 +52,10 @@ test('reference loading fails honestly, retries, and overlays the geographic obs
   expect(exported.externalMappingReference.product).toBe('EMSR927 AOI01 GRA PRODUCT v1');
   expect(exported.quantitativeResult).toBeNull();
   await page.locator('.observation-map').screenshot({ path: 'artifacts/rasuwa-reference-map.png' });
-  await page.route('**/observations/nepal-rasuwa-2026-08-31.png', route => route.abort());
+  await page.route('**/observations/nepal-rasuwa-2026-08-31.webp', route => route.abort());
   await page.getByRole('button', { name: 'Previous acquisition', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Retry map', exact: true })).toBeVisible();
-  await page.unroute('**/observations/nepal-rasuwa-2026-08-31.png');
+  await page.unroute('**/observations/nepal-rasuwa-2026-08-31.webp');
   await page.getByRole('button', { name: 'Retry map', exact: true }).click();
   await expect(page.getByText('Archived imagery loaded', { exact: true })).toBeVisible();
   await expect(toggle).toBeChecked();

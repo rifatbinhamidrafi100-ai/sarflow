@@ -225,7 +225,7 @@ function ExploreContent() {
           <div className="catalog-search">
             <h3>Real NISAR discovery</h3>
             <p className="tiny">
-              Search beta GCOV metadata for{' '}
+              Search GCOV catalog metadata for{' '}
               {aoi ? 'the clicked / entered region' : 'this study area'}. Coverage is
               collection-specific; no result is not proof of no NISAR coverage.
             </p>
@@ -243,7 +243,7 @@ function ExploreContent() {
                 <p>
                   {records.length
                     ? `${records.length} actual records (up to 20 newest).`
-                    : 'No NISAR beta GCOV observations returned for this region.'}
+                    : 'No NISAR GCOV observations returned for this region.'}
                 </p>
                 {records.slice(0, 3).map((r) => (
                   <External key={r.id} href={r.source}>

@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('Nepal case connects reports, before/after evidence, and real map dates',async({page})=>{
+ await page.route('**/api/global-radar?*',r=>r.fulfill({json:{empty:true,message:'Archive case test.'}}));
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('/');await page.getByRole('link',{name:'Explore Nepal flood',exact:true}).click();
  await expect(page.getByRole('heading',{name:'Nepal: the Rasuwa flood',exact:true})).toBeVisible();
@@ -16,7 +17,7 @@ test('Nepal case connects reports, before/after evidence, and real map dates',as
  await expect(page.getByText('Archived imagery loaded',{exact:true})).toBeVisible();
  await expect(page.locator('.obs-frame-number')).toHaveText('3/ 3');
  await page.getByRole('button',{name:'Compare',exact:true}).click();await page.getByRole('slider',{name:'Real imagery swipe'}).fill('65');
- await page.getByRole('link',{name:'Read event reports and limitations'}).click();await expect(page.getByRole('heading',{name:'Nepal: the Rasuwa flood',exact:true})).toBeVisible();expect(errors).toEqual([]);
+ await page.getByRole('link',{name:'Event reports & limitations'}).click();await expect(page.getByRole('heading',{name:'Nepal: the Rasuwa flood',exact:true})).toBeVisible();expect(errors).toEqual([]);
 });
 
 test('Nepal event reports remain accessible when imagery API fails',async({page})=>{

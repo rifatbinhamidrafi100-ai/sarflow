@@ -183,11 +183,12 @@
   font-size: 12px;
 }
 .observatory-body .observation-stage {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   min-height: 0;
 }
 .observatory-body .obs-map-wrap {
-  min-height: 0;
+  min-height: 320px;
 }
 .observatory-body .obs-stage-toolbar {
   padding: 10px 12px;
@@ -426,7 +427,10 @@
   overflow-wrap: anywhere;
 }
 .observatory-body .obs-view-modes {
-  flex-shrink: 0;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .obs-result-facts time span {
@@ -457,6 +461,9 @@
   align-items: center;
   gap: 6px;
   font-size: 12px;
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
 }
 .obs-detail-control select {
   width: auto;
@@ -473,4 +480,5 @@
   color: white;
   font-size: 12px;
   pointer-events: none;
+  max-width: calc(100% - 80px);
 }

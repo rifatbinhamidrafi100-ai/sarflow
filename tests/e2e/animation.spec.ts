@@ -28,10 +28,11 @@ test('reduced motion keeps the radar story static and usable',async({page})=>{
 });
 
 test('observation playback waits for a delayed raster',async({page})=>{
+ await page.route('**/api/global-radar?*',r=>r.fulfill({json:{empty:true,message:'Archive playback test.'}}));
  await page.goto('/observatory');await expect(page.getByText('Archived imagery loaded',{exact:true})).toBeVisible();
  let release:()=>void=()=>{};
  const gate=new Promise<void>(resolve=>{release=resolve;});
- await page.route('**/observations/*.png',async route=>{await gate;await route.continue();});
+ await page.route('**/observations/*.webp',async route=>{await gate;await route.continue();});
  await page.getByRole('button',{name:'Play observations',exact:true}).click();
  await expect(page.getByRole('slider',{name:'Real acquisition timeline'})).toHaveValue('0');
  await page.waitForTimeout(2700);
