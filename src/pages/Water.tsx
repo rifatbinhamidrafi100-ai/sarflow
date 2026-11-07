@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Download } from '../components/ui';
 import './water.css';
+import { WaterEvaluation } from '../components/WaterEvaluation';
 type Input = { id: string; location: string; dataType: string; dates: number };
 type Result = {
   dataType: string;
@@ -58,6 +59,39 @@ export default function Water() {
     },
     [],
   );
+  useEffect(() => {
+    const saved = new URLSearchParams(window.location.search).get('job');
+    if (!saved || !/^[0-9a-f-]{36}$/.test(saved)) return;
+    const runId = invalidate(),
+      c = new AbortController();
+    controller.current = c;
+    setJob(saved);
+    setBusy(true);
+    async function restore() {
+      try {
+        const body = await request('/jobs/' + saved, { signal: c.signal });
+        if (c.signal.aborted || generation.current !== runId) return;
+        setStatus(body.message);
+        if (body.status === 'running') {
+          timer.current = setTimeout(() => void restore(), 800);
+        } else {
+          setBusy(false);
+          if (body.status === 'complete') setResult(body.result);
+          else if (body.status === 'failed') setError(body.message);
+        }
+      } catch (e) {
+        if (!c.signal.aborted && generation.current === runId) {
+          setBusy(false);
+          setError(e instanceof Error ? e.message : 'Saved investigation unavailable');
+        }
+      }
+    }
+    void restore();
+    return () => {
+      c.abort();
+      clearTimeout(timer.current);
+    };
+  }, []);
   useEffect(() => {
     const c = new AbortController();
     setLoading(true);
@@ -118,6 +152,9 @@ export default function Water() {
       });
       if (!current()) return;
       setJob(b.id);
+      const url = new URL(window.location.href);
+      url.searchParams.set('job', b.id);
+      window.history.replaceState(window.history.state, '', url);
       void poll(b.id);
     } catch (e) {
       if (current()) {
@@ -167,7 +204,7 @@ export default function Water() {
       <div className="page-heading">
         <div>
           <span className="tiny">Experimental calibrated-measurement workflow</span>
-          <h1>Brahmaputra water change</h1>
+          <h1>Water change investigation</h1>
         </div>
         <Link className="button" to="/observatory?region=brahmaputra">
           View rendered NISAR imagery
@@ -179,7 +216,7 @@ export default function Water() {
       </p>
       <p className="notice">
         Not an official OPERA product. Newly detected water candidates are not confirmed floods.
-        Real-event accuracy has not been evaluated.
+        Reference agreement, when available, is reported separately and does not confirm flooding.
       </p>
       {loading ? (
         <p role="status">Checking registered measurements…</p>
@@ -187,6 +224,12 @@ export default function Water() {
         <>
           <section className="panel">
             <h2>Measurement inputs</h2>
+            {result && (
+              <p className="notice">
+                These inputs and thresholds configure a new run. The displayed retained result keeps
+                its original processing parameters in the exported evidence JSON.
+              </p>
+            )}
             {inputs.length === 0 ? (
               <>
                 <p role="status">
@@ -421,9 +464,10 @@ export default function Water() {
           <h3>Area and uncertainty</h3>
           <p>
             Area unavailable: ground pixel area and support have not been independently justified.
-            No confidence probability or reference-label accuracy is reported. Download the
-            reason-bit raster to inspect exclusions, missing evidence and ambiguous signals.
+            No confidence probability is reported. Download the reason-bit raster to inspect
+            exclusions, missing evidence and ambiguous signals.
           </p>
+          <WaterEvaluation key={job} job={job} />
           <ul>
             {result.limitations.map((l) => (
               <li key={l}>{l}</li>

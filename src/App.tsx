@@ -11,12 +11,17 @@ import {
   Moon,
   Sun,
   X,
+  Smartphone,
 } from 'lucide-react';
 import { WorkspaceProvider } from './data/Workspace';
 import Evidence from './components/Evidence';
+const Install = lazy(() => import('./pages/Install'));
 const SavedInvestigations = lazy(() => import('./pages/SavedInvestigations'));
 const Study = lazy(() => import('./pages/Study'));
 const Water = lazy(() => import('./pages/Water'));
+const Resources = lazy(() => import('./pages/Resources'));
+const GettingStarted = lazy(() => import('./pages/GettingStarted'));
+const NisarExplorer = lazy(() => import('./pages/NisarExplorer'));
 const GlobalRadar = lazy(() => import('./pages/GlobalRadar'));
 const World = lazy(() => import('./pages/World'));
 const Home = lazy(() => import('./pages/RealHome')),
@@ -144,6 +149,7 @@ function Shell() {
         >
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/install" element={<Install />} />
             <Route path="/global-radar" element={<GlobalRadar />} />
             <Route path="/study" element={<Study />} />
             <Route path="/water" element={<Water />} />
@@ -157,6 +163,9 @@ function Shell() {
             <Route path="/cases" element={<Cases />} />
             <Route path="/cases/:id" element={<Cases />} />
             <Route path="/science" element={<Knowledge />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/getting-started" element={<GettingStarted />} />
+            <Route path="/nisar-explorer" element={<NisarExplorer />} />
             <Route path="/methodology" element={<Knowledge />} />
             <Route path="/about" element={<Knowledge />} />
             <Route path="/data" element={<Data />} />
@@ -179,6 +188,9 @@ function Shell() {
         <p>See Earth Move. Understand the evidence.</p>
         <div>
           <Link to="/about">About</Link>
+          <Link to="/getting-started">Beginner guide</Link>
+          <Link to="/install">Get the mobile app</Link>
+          <Link to="/nisar-explorer">NISAR Explorer</Link>
           <Link to="/methodology">Methodology</Link>
           <Link to="/science">
             Sources / science
@@ -188,6 +200,24 @@ function Shell() {
         <small>Independent project. No NASA or ISRO endorsement.</small>
       </footer>
       <Evidence />
+      <nav className="phone-nav" aria-label="Mobile navigation">
+        <NavLink to="/world">
+          <Globe2 size={21} />
+          Explore
+        </NavLink>
+        <NavLink to="/getting-started">
+          <BookOpen size={21} />
+          Learn
+        </NavLink>
+        <NavLink to="/study">
+          <Database size={21} />
+          Evidence
+        </NavLink>
+        <NavLink to="/install">
+          <Smartphone size={21} />
+          Install
+        </NavLink>
+      </nav>
       <ScrollReset />
     </>
   );

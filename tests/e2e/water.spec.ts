@@ -20,3 +20,61 @@ test('water page has an honest empty state and loads without MapLibre',async({pa
  const scripts:string[]=[];page.on('request',r=>{if(r.resourceType()==='script')scripts.push(r.url());});
  await page.route('**/api/water/inputs',r=>r.fulfill({json:{inputs:[],workerAvailable:true}}));await page.goto('/water');await expect(page.getByText(/No calibrated GCOV measurements are registered/)).toBeVisible();await expect(page.getByRole('button',{name:'Run water-candidate analysis'})).toBeDisabled();expect(scripts.some(s=>s.includes('maplibre'))).toBe(false);
 });
+
+test('retained investigation restores its comparison and evidence after reload',async({page})=>{
+ const id='12345678-1234-4123-8123-123456789abc';
+ await page.route('**/api/water/inputs',r=>r.fulfill({json:{inputs:[],workerAvailable:true}}));
+ await page.route(`**/api/water/jobs/${id}`,r=>r.fulfill({json:{status:'complete',message:'Retained software fixture',result:result('Retained investigation')}}));
+ await page.goto(`/water?job=${id}`);
+ await expect(page.locator('.location-watermark')).toContainText('Retained investigation');
+ await page.getByLabel('Result lens').selectOption('compare');
+ await page.getByLabel('Water comparison swipe').fill('35');
+ await expect(page.locator('.water-after')).toHaveCSS('clip-path','inset(0px 0px 0px 35%)');
+ await expect(page.getByRole('link',{name:'classes GeoTIFF'})).toHaveAttribute('href',`/api/water/jobs/${id}/files/classes.tif`);
+ await page.reload();
+ await expect(page.locator('.location-watermark')).toContainText('Retained investigation');
+ await expect(page.getByRole('button',{name:'Export water evidence JSON'})).toBeVisible();
+});
+
+test('interrupted retained job shows failure without partial results',async({page})=>{
+ const id='12345678-1234-4123-8123-123456789abc';
+ await page.route('**/api/water/inputs',r=>r.fulfill({json:{inputs:[],workerAvailable:true}}));
+ await page.route(`**/api/water/jobs/${id}`,r=>r.fulfill({json:{status:'failed',message:'Server restarted during processing. Partial outputs are unavailable; submit a new job.',result:null}}));
+ await page.goto(`/water?job=${id}`);
+ await expect(page.getByText(/Server restarted during processing/).first()).toBeVisible();
+ await expect(page.locator('.location-watermark')).toHaveCount(0);
+});
+
+test('evaluation shows pending and rejects inconsistent metrics',async({page})=>{
+ const id='12345678-1234-4123-8123-123456789abc';
+ await page.route('**/api/water/inputs',r=>r.fulfill({json:{inputs:[],workerAvailable:true}}));
+ await page.route(`**/api/water/jobs/${id}`,r=>r.fulfill({json:{status:'complete',message:'Software fixture',result:result('Evaluation test')}}));
+ await page.route(`**/api/water/jobs/${id}/evaluation`,r=>r.fulfill({json:{status:'pending',evaluation:null}}));
+ await page.goto(`/water?job=${id}`);
+ await expect(page.getByText('Independent evaluation pending. No reference agreement metrics are available.')).toBeVisible();
+ await expect(page.getByRole('button',{name:'Export evaluation receipt JSON'})).toHaveCount(0);
+ await page.route(`**/api/water/jobs/${id}/evaluation`,r=>r.fulfill({json:{status:'available',evaluation:{metrics:{accuracy:1}}}}));
+ await page.reload();
+ await expect(page.getByText('Invalid evaluation receipt. Metrics withheld.')).toBeVisible();
+ await expect(page.getByRole('button',{name:'Export evaluation receipt JSON'})).toHaveCount(0);
+});
+
+test('software evaluation is labelled and exports its actual receipt',async({page})=>{
+ const id='12345678-1234-4123-8123-123456789abc', hash='a'.repeat(64);
+ const evaluation={schemaVersion:'1.0',method:'target-water-pixel-agreement-v1',status:'software-fixture-only',createdAt:'2026-01-01T00:00:00Z',predictionSha256:hash,processingReceiptSha256:hash,
+ reference:{source:'Independent software labels',acquisitionTime:'2026-01-01T00:00:00Z',samplingMethod:'All fixture cells',preparationMethod:'Known values',limitations:'Synthetic only',independentOfPrediction:true,sha256:hash,files:[]},
+ scope:{bounds:[0,0,1,1],crs:'EPSG:32646',observations:[]},sampleUnit:'raster pixel',sampleSize:4,
+ support:{totalCells:6,classifiedCells:4,referenceValidCells:6,evaluatedCells:4,excludedCells:2},confusionMatrix:{truePositive:1,falsePositive:1,falseNegative:1,trueNegative:1},
+ metrics:{precision:.5,recall:.5,f1:.5,intersectionOverUnion:1/3,accuracy:.5},limitations:['Not real scientific validation']};
+ await page.route('**/api/water/inputs',r=>r.fulfill({json:{inputs:[],workerAvailable:true}}));
+ await page.route(`**/api/water/jobs/${id}`,r=>r.fulfill({json:{status:'complete',message:'Software fixture',result:result('Evaluation test')}}));
+ await page.route(`**/api/water/jobs/${id}/evaluation`,r=>r.fulfill({json:{status:'available',evaluation}}));
+ await page.goto(`/water?job=${id}`);
+ await expect(page.getByText('Software fixture only — not real-world accuracy.')).toBeVisible();
+ const section=page.getByRole('region',{name:'Independent evaluation'});
+ await expect(section.getByText('50.00%').first()).toBeVisible();
+ await expect(section.getByText('Evaluated: 4 pixels. Excluded: 2 of 6 window pixels.')).toBeVisible();
+ const download=page.waitForEvent('download');
+ await page.getByRole('button',{name:'Export evaluation receipt JSON'}).click();
+ expect((await download).suggestedFilename()).toBe('sarflow-water-evaluation.json');
+});

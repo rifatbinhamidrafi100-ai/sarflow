@@ -6,6 +6,8 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
+import { recoverWaterJobs, saveWaterJob } from './water-job-store.js';
+import { readWaterEvaluation } from './water-evaluation.js';
 const parameters = z
   .object({
     co_db: z.number().min(-35).max(-5).default(-17),
@@ -16,6 +18,7 @@ const parameters = z
   .strict();
 type Job = {
   id: string;
+  created: number;
   status: 'running' | 'complete' | 'failed' | 'cancelled';
   message: string;
   cancel: () => void;
@@ -40,6 +43,28 @@ export function waterRouter(
     process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python',
   );
   let workerActive = false;
+  let storageAvailable = true;
+  try {
+    for (const record of recoverWaterJobs(outputs))
+      jobs.set(record.id, { ...record, cancel: () => {} });
+  } catch {
+    storageAvailable = false;
+  }
+  const persist = (job: Job) => {
+    try {
+      saveWaterJob(outputs, {
+        version: 1,
+        id: job.id,
+        created: job.created,
+        updated: Date.now(),
+        status: job.status,
+        message: job.message,
+      });
+    } catch {
+      job.status = 'failed';
+      job.message = 'Job state could not be saved. Outputs are unavailable; check local storage.';
+    }
+  };
   router.use(json({ limit: '4kb' }));
   router.use((req, res, next) => {
     res.setHeader('Cache-Control', 'no-store');
@@ -75,7 +100,8 @@ export function waterRouter(
       }
       res.json({
         inputs: list,
-        workerAvailable: existsSync(python),
+        workerAvailable: existsSync(python) && storageAvailable,
+        storageAvailable,
         limits: { dates: 30, window: 1024, tile: 256, concurrency: 1, timeoutSeconds: 120 },
         message: list.length
           ? 'Registered local inputs; compatibility is verified during processing.'
@@ -88,6 +114,12 @@ export function waterRouter(
     }
   });
   router.post('/jobs', async (req, res) => {
+    if (!storageAvailable) {
+      res.status(503).json({
+        error: 'Local job storage is unavailable. Restore access and restart the server.',
+      });
+      return;
+    }
     const parsed = z
       .object({
         input: z
@@ -123,6 +155,7 @@ export function waterRouter(
     const id = randomUUID(),
       job: Job = {
         id,
+        created: Date.now(),
         status: 'running',
         message: 'Validating acquisitions and processing bounded tiles',
         cancel: () => {},
@@ -144,6 +177,8 @@ export function waterRouter(
         JSON.stringify({ id, created: Date.now() }),
         { flag: 'wx' },
       );
+      persist(job);
+      if (job.status !== 'running') throw Error('state');
       workerActive = true;
       const child = spawn(
         python,
@@ -165,6 +200,7 @@ export function waterRouter(
         if (job.status === 'running') {
           job.status = 'failed';
           job.message = 'Processing exceeded 120 seconds. Choose a smaller window.';
+          persist(job);
           child.kill();
         }
       }, 120000);
@@ -172,6 +208,7 @@ export function waterRouter(
         if (job.status === 'running') {
           job.status = 'cancelled';
           job.message = 'Cancelled; incomplete outputs are not served.';
+          persist(job);
           child.kill();
           clearTimeout(timer);
         }
@@ -181,6 +218,7 @@ export function waterRouter(
         clearTimeout(timer);
         job.status = 'failed';
         job.message = 'Worker could not start; check local dependencies.';
+        persist(job);
       });
       child.on('close', (code) => {
         workerActive = false;
@@ -193,6 +231,7 @@ export function waterRouter(
             : diagnostic.startsWith('Processing failed:')
               ? diagnostic.trim()
               : 'Processing failed. Check product specification and local input files.';
+        persist(job);
       });
       res.status(202).json({
         id,
@@ -212,7 +251,7 @@ export function waterRouter(
   router.get('/jobs/:id', async (req, res) => {
     const j = jobs.get(req.params.id);
     if (!j) {
-      res.status(404).json({ error: 'Job not found; jobs do not resume after server restart.' });
+      res.status(404).json({ error: 'Job not found or its retained record is unavailable.' });
       return;
     }
     try {
@@ -227,6 +266,23 @@ export function waterRouter(
       });
     } catch {
       res.status(500).json({ error: 'Completed result could not be read.' });
+    }
+  });
+  router.get('/jobs/:id/evaluation', async (req, res) => {
+    const job = jobs.get(req.params.id);
+    if (!job || job.status !== 'complete') {
+      res.status(404).json({ error: 'Completed investigation unavailable' });
+      return;
+    }
+    try {
+      const evaluation = await readWaterEvaluation(path.join(outputs, job.id));
+      res.json({ status: evaluation ? 'available' : 'pending', evaluation });
+    } catch {
+      res
+        .status(422)
+        .json({
+          error: 'Evaluation is invalid or does not match this investigation. Metrics withheld.',
+        });
     }
   });
   router.delete('/jobs/:id', (req, res) => {

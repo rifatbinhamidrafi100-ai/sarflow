@@ -1,0 +1,25 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:08.000
+First, check the data label
+DEMO DATA · SYNTHETIC means the lab is teaching with generated numbers. Its dates and changes are not evidence of an actual flood.
+
+00:00:08.000 --> 00:00:16.000
+Choose Before and After
+Choose an earlier and a later frame. The timeline plays stored frames; it does not create observations between dates. T1 to T6 are frame labels.
+
+00:00:16.000 --> 00:00:24.000
+Set the change threshold
+The threshold is the minimum absolute radar difference to mark a candidate. A higher threshold usually selects fewer cells. It is not a confidence percentage.
+
+00:00:24.000 --> 00:00:32.000
+Understand smoothing
+The 3 × 3 option averages nearby valid measurements in linear power, then displays them in dB. It can reduce local variation but also blur small features.
+
+00:00:32.000 --> 00:00:40.000
+Run, then read the result
+Candidate cells crossed the threshold. Mean signed change describes the average direction. Zero candidates can coexist with a nonzero mean when changes are below the threshold.
+
+00:00:40.000 --> 00:00:48.000
+Check what is still unknown
+Not available is not zero. Review sources, exclusions and limitations in the receipts. Ask the data explains available evidence using fixed templates; it cannot confirm a flood.

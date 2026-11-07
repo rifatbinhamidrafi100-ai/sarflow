@@ -430,9 +430,14 @@ export default function World() {
           <h1>Explore the whole Earth.</h1>
           <p>Find a place. Choose an observation. Investigate the evidence.</p>
         </div>
-        <Link className="button" to="/observatory">
-          NISAR time machine
-        </Link>
+        <div className="actions">
+          <Link className="button" to="/resources">
+            Learning resources
+          </Link>
+          <Link className="button" to="/observatory">
+            NISAR time machine
+          </Link>
+        </div>
       </header>
       <div className="world-panel-toggles" aria-label="Workspace panels">
         <button

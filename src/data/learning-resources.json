@@ -1,0 +1,58 @@
+[
+  {
+    "url": "https://www.earthdata.nasa.gov/learn/trainings/identifying-disaster-extent-risk-using-nisar-surface-displacement",
+    "title": "Identifying Disaster Extent and Risk Using NISAR Surface Displacement",
+    "image": "https://earthdata.nasa.gov/s3fs-public/styles/hds_generic_card/public/2026-09/ARSET-SurfaceDisplacement2026-th.jpg?VersionId=eYAUSXFMJaR5dPr2J9otU5LgjuUrfoHO&itok=cys57EJX",
+    "type": "Training",
+    "language": "English"
+  },
+  {
+    "url": "https://www.earthdata.nasa.gov/learn/data-in-action/from-sea-surface-sea-life-swot-pace-nisar-watch-gulf-stream-frontal-eddies",
+    "title": "From Sea Surface to Sea Life: SWOT, PACE, and NISAR Watch Gulf Stream Frontal Eddies Together",
+    "image": "https://earthdata.nasa.gov/s3fs-public/styles/hds_generic_card/public/2026-09/gulf-stream-eddy-th.jpg?VersionId=m0dwO_Y7xcpT_FskirKLYn9xJ7D8xgAh&itok=XQUmYbRD",
+    "type": "Article",
+    "language": "English"
+  },
+  {
+    "url": "https://www.earthdata.nasa.gov/es/learn/trainings/monitoreo-de-inundaciones-con-sar-para-la-gestion-de-los-recursos-hidricos",
+    "title": "Monitoreo de Inundaciones con SAR para la Gestión de los Recursos Hídricos",
+    "image": "https://earthdata.nasa.gov/s3fs-public/styles/hds_generic_card/public/2026-08/arset-2026-surfacewater-th.png?VersionId=sSvjVDlaaHWT9whlYI8LYtb_o90wXzHc&itok=JeRm-xRs",
+    "type": "Training",
+    "language": "Spanish"
+  },
+  {
+    "url": "https://www.earthdata.nasa.gov/learn/trainings/monitoring-surface-water-sar-water-resource-management",
+    "title": "Monitoring Surface Water with SAR for Water Resource Management",
+    "image": "https://earthdata.nasa.gov/s3fs-public/styles/hds_generic_card/public/2026-08/arset-2026-surfacewater-th.png?VersionId=sSvjVDlaaHWT9whlYI8LYtb_o90wXzHc&itok=JeRm-xRs",
+    "type": "Training",
+    "language": "English"
+  },
+  {
+    "url": "https://www.earthdata.nasa.gov/learn/gis/storymaps/spatial-subsetting-nisar-data",
+    "title": "Spatial Subsetting for NISAR Data",
+    "image": "https://earthdata.nasa.gov/s3fs-public/styles/hds_generic_card/public/2026-05/VxosYxeHg6bIer4qDQTdd.png?VersionId=7J.zzojpbYgTbECqtR0OL4qkXyiSIJLO&itok=jZnv0NTx",
+    "type": "StoryMap",
+    "language": "English"
+  },
+  {
+    "url": "https://www.earthdata.nasa.gov/learn/trainings/harnessing-nisar-next-generation-radar-observations-earth-applications",
+    "title": "Harnessing NISAR: Next-Generation Radar Observations for Earth Applications",
+    "image": "https://earthdata.nasa.gov/s3fs-public/styles/hds_generic_card/public/2026-05/arset-2026-nisar-th.png?VersionId=3.0VPFxs9cOftqM22hqceODZpr800gDB&itok=cJnA_yo7",
+    "type": "Training",
+    "language": "English"
+  },
+  {
+    "url": "https://www.earthdata.nasa.gov/learn/trainings/monitoring-predicting-floods-using-earth-observations-planning-preparedness",
+    "title": "Monitoring and Predicting Floods Using Earth Observations for Planning and Preparedness",
+    "image": "https://earthdata.nasa.gov/s3fs-public/styles/hds_generic_card/public/2026-04/ARSET-Floods2026-th.jpg?VersionId=SHKgrFcaZSEynxc3fUL7C25cp4fmXKZ0&itok=mW-TmePb",
+    "type": "Training",
+    "language": "English"
+  },
+  {
+    "url": "https://www.earthdata.nasa.gov/learn/webinars/introducing-nisar-nasas-biggest-earth-observation-mission",
+    "title": "Introducing NISAR: NASA’s Biggest Earth Observation Mission",
+    "image": "https://earthdata.nasa.gov/s3fs-public/styles/hds_generic_card/public/2026-01/nisar-in-space-th.jpg?VersionId=4v6BDKei0pSP4FdU06rWnKncQubafQ5G&itok=_ZG1JnSr",
+    "type": "Webinar",
+    "language": "English"
+  }
+]

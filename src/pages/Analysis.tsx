@@ -26,6 +26,9 @@ function AnalysisContent() {
         <div>
           <span className="tiny">From signal to interpretation</span>
           <h1>Change analysis</h1>
+          <Link to="/getting-started#analysis-lab-guide">
+            Explain these controls · watch the walkthrough
+          </Link>
         </div>
         <div className="actions">
           <Badge observed={d.status === 'observed'} />

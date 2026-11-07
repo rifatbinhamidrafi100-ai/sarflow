@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useObservatory } from '../data/observatory';
 import { date } from '../components/ui';
 import './real-home.css';
-import RadarStory from '../components/RadarStory';
 import { NepalFeature } from './NepalCase';
 export default function RealHome() {
   const { data, error, retry } = useObservatory();
@@ -35,9 +34,6 @@ export default function RealHome() {
               Explore the whole world
             </Link>
           </div>
-          <a className="radar-watch-link" href="#radar-story">
-            Watch radar in motion <ArrowRight size={15} />
-          </a>
           <div className="real-hero-proof">
             <Satellite size={18} />
             <div>
@@ -80,7 +76,6 @@ export default function RealHome() {
           Animate Earth
         </Link>
       </section>
-      <RadarStory />
       <section className="real-entry-strip">
         <div>
           <strong>Observe.</strong>

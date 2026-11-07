@@ -1,0 +1,143 @@
+.phone-nav {
+  display: none;
+}
+.install-page {
+  max-width: 1060px;
+}
+.install-intro {
+  padding: 2rem 0;
+  max-width: 650px;
+}
+.install-intro h1 {
+  font-size: clamp(2rem, 4vw, 3.8rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  margin: 1rem 0;
+}
+.install-intro > svg {
+  color: var(--accent, #167299);
+}
+.install-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.install-options article {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 1.75rem;
+}
+.install-options h2 {
+  font-size: 1.35rem;
+}
+.install-options p {
+  line-height: 1.65;
+}
+.install-note {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+.install-note > svg {
+  flex-shrink: 0;
+}
+@media (max-width: 700px) {
+  footer > div { display: flex; flex-wrap: wrap; gap: 12px; }
+  body {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+  .phone-nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    background: var(--surface, #fff);
+    border-top: 1px solid var(--line);
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+    box-shadow: 0 -3px 20px #112c4610;
+  }
+  .phone-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 48px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: #456273;
+    text-decoration: none;
+  }
+  .phone-nav a.active {
+    background: #e2f2f5;
+    color: #124c68;
+    font-weight: 700;
+  }
+  [data-theme='dark'] .phone-nav {
+    background: #112c46;
+  }
+  [data-theme='dark'] .phone-nav a {
+    color: #dbeaf0;
+  }
+  [data-theme='dark'] .phone-nav a.active {
+    color: #124c68;
+  }
+  .site-header {
+    padding-inline: 18px;
+  }
+  .workspace-nav {
+    display: none;
+  }
+  .real-hero h1 {
+    font-size: 58px;
+    line-height: 1;
+    letter-spacing: -2.8px;
+  }
+  .real-hero-copy > p {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .real-hero .actions {
+    display: grid;
+    gap: 10px;
+  }
+  .real-hero .button {
+    min-height: 48px;
+    font-size: 14px;
+    justify-content: center;
+  }
+  .real-entry-strip span,
+  .real-home-credit,
+  .real-scene-bottom small {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .real-entry-strip {
+    gap: 12px;
+  }
+  .real-hero-scene {
+    height: 290px;
+    border-radius: 20px;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+  .nisar-search input,
+  .nisar-search select,
+  .nisar-search button {
+    min-height: 44px;
+  }
+  .install-options {
+    grid-template-columns: 1fr;
+  }
+  .install-options article {
+    padding: 1.25rem;
+  }
+}

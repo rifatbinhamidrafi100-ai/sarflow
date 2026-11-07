@@ -136,6 +136,9 @@ export default function GlobalRadar() {
           Internet required.
         </p>
         <PlaceObservatory latitude={lat} longitude={lon} revision={catalogRevision} />
+        <Link className="button" to={`/nisar-explorer?${new URLSearchParams({lat,lon})}`}>
+          Inspect source products with ASF
+        </Link>
       </section>
       {data && (
         <RegionWorkspace
