@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { ArrowRight, Globe2, UserRound } from 'lucide-react';
 import {
   accountSessionSchema,
   accountStatusSchema,
@@ -20,6 +21,7 @@ async function authRequest(path: string, options: RequestInit = {}) {
 }
 export default function Account() {
   const [params] = useSearchParams();
+  const creating = params.get('mode') === 'signup';
   const [status, setStatus] = useState<Status | null>(null),
     [session, setSession] = useState<AccountSession | null>(null);
   const [loading, setLoading] = useState(true),
@@ -88,8 +90,14 @@ export default function Account() {
     <div className="page account-page">
       <header className="account-heading">
         <span className="tiny">Your SARFlow workspace</span>
-        <h1>{session ? 'Your account' : 'Explore freely. Sign in when you need to.'}</h1>
-        <p>Explore Earth, understand radar, and keep the evidence in view.</p>
+        <h1>
+          {session
+            ? 'Your account'
+            : creating
+              ? 'Start your SARFlow journey.'
+              : 'Welcome back to SARFlow.'}
+        </h1>
+        <p>Explore Earth. Understand radar. Follow the evidence.</p>
       </header>
       <div className="account-layout">
         <section className="panel account-card" aria-label="SARFlow account">
@@ -173,13 +181,31 @@ export default function Account() {
             </>
           ) : (
             <>
-              <h2>Welcome to SARFlow</h2>
-              <p>Use your Google account. SARFlow never asks for your Google password.</p>
+              <nav className="account-modes" aria-label="Account access">
+                <Link to="/login" aria-current={!creating ? 'page' : undefined}>
+                  Log in
+                </Link>
+                <Link to="/login?mode=signup" aria-current={creating ? 'page' : undefined}>
+                  Create account
+                </Link>
+              </nav>
+              <span className="account-welcome-icon" aria-hidden="true">
+                <UserRound size={28} />
+              </span>
+              <h2>{creating ? 'Create your SARFlow profile' : 'Log in to your account'}</h2>
+              <p>
+                {creating
+                  ? 'Use Google to verify your email and start a profile. You can choose a display name and username after signing in.'
+                  : 'Continue with your Google account to open your profile. Your Google password stays with Google.'}
+              </p>
               <button
                 className="google-signin"
                 disabled={!status?.enabled || busy}
                 onClick={() => void submit('signin/google')}
               >
+                <span className="google-letter" aria-hidden="true">
+                  G
+                </span>
                 Continue with Google
               </button>
               {status && !status.enabled && (
@@ -187,6 +213,12 @@ export default function Account() {
                   Google sign-in is being configured. You can continue exploring without an account.
                 </p>
               )}
+              <div className="account-divider">
+                <span>or explore freely</span>
+              </div>
+              <Link className="button account-guest" to="/my-area">
+                Continue without signing in <ArrowRight size={16} aria-hidden="true" />
+              </Link>
               <p className="tiny">
                 Signing in shares your Google account identifier, verified email and basic profile
                 with SARFlow. No Gmail, Drive or contacts access is requested. The session uses a
@@ -195,6 +227,9 @@ export default function Account() {
             </>
           )}
           {error && <p role="alert">{error}</p>}
+          {error && !status && (
+            <button onClick={() => window.location.reload()}>Retry account connection</button>
+          )}
           {params.has('error') && (
             <p role="alert">
               Google sign-in was cancelled or could not be completed. Please retry; your public
@@ -204,6 +239,7 @@ export default function Account() {
           {message && <p role="status">{message}</p>}
         </section>
         <aside className="account-info">
+          <Globe2 size={32} aria-hidden="true" />
           <h2>Keep exploring</h2>
           <p>
             An account is optional. Maps, observation discovery, the learning tools and public

@@ -115,8 +115,8 @@ function Shell() {
           </NavLink>
         </nav>
         <div className="header-right">
-          <Link to="/account" className="account-link">
-            Account
+          <Link to="/login" className="account-link">
+            Log in
           </Link>
           <span className="project-status">
             <span />

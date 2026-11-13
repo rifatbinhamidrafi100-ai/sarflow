@@ -19,6 +19,73 @@
   padding: 32px;
   min-width: 0;
 }
+.account-modes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 4px;
+  margin-bottom: 28px;
+  border-radius: 10px;
+  background: var(--soft);
+}
+.account-modes a {
+  display: grid;
+  place-items: center;
+  min-height: 46px;
+  padding: 8px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 7px;
+}
+.account-modes a[aria-current='page'] {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 1px 4px #00000010;
+}
+.account-welcome-icon {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 22px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  color: var(--accent);
+  background: var(--soft);
+}
+.account-card h2 {
+  font-size: clamp(23px, 3vw, 29px);
+  margin: 0 0 12px;
+}
+.account-card > p {
+  line-height: 1.75;
+}
+.account-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 12px;
+  margin: 24px 0;
+}
+.account-divider::before,
+.account-divider::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--line);
+}
+.account-guest {
+  width: 100%;
+  min-height: 48px;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.google-letter {
+  font-size: 20px;
+  font-weight: 700;
+}
 .account-card form {
   display: grid;
   gap: 16px;
@@ -46,6 +113,10 @@
   font-size: 24px;
 }
 .account-card .google-signin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   width: 100%;
   min-height: 48px;
   margin: 16px 0;
@@ -56,6 +127,10 @@
 }
 .account-info {
   padding: 12px 0;
+}
+.account-info > svg {
+  color: var(--accent);
+  margin-bottom: 16px;
 }
 .account-info .button {
   margin: 0 8px 12px 0;
