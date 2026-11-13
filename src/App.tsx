@@ -16,6 +16,7 @@ import {
 import { WorkspaceProvider } from './data/Workspace';
 import Evidence from './components/Evidence';
 const Install = lazy(() => import('./pages/Install'));
+const MyArea = lazy(() => import('./pages/MyArea'));
 const SavedInvestigations = lazy(() => import('./pages/SavedInvestigations'));
 const Study = lazy(() => import('./pages/Study'));
 const Water = lazy(() => import('./pages/Water'));
@@ -150,6 +151,7 @@ function Shell() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/install" element={<Install />} />
+            <Route path="/my-area" element={<MyArea />} />
             <Route path="/global-radar" element={<GlobalRadar />} />
             <Route path="/study" element={<Study />} />
             <Route path="/water" element={<Water />} />
@@ -190,6 +192,7 @@ function Shell() {
           <Link to="/about">About</Link>
           <Link to="/getting-started">Beginner guide</Link>
           <Link to="/install">Get the mobile app</Link>
+          <Link to="/my-area">My area</Link>
           <Link to="/nisar-explorer">NISAR Explorer</Link>
           <Link to="/methodology">Methodology</Link>
           <Link to="/science">
