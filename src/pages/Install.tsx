@@ -83,7 +83,7 @@ export default function Install() {
             Version 0.2 adds a phone home screen, four topic guides and clear bottom navigation.
             Open the hosted satellite tools when you are ready to explore.
           </p>
-          <a className="button" href="/downloads/sarflow-preview.apk" download>
+          <a className="button" href="/downloads/sarflow-preview.apk?v=0.2-6965e2be" download>
             Download Android APK
           </a>
           <p className="tiny">
