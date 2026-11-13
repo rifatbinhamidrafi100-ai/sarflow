@@ -66,7 +66,16 @@ it('serves a persisted completed result through a new router', async () => {
   });
   writeFileSync(
     path.join(outputs, id, 'result.json'),
-    JSON.stringify({ dataType: 'synthetic-software-fixture' }),
+    JSON.stringify({
+      algorithm: 'sarflow-water-candidates-v1', dataType: 'synthetic-software-fixture',
+      location: 'Software fixture', commonValidCells: 1,
+      counts: { '0': 0, '1': 1, '2': 0, '3': 0, '4': 0, '5': 0 },
+      legend: { '0': 'Excluded', '1': 'Persistent', '2': 'New', '3': 'Receding', '4': 'Other', '5': 'Insufficient' },
+      observations: [{ id: 'fixture', date: '2026-01-01' }], perDateValidCells: [1], temporalMeansDb: [-25],
+      thresholdBaseline: { candidateCells: 0 }, limitations: ['Software test only'],
+      previews: [], outputs: ['classes'], window: { width: 1, height: 1 },
+      accuracyEvaluation: null, areaKm2: null,
+    }),
   );
   const server = express().use('/water', waterRouter(root)).listen(0, '127.0.0.1');
   await new Promise<void>((resolve) => server.once('listening', resolve));
@@ -82,6 +91,8 @@ it('serves a persisted completed result through a new router', async () => {
     });
     writeFileSync(path.join(outputs, id, 'evaluation.json'), '{"metrics":{"accuracy":1}}');
     expect((await fetch(`${base}/jobs/${id}/evaluation`)).status).toBe(422);
+    writeFileSync(path.join(outputs, id, 'result.json'), JSON.stringify({ commonValidCells: -1 }));
+    expect((await fetch(`${base}/jobs/${id}`)).status).toBe(422);
   } finally {
     await new Promise<void>((resolve) => server.close(() => resolve()));
     rmSync(root, { recursive: true });

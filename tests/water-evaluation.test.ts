@@ -1,9 +1,10 @@
 import { expect, it } from 'vitest';
-import { mkdtemp, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, writeFile, readFile, rm } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
 import { waterEvaluation } from '../shared/water-evaluation';
+import { parseWaterResult } from '../shared/water-result';
 import { readWaterEvaluation } from '../server/water-evaluation';
 import { execFileSync } from 'node:child_process';
 
@@ -20,6 +21,8 @@ it('accepts the actual Python pipeline and evaluator output without relabelling 
       stdio: 'pipe',
     });
     const evaluated = await readWaterEvaluation(path.join(directory, 'result'));
+    const receipt = JSON.parse(await readFile(path.join(directory, 'result/result.json'), 'utf8'));
+    expect(parseWaterResult(receipt)).toEqual(receipt);
     expect(evaluated?.status).toBe('software-fixture-only');
     expect(evaluated?.sampleSize).toBe(256);
     expect(evaluated?.confusionMatrix.truePositive).toBe(128);
