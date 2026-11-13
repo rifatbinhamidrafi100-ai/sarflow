@@ -1,5 +1,13 @@
 import { Component, lazy, Suspense, useEffect, useState, type ReactNode } from 'react';
-import { BrowserRouter, Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Link,
+  Navigate,
+  NavLink,
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router-dom';
 import {
   Activity,
   ArrowUpRight,
@@ -16,7 +24,6 @@ import {
 import { WorkspaceProvider } from './data/Workspace';
 import Evidence from './components/Evidence';
 const Install = lazy(() => import('./pages/Install'));
-const Account = lazy(() => import('./pages/Account'));
 const Topics = lazy(() => import('./pages/Topics'));
 const MyArea = lazy(() => import('./pages/MyArea'));
 const SavedInvestigations = lazy(() => import('./pages/SavedInvestigations'));
@@ -115,9 +122,6 @@ function Shell() {
           </NavLink>
         </nav>
         <div className="header-right">
-          <Link to="/login" className="account-link">
-            Log in
-          </Link>
           <span className="project-status">
             <span />
             Research & education
@@ -156,8 +160,9 @@ function Shell() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/install" element={<Install />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/login" element={<Account />} />
+            <Route path="/account" element={<Navigate to="/" replace />} />
+            <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route path="/signup" element={<Navigate to="/" replace />} />
             <Route path="/topics" element={<Topics />} />
             <Route path="/topics/:topic" element={<Topics />} />
             <Route path="/phenomena" element={<Topics phenomena />} />

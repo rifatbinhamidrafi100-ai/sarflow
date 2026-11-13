@@ -1,3 +1,5 @@
+> Retired: the user requested account-free access. See PUBLIC_ACCESS_RELEASE.md. This document is historical.
+
 # Google sign-in setup for SARFlow
 
 ## Implemented, with activation pending

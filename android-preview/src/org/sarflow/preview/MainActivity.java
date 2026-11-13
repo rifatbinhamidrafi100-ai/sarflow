@@ -104,7 +104,7 @@ public final class MainActivity extends Activity {
     row.setPadding(dp(8), dp(8), dp(8), dp(8));
     row.setBackgroundColor(Color.WHITE);
     row.setElevation(dp(8));
-    String[] names = {"Home", "Explore", "Learn", "Account ↗"};
+    String[] names = {"Home", "Explore", "Learn", "Evidence"};
     for (int i = 0; i < names.length; i++) {
       final int tab = i;
       TextView item = label(names[i], 13, PhoneHome.MUTED);
@@ -118,9 +118,9 @@ public final class MainActivity extends Activity {
         if (tab == 0) showHome();
         else if (tab == 1) open("/my-area");
         else if (tab == 2) open("/getting-started");
-        else external(AppLinks.HOME + "account");
+        else open("/study");
       });
-      if (i == 3) item.setContentDescription("Account, opens in browser for sign-in");
+      if (i == 3) item.setContentDescription("Open scientific evidence");
       tabs[i] = item;
       row.addView(item, new LinearLayout.LayoutParams(0, -2, 1));
     }
@@ -177,7 +177,7 @@ public final class MainActivity extends Activity {
     settings.setAllowContentAccess(false);
     settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
     settings.setMediaPlaybackRequiresUserGesture(true);
-    settings.setUserAgentString(settings.getUserAgentString() + " SARFlowAndroid/0.2");
+    settings.setUserAgentString(settings.getUserAgentString() + " SARFlowAndroid/0.3");
     CookieManager.getInstance().setAcceptThirdPartyCookies(web, false);
     web.setWebChromeClient(new WebChromeClient() {
       @Override public void onProgressChanged(WebView view, int value) {
@@ -284,7 +284,7 @@ public final class MainActivity extends Activity {
     String path = Uri.parse(currentUrl).getPath();
     boolean learn = "/getting-started".equals(path);
     title.setText(learn ? "Learn radar" : "/my-area".equals(path) ? "Explore a place" : "SARFlow");
-    selectTab(learn ? 2 : 1);
+    selectTab(learn ? 2 : "/study".equals(path) ? 3 : 1);
   }
 
   private void showHome() {
@@ -318,8 +318,8 @@ public final class MainActivity extends Activity {
       else if (action.equals("Reload this page")) load(currentUrl);
       else if (action.equals("Open in browser / export")) external(currentUrl);
       else if (action.equals("All topics")) open("/phenomena");
-      else new AlertDialog.Builder(this).setTitle("SARFlow · Android preview 0.2")
-          .setMessage("A native phone home screen with online Earth-observation tools. Satellite data and processing require internet. Account sign-in and evidence exports use your browser.\n\nDevelopment-signed preview; not a Play Store release. Not an emergency-warning service.")
+      else new AlertDialog.Builder(this).setTitle("SARFlow · Android preview 0.3")
+          .setMessage("A native phone home screen with online Earth-observation tools. No account is needed. Satellite data and processing require internet. Evidence exports use your browser.\n\nDevelopment-signed preview; not a Play Store release. Not an emergency-warning service.")
           .setPositiveButton("Close", null).show();
       return true;
     });

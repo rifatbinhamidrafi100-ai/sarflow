@@ -80,10 +80,10 @@ export default function Install() {
           <Download aria-hidden="true" />
           <h2>Android preview APK</h2>
           <p>
-            Version 0.2 adds a phone home screen, four topic guides and clear bottom navigation.
+            Version 0.3 includes a phone home screen, four topic guides and clear bottom navigation.
             Open the hosted satellite tools when you are ready to explore.
           </p>
-          <a className="button" href="/downloads/sarflow-preview.apk?v=0.2-6965e2be" download>
+          <a className="button" href="/downloads/sarflow-preview.apk?v=0.3-0accad05" download>
             Download Android APK
           </a>
           <p className="tiny">
@@ -91,9 +91,9 @@ export default function Install() {
             Physical-device testing is still pending. Install only if you trust this source.
           </p>
           <p className="tiny">
-            Updating an earlier preview? Install over the existing app. Sign-in and evidence-file
-            exports open in your browser. The home screen works offline; satellite tools need
-            internet.
+            Updating an earlier preview? Install over the existing app. No account is needed.
+            Evidence-file exports open in your browser. The home screen works offline; satellite
+            tools need internet.
           </p>
         </article>
       </div>

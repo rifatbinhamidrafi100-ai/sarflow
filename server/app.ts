@@ -14,7 +14,6 @@ import { monitoringRouter } from './monitoring.js';
 import { placeObservatoryRouter } from './place-observatory.js';
 import { asfDiscoveryRouter } from './asf-discovery.js';
 import { waterReferenceRouter } from './water-reference.js';
-import { authRouter } from './auth.js';
 
 interface AppOptions {
   discover?: typeof discover;
@@ -35,7 +34,6 @@ export function createApp(options: AppOptions = {}) {
       .filter(Boolean);
   if (proxies.length) app.set('trust proxy', proxies);
   app.use(securityHeaders);
-  app.use('/api/auth', authRouter());
   app.use(
     [
       '/api/places',

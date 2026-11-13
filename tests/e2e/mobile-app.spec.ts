@@ -16,7 +16,7 @@ test('phone navigation, install instructions and real APK download', async ({ pa
     page.getByText('Physical-device testing is still pending.', { exact: false }),
   ).toBeVisible();
   await expect(
-    page.getByText('Version 0.2 adds a phone home screen', { exact: false }),
+    page.getByText('Version 0.3 includes a phone home screen', { exact: false }),
   ).toBeVisible();
   const download = page.waitForEvent('download');
   await page.getByRole('link', { name: 'Download Android APK' }).click();

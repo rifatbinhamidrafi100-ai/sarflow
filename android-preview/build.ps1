@@ -1,7 +1,7 @@
 param([string]$Sdk = "$env:LOCALAPPDATA\Android\Sdk")
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot
-$build = Join-Path $root 'artifacts\android-build-v02'
+$build = Join-Path $root 'artifacts\android-build-v03'
 $tools = Join-Path $Sdk 'build-tools\35.0.0'
 $platform = Join-Path $Sdk 'platforms\android-35\android.jar'
 New-Item -ItemType Directory -Force $build | Out-Null

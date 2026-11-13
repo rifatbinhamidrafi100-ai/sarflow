@@ -1,3 +1,5 @@
+> Retired: the user requested account-free access. See PUBLIC_ACCESS_RELEASE.md. This document is historical.
+
 # Google-only authentication handoff
 
 User confirmed Google sign-in only, with username/profile editing. Existing Auth.js Google OAuth processing, verified email and encrypted session-based profile remain in place. No password login, account database or new authentication provider was introduced.

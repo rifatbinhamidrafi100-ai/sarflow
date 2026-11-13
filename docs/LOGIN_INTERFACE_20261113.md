@@ -1,3 +1,5 @@
+> Retired: the user requested account-free access. See PUBLIC_ACCESS_RELEASE.md. This document is historical.
+
 # Login interface — 13 November 2026
 
 Existing account/session/OAuth processing is preserved. The header now provides a visible Log in link to `/login`. The account page provides Log in and Create account views, Google continuation when the backend is configured, guest exploration, and connection-retry feedback. Profile editing remains available after a verified Google session. No password form, account database, email delivery or cloud saving was added.
