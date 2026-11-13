@@ -4,6 +4,7 @@ import { ArrowRight, Globe2, UserRound } from 'lucide-react';
 import {
   accountSessionSchema,
   accountStatusSchema,
+  accountCsrfSchema,
   type AccountSession,
 } from '../../shared/account';
 import './account.css';
@@ -34,6 +35,13 @@ export default function Account() {
   useEffect(() => {
     const controller = new AbortController();
     lifetime.current = controller;
+    const timeout = window.setTimeout(() => {
+      setError(
+        'The account service is taking too long. Retry the connection, or continue as a guest.',
+      );
+      setLoading(false);
+      controller.abort();
+    }, 12000);
     Promise.all([
       authRequest('status', { signal: controller.signal }),
       authRequest('session', { signal: controller.signal }),
@@ -51,9 +59,13 @@ export default function Account() {
           setError('Your account could not load. Reload this page to retry.');
       })
       .finally(() => {
+        window.clearTimeout(timeout);
         if (!controller.signal.aborted) setLoading(false);
       });
-    return () => controller.abort();
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
   }, []);
   async function submit(action: 'signin/google' | 'signout') {
     if (!status?.enabled) return;
@@ -64,7 +76,7 @@ export default function Account() {
     setBusy(true);
     setError('');
     try {
-      const csrf = await authRequest('csrf');
+      const csrf = accountCsrfSchema.parse(await authRequest('csrf'));
       if (lifetime.current?.signal.aborted) return;
       const form = document.createElement('form');
       form.method = 'POST';
@@ -117,7 +129,7 @@ export default function Account() {
                   setError('');
                   setMessage('');
                   try {
-                    const csrf = await authRequest('csrf');
+                    const csrf = accountCsrfSchema.parse(await authRequest('csrf'));
                     const raw = await authRequest('session', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },

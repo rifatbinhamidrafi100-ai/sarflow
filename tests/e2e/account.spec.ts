@@ -1,6 +1,76 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+test('Google sign-in stays recoverable when the CSRF response is invalid', async ({ page }) => {
+  await page.route('**/api/auth/status', (route) =>
+    route.fulfill({
+      json: { enabled: true, origin: new URL(page.url()).origin },
+    }),
+  );
+  await page.route('**/api/auth/session', (route) => route.fulfill({ json: null }));
+  await page.route('**/api/auth/csrf', (route) => route.fulfill({ json: {} }));
+  let submitted = false;
+  await page.route('**/api/auth/signin/google', (route) => {
+    submitted = true;
+    return route.abort();
+  });
+  await page.goto('/login', { waitUntil: 'domcontentloaded' });
+  await page.getByRole('button', { name: 'Continue with Google' }).click();
+  await expect(page.getByRole('alert')).toContainText('Sign-in could not start');
+  await expect(page.getByRole('button', { name: 'Continue with Google' })).toBeEnabled();
+  expect(submitted).toBe(false);
+});
+
+test('an unresponsive account service times out and keeps guest access available', async ({
+  page,
+}) => {
+  await page.clock.install();
+  let release!: () => void;
+  const waiting = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route('**/api/auth/status', async (route) => {
+    await waiting;
+    await route.fulfill({ json: { enabled: false, origin: null } }).catch(() => {});
+  });
+  await page.route('**/api/auth/session', (route) => route.fulfill({ json: null }));
+  await page.goto('/login', { waitUntil: 'domcontentloaded' });
+  await expect(page.getByText('Checking your secure session…')).toBeVisible();
+  await page.clock.fastForward(12001);
+  await expect(page.getByRole('alert')).toContainText('The account service is taking too long');
+  await expect(page.getByRole('button', { name: 'Retry account connection' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Continue without signing in' })).toBeVisible();
+  release();
+});
+
+test('configured Google button submits the CSRF-protected OAuth handoff', async ({ page }) => {
+  await page.route('**/api/auth/status', (route) =>
+    route.fulfill({
+      json: { enabled: true, origin: new URL(page.url()).origin },
+    }),
+  );
+  await page.route('**/api/auth/session', (route) => route.fulfill({ json: null }));
+  await page.route('**/api/auth/csrf', (route) =>
+    route.fulfill({ json: { csrfToken: 'software-fixture-only' } }),
+  );
+  await page.route('**/api/auth/signin/google', (route) =>
+    route.fulfill({
+      contentType: 'text/html',
+      body: '<p>Software fixture: OAuth handoff captured</p>',
+    }),
+  );
+  await page.goto('/login', { waitUntil: 'domcontentloaded' });
+  const origin = new URL(page.url()).origin;
+  const request = page.waitForRequest('**/api/auth/signin/google');
+  await page.getByRole('button', { name: 'Continue with Google' }).click();
+  const submitted = await request;
+  expect(submitted.method()).toBe('POST');
+  const fields = new URLSearchParams(submitted.postData()!);
+  expect(fields.get('csrfToken')).toBe('software-fixture-only');
+  expect(fields.get('callbackUrl')).toBe(origin + '/account');
+  expect([...fields.keys()].sort()).toEqual(['callbackUrl', 'csrfToken']);
+});
+
 test('login entry, create-account view and guest access work without collecting passwords', async ({
   page,
 }) => {
