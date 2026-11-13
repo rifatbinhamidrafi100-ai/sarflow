@@ -8,6 +8,7 @@ import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import { recoverWaterJobs, saveWaterJob } from './water-job-store.js';
 import { readWaterEvaluation } from './water-evaluation.js';
+import { waterResult } from '../shared/water-result.js';
 const parameters = z
   .object({
     co_db: z.number().min(-35).max(-5).default(-17),
@@ -255,14 +256,20 @@ export function waterRouter(
       return;
     }
     try {
+      let result = null;
+      if (j.status === 'complete') {
+        const parsed = waterResult.safeParse(JSON.parse(await readFile(path.join(outputs, j.id, 'result.json'), 'utf8')));
+        if (!parsed.success) {
+          res.status(422).json({ error: 'Invalid water result. Measurements withheld; inspect the processing artifacts.' });
+          return;
+        }
+        result = parsed.data;
+      }
       res.json({
         id: j.id,
         status: j.status,
         message: j.message,
-        result:
-          j.status === 'complete'
-            ? JSON.parse(await readFile(path.join(outputs, j.id, 'result.json'), 'utf8'))
-            : null,
+        result,
       });
     } catch {
       res.status(500).json({ error: 'Completed result could not be read.' });
