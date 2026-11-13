@@ -1,6 +1,21 @@
 import {test,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-const result=(name:string)=>({location:name,dataType:'synthetic-software-fixture',commonValidCells:1,counts:{'1':1},legend:{'1':'Persistent candidate'},observations:[{id:'test',date:'2026-01-01'}],perDateValidCells:[1],temporalMeansDb:[-25],thresholdBaseline:{candidateCells:0},limitations:['Software fixture only; no real accuracy evaluation.'],previews:[],outputs:['classes'],window:{width:16,height:16}});
+const result=(name:string)=>({algorithm:'sarflow-water-candidates-v1',areaKm2:null,accuracyEvaluation:null,location:name,dataType:'synthetic-software-fixture',commonValidCells:1,counts:{'0':255,'1':1,'2':0,'3':0,'4':0,'5':0},legend:{'0':'Excluded','1':'Persistent candidate','2':'New candidate','3':'Receding candidate','4':'Other','5':'Insufficient'},observations:[{id:'test',date:'2026-01-01'}],perDateValidCells:[1],temporalMeansDb:[-25],thresholdBaseline:{candidateCells:0},limitations:['Software fixture only; no real accuracy evaluation.'],previews:[],outputs:['classes'],window:{width:16,height:16}});
+
+test('malformed retained measurements are withheld and a corrected result can reload', async ({ page }) => {
+ const id='12345678-1234-4123-8123-123456789abc';
+ let corrupt=true;
+ await page.route('**/api/water/inputs', r=>r.fulfill({json:{inputs:[],workerAvailable:true}}));
+ await page.route(`**/api/water/jobs/${id}`, r=>r.fulfill({json:{status:'complete',message:'Software fixture',result:{...result('Recovered fixture'),commonValidCells:corrupt?9999:1}}}));
+ await page.goto(`/water?job=${id}`);
+ await expect(page.getByText(/Invalid water result. Measurements and exports withheld/)).toBeVisible();
+ await expect(page.getByRole('button',{name:'Export water evidence JSON'})).toHaveCount(0);
+ await expect(page.locator('.water-map')).toHaveCount(0);
+ corrupt=false;
+ await page.reload();
+ await expect(page.locator('.location-watermark')).toContainText('Recovered fixture');
+ await expect(page.getByRole('button',{name:'Export water evidence JSON'})).toBeVisible();
+});
 test('rerun with delayed submission retains only the new result and download job',async({page})=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));let submissions=0,aPolls=0,releaseB:()=>void=()=>{};
  const held=new Promise<void>(r=>releaseB=r);
