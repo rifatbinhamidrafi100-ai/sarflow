@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 
 /** Shared routing policy, independent of Android so it can be tested on the JVM. */
 public final class AppLinks {
-  public static final String HOME = "https://sarflow-earth-rbhr.vercel.app/";
+  public static final String HOME = "https://sarflow-one.vercel.app/";
 
   private AppLinks() {}
 

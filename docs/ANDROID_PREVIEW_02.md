@@ -32,7 +32,8 @@ Only HTTPS, exact trusted SARFlow hosts load internally. SSL failures cancel, fi
 - Android 8+ (API 26), target API 35.
 - Development signing; v2/v3 signatures verified; zip alignment verified.
 - Signing certificate matches the previously distributed 0.1 preview. This establishes package-level update compatibility; successful in-place installation has not been established on a phone.
-- APK SHA-256: `c5796d7f42c47c555855d9ad9e0075a39c96f4abff20ad707bb97852ddad4882`.
+- APK SHA-256: `6965e2be5c095855865426d717f5990d7adeec11e51ef0c2d418dd6ec4930b67`.
+- Home address: `https://sarflow-one.vercel.app/`, the original production address. The older backup alias was still serving a previous deployment during public checks; it is accepted as an internal link but is no longer the launch address.
 - Old source and APK preserved under ignored task artifacts before replacement.
 
 ## Executed checks

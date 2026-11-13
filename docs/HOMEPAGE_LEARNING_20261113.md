@@ -15,3 +15,5 @@ Executed verification:
 - Production dependency audit reported zero known production vulnerabilities at check time. Existing map-bundle and third-party comment build warnings remain.
 
 Native Android runtime/physical-phone testing is still pending due to the documented emulator/tool failures. Website changes do not establish scientific validation or worker availability. GitHub push and public deployment are separate release facts; verify the remote commit and hosting response before reporting either complete.
+
+Publication verified: GitHub main received the tested source snapshot via the connected GitHub app (terminal credentials were unavailable). The uploaded Git tree exactly matched the local tested tree. Vercel deployed automatically. Both homepage-learning browser tests passed against `https://sarflow-one.vercel.app/`, including actual guide/resources navigation and responsive light/dark layouts. The backup `sarflow-earth-rbhr.vercel.app` still served an older deployment, so the APK launch URL now uses the original production address. Physical-device testing remains pending.

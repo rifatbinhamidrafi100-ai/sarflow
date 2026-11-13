@@ -6,7 +6,7 @@ public final class AppLinksTest {
   }
   public static void main(String[] args) {
     check(AppLinks.internal(AppLinks.HOME), "primary site stays inside the app");
-    check(AppLinks.internal("https://sarflow-one.vercel.app/world?lat=28&lon=85.3"), "legacy alias stays inside");
+    check(AppLinks.internal("https://sarflow-earth-rbhr.vercel.app/world?lat=28&lon=85.3"), "backup alias stays inside");
     check(!AppLinks.internal("http://sarflow-earth-rbhr.vercel.app/"), "HTTP is blocked");
     check(!AppLinks.internal("https://sarflow-earth-rbhr.vercel.app.evil.example/"), "host suffix spoof is not trusted");
     check(!AppLinks.internal("https://person@sarflow-earth-rbhr.vercel.app/"), "userinfo is rejected");

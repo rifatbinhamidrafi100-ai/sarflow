@@ -1,6 +1,6 @@
 # Mobile public release
 
-Local update prepared 13 November 2026: [Android preview 0.2](ANDROID_PREVIEW_02.md). It has not replaced the public download in this increment. The verification below describes the earlier public release.
+Update prepared 13 November 2026: [Android preview 0.2](ANDROID_PREVIEW_02.md), uploaded to GitHub main with the homepage learning improvements. The original production address is `https://sarflow-one.vercel.app/`; use it in preference to the older backup alias. The verification below describes the earlier public release; current package checks and device-testing limitations are documented in the 0.2 notes.
 
 Verified 8 November 2026 (Asia/Dhaka).
 
