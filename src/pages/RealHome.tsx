@@ -26,12 +26,15 @@ export default function RealHome() {
             changed, and inspect the evidence needed to support an explanation.
           </p>
           <div className="actions">
-            <Link className="button primary" to="/study">
-              Start the evidence investigation
+            <Link className="button primary" to="/my-area">
+              Explore my area
               <ArrowRight size={17} />
             </Link>
             <Link className="button" to="/world">
               Explore the whole world
+            </Link>
+            <Link className="button" to="/install">
+              Download mobile app
             </Link>
           </div>
           <div className="real-hero-proof">

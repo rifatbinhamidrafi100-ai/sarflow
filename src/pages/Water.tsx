@@ -1,3 +1,4 @@
+import { parseWaterResult, type WaterResult } from '../../shared/water-result';
 import { cellPercentage } from '../../shared/change-summary';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -5,23 +6,6 @@ import { Download } from '../components/ui';
 import './water.css';
 import { WaterEvaluation } from '../components/WaterEvaluation';
 type Input = { id: string; location: string; dataType: string; dates: number };
-type Result = {
-  dataType: string;
-  location: string;
-  commonValidCells: number;
-  counts: Record<string, number>;
-  legend: Record<string, string>;
-  observations: { id: string; date: string }[];
-  perDateValidCells: number[];
-  temporalMeansDb: (number | null)[];
-  thresholdBaseline: { candidateCells: number };
-  limitations: string[];
-  previews: { file: string; row: number; col: number; width: number; height: number }[];
-  outputs: string[];
-  window: { width: number; height: number };
-  accuracyEvaluation: null;
-  areaKm2: null;
-};
 async function request(url: string, options: RequestInit = {}) {
   const r = await fetch('/api/water' + url, options);
   const body = await r.json();
@@ -37,7 +21,7 @@ export default function Water() {
     [available, setAvailable] = useState(false);
   const [job, setJob] = useState(''),
     [status, setStatus] = useState(''),
-    [result, setResult] = useState<Result | null>(null),
+    [result, setResult] = useState<WaterResult | null>(null),
     [busy, setBusy] = useState(false),
     [split, setSplit] = useState(50),
     [mode, setMode] = useState('classes');
@@ -76,7 +60,7 @@ export default function Water() {
           timer.current = setTimeout(() => void restore(), 800);
         } else {
           setBusy(false);
-          if (body.status === 'complete') setResult(body.result);
+          if (body.status === 'complete') setResult(parseWaterResult(body.result));
           else if (body.status === 'failed') setError(body.message);
         }
       } catch (e) {
@@ -127,7 +111,7 @@ export default function Water() {
         if (!current()) return;
         setStatus(b.message);
         if (b.status === 'complete') {
-          setResult(b.result);
+          setResult(parseWaterResult(b.result));
           setBusy(false);
         } else if (b.status !== 'running') {
           setBusy(false);
@@ -217,6 +201,10 @@ export default function Water() {
       <p className="notice">
         Not an official OPERA product. Newly detected water candidates are not confirmed floods.
         Reference agreement, when available, is reported separately and does not confirm flooding.
+      </p>
+      <p>
+        Want to inspect actual measurements first? <Link to="/data#real-nisar">Download a verified real NISAR observation</Link>.
+        {' '}This single-date Arctic sample is available now, but does not meet this workflow’s multitemporal input requirements.
       </p>
       {loading ? (
         <p role="status">Checking registered measurements…</p>
@@ -415,9 +403,9 @@ export default function Water() {
               </tr>
             </thead>
             <tbody>
-              {Object.entries(result.legend).map(([id, label]) => (
+              {(Object.keys(result.legend) as (keyof WaterResult['legend'])[]).map((id) => (
                 <tr key={id}>
-                  <td>{label}</td>
+                  <td>{result.legend[id]}</td>
                   <td>{result.counts[id]}</td>
                   <td>
                     {cellPercentage(

@@ -34,9 +34,30 @@ export default function Data() {
         <Database size={30} />
       </div>
       <p className="lead">
-        Three distinct sources. Three clear roles. Metadata, context imagery, and analytical inputs
+        Metadata, context imagery, and calibrated analytical inputs
         are never interchangeable.
       </p>
+      <section className="panel" id="real-nisar" aria-labelledby="real-nisar-title">
+        <span className="badge observed">REAL CALIBRATED MEASUREMENTS · SINGLE OBSERVATION</span>
+        <h2 id="real-nisar-title">Inspect a real NISAR observation</h2>
+        <p>
+          Arctic location: 71.89533° N, 76.29144° W. Acquired 16 October 2026 at 02:04:20 UTC.
+          This 64 × 64 pixel extract comes from a provisional Level-2 GCOV product, not a browse image.
+          It contains HH and HV linear gamma-zero radar measurements on a 10 m projected grid.
+        </p>
+        <p>
+          All 4,096 pixels in each channel passed the applied product-support checks. That does not
+          establish water, flooding or safety. One observation cannot show temporal change; terrain
+          effects and independent scientific evaluation remain unresolved. Grid spacing is not a
+          claim of ground resolution or measured surface area.
+        </p>
+        <div className="actions">
+          <a className="button primary" href="/data/real-nisar-arctic/calibrated-gamma0.tif" download>Download real GeoTIFF</a>
+          <a className="button" href="/data/real-nisar-arctic/measurements.csv" download>Download pixel CSV</a>
+          <a className="button" href="/data/real-nisar-arctic/export-receipt.json" download>Download observation receipt</a>
+        </div>
+        <p className="tiny">Open the GeoTIFF in QGIS or the CSV in a spreadsheet. The receipt records the exact product ID, acquisition, processing flags, source checksum and export checksums. No interpolation or spatial filtering was applied.</p>
+      </section>
       <div className="data-categories">
         <article className="panel">
           <span className="badge observed">ARCHIVED METADATA</span>

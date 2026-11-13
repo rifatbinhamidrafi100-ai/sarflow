@@ -1,0 +1,96 @@
+.my-area {
+  max-width: 1100px;
+}
+.my-area header {
+  max-width: 700px;
+  margin-bottom: 2rem;
+}
+.my-area h1 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+.my-area p,
+.my-area li {
+  line-height: 1.65;
+}
+.my-area p a,
+.area-explainer > a {
+  text-decoration: underline;
+}
+.area-search label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+.area-search > div {
+  display: flex;
+  gap: 0.75rem;
+}
+.area-search input {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+}
+.area-search button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.area-places {
+  display: grid;
+  gap: 0.6rem;
+}
+.area-places button {
+  display: flex;
+  text-align: left;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+.area-places small {
+  display: block;
+  margin-top: 0.25rem;
+}
+.area-places button[aria-pressed='true'] {
+  border-color: #167299;
+  background: #e5f3f6;
+  color: #112c46;
+}
+.area-selected {
+  margin-top: 2rem;
+}
+.area-status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.area-status-grid article {
+  border-top: 3px solid #8aaebc;
+  padding: 0.75rem 0;
+}
+.area-status-grid h3 {
+  font-size: 1.1rem;
+}
+.area-explainer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+.area-explainer li {
+  margin-bottom: 0.8rem;
+}
+@media (max-width: 700px) {
+  .area-search > div {
+    flex-direction: column;
+  }
+  .area-search button {
+    min-height: 48px;
+    justify-content: center;
+  }
+  .area-status-grid {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+}
