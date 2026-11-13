@@ -4,7 +4,7 @@ import { useRadarUpdates } from '../data/useRadarUpdates';
 import { RegionWorkspace } from './Observatory';
 import PlaceObservatory from '../components/PlaceObservatory';
 export default function GlobalRadar() {
-  const [params] = useSearchParams(),
+  const [params, setParams] = useSearchParams(),
     [lat, setLat] = useState(params.get('lat') ?? '28'),
     [lon, setLon] = useState(params.get('lon') ?? '85.3'),
     [query, setQuery] = useState(''),
@@ -17,6 +17,10 @@ export default function GlobalRadar() {
   const [catalogRevision, setCatalogRevision] = useState(0);
   const searchActive = useRef<AbortController | null>(null);
   useEffect(() => () => searchActive.current?.abort(), []);
+  useEffect(() => {
+    setLat(params.get('lat') ?? '28');
+    setLon(params.get('lon') ?? '85.3');
+  }, [params]);
   async function search() {
     searchActive.current?.abort();
     const c = new AbortController();
@@ -28,6 +32,7 @@ export default function GlobalRadar() {
       const r = await fetch(`/api/places?q=${encodeURIComponent(query)}`, { signal: c.signal });
       const b = await r.json();
       if (!r.ok) throw Error(b.error);
+      if (c.signal.aborted) return;
       setPlaces(b.results);
       setSearchMessage(
         b.results.length
@@ -71,7 +76,13 @@ export default function GlobalRadar() {
               minLength={2}
               maxLength={100}
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                searchActive.current?.abort();
+                setSearchBusy(false);
+                setPlaces([]);
+                setSearchMessage('');
+                setQuery(e.target.value);
+              }}
               placeholder="Dhaka, Kathmandu, Tokyo…"
             />
           </label>
@@ -85,6 +96,7 @@ export default function GlobalRadar() {
               onClick={() => {
                 setLat(String(p.latitude));
                 setLon(String(p.longitude));
+                setParams({ lat: String(p.latitude), lon: String(p.longitude) });
               }}
             >
               {p.name}, {p.country}
@@ -136,6 +148,9 @@ export default function GlobalRadar() {
           Internet required.
         </p>
         <PlaceObservatory latitude={lat} longitude={lon} revision={catalogRevision} />
+        <Link className="button" to={`/nisar-explorer?${new URLSearchParams({ lat, lon })}`}>
+          Inspect source products with ASF
+        </Link>
       </section>
       {data && (
         <RegionWorkspace

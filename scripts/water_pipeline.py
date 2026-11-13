@@ -84,6 +84,7 @@ def run(manifest_path, output, parameters):
                     if not known: quality_missing.add(i)
                     if cross:
                         b, _, known = read_tile(f,frequency,cross,row+rr,col+cc,hh,ww);bb.append(b)
+                        if not known: quality_missing.add(i)
                 terrain_values = read_terrain(terrain, Window(cc,rr,ww,hh)) if terrain else None
                 result = classify(np.stack(aa),np.stack(bb) if cross else None,terrain_values,**parameters)
                 n = int(result['common'].sum());common_count += n

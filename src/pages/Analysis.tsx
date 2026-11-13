@@ -9,6 +9,7 @@ import AskData from '../components/AskData';
 import { PairControls } from './Explore';
 import Investigation from '../components/Investigation';
 import { numericalInvestigation } from '../../shared/investigation';
+import RadarInterpreter from '../components/RadarInterpreter';
 export default function Analysis() {
   return (
     <DataGate>
@@ -26,8 +27,24 @@ function AnalysisContent() {
         <div>
           <span className="tiny">From signal to interpretation</span>
           <h1>Change analysis</h1>
+          <Link to="/getting-started#analysis-lab-guide">
+            Explain these controls · watch the walkthrough
+          </Link>
         </div>
         <div className="actions">
+          <RadarInterpreter
+            context={{
+              source:
+                d.status === 'synthetic'
+                  ? 'SARFlow synthetic teaching dataset'
+                  : 'Imported dataset metadata',
+              acquired: d.observations[w.after].date,
+              referenceAcquired: d.observations[w.before].date,
+              polarization: d.polarization,
+              layer: 'Numerical change analysis',
+              visualization: d.status === 'synthetic' ? 'synthetic' : 'calibrated',
+            }}
+          />
           <Badge observed={d.status === 'observed'} />
           <button onClick={() => w.setEvidence(true)}>Inspect evidence</button>
         </div>

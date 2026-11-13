@@ -32,6 +32,7 @@ import './observatory.css';
 import Investigation from '../components/Investigation';
 import ChangeTracker from '../components/ChangeTracker';
 import ArchiveCompare from '../components/ArchiveCompare';
+import RadarInterpreter from '../components/RadarInterpreter';
 import { visualInvestigation } from '../../shared/investigation';
 import '../components/radar-story.css';
 import './observatory-workspace.css';
@@ -597,6 +598,17 @@ export function RegionWorkspace({
               <span>{region.topic}</span>
             </div>
             <div className="obs-view-modes">
+              <RadarInterpreter
+                context={{
+                  source: data.source,
+                  mission: 'NISAR L-SAR',
+                  acquired: frame.acquired,
+                  referenceAcquired: compare ? before.acquired : null,
+                  product: frame.title,
+                  layer: data.layer,
+                  visualization: 'rgb',
+                }}
+              />
               <label className="obs-detail-control">
                 Image detail
                 <select
@@ -640,6 +652,7 @@ export function RegionWorkspace({
                 before={before}
                 compare={compare}
                 split={split}
+                onSplit={setSplit}
                 mode={studio}
                 maxPixels={playing ? 384 : detailPixels}
                 onStatus={setStatus}
@@ -654,6 +667,7 @@ export function RegionWorkspace({
                   compare={compare}
                   mode={studio}
                   split={studio === 'split' ? 50 : split}
+                  onSplit={setSplit}
                   opacity={opacity}
                   footprint={footprint}
                   studyArea={studyArea}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { observationDisplayImage, type ActualFrame } from '../../shared/observatory';
+import ComparisonHandle from './ComparisonHandle';
 
 /** Same archived display pixels, without WebGL or external basemap services. */
 export default function ArchiveCompare({
@@ -10,6 +11,7 @@ export default function ArchiveCompare({
   mode,
   onStatus,
   maxPixels = 768,
+  onSplit,
 }: {
   frame: ActualFrame;
   before: ActualFrame;
@@ -18,6 +20,7 @@ export default function ArchiveCompare({
   mode: string;
   onStatus: (status: string) => void;
   maxPixels?: number;
+  onSplit?: (value: number) => void;
 }) {
   const [error, setError] = useState(false),
     [retry, setRetry] = useState(0);
@@ -84,6 +87,9 @@ export default function ArchiveCompare({
       <span className="archive-caption">
         Archived display pixels · no numerical detection · north up
       </span>
+      {compare && mode === 'swipe' && onSplit && (
+        <ComparisonHandle value={split} onChange={onSplit} />
+      )}
       {error && (
         <div className="obs-map-error" role="alert">
           Archived image unavailable.{' '}

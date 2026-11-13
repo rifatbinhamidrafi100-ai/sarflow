@@ -8,7 +8,7 @@ import {
 import { clientCooldown } from './http-policy.js';
 
 const MAX_BYTES = 4 * 1024 * 1024;
-async function boundedJson(response: Response) {
+export async function boundedJson(response: Response) {
   if (!response.ok || !response.body || Number(response.headers.get('content-length')) > MAX_BYTES)
     throw Error('Upstream unavailable');
   const reader = response.body.getReader(),

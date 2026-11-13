@@ -1,0 +1,32 @@
+[
+  {
+    "title": "First, check the data label",
+    "text": "DEMO DATA · SYNTHETIC means the lab is teaching with generated numbers. Its dates and changes are not evidence of an actual flood.",
+    "label": "Start with the evidence"
+  },
+  {
+    "title": "Choose Before and After",
+    "text": "Choose an earlier and a later frame. The timeline plays stored frames; it does not create observations between dates. T1 to T6 are frame labels.",
+    "label": "Dates and timeline"
+  },
+  {
+    "title": "Set the change threshold",
+    "text": "The threshold is the minimum absolute radar difference to mark a candidate. A higher threshold usually selects fewer cells. It is not a confidence percentage.",
+    "label": "Change threshold · dB"
+  },
+  {
+    "title": "Understand smoothing",
+    "text": "The 3 × 3 option averages nearby valid measurements in linear power, then displays them in dB. It can reduce local variation but also blur small features.",
+    "label": "3 × 3 mean in linear power"
+  },
+  {
+    "title": "Run, then read the result",
+    "text": "Candidate cells crossed the threshold. Mean signed change describes the average direction. Zero candidates can coexist with a nonzero mean when changes are below the threshold.",
+    "label": "Run analysis · Change DNA"
+  },
+  {
+    "title": "Check what is still unknown",
+    "text": "Not available is not zero. Review sources, exclusions and limitations in the receipts. Ask the data explains available evidence using fixed templates; it cannot confirm a flood.",
+    "label": "Inspect evidence · Ask the data"
+  }
+]

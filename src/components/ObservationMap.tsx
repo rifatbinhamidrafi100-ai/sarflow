@@ -6,6 +6,7 @@ import { observationDisplayImage, type Region, type ActualFrame } from '../../sh
 import { referenceBounds, type ExternalReference } from '../../shared/external-reference';
 import { LocateFixed, Maximize2, Minus, Plus } from 'lucide-react';
 import { loadObservationPixels, MissingBrowsePixels } from './observationImage';
+import ComparisonHandle from './ComparisonHandle';
 ml.setWorkerUrl(workerUrl);
 type Props = {
   region: Region;
@@ -14,6 +15,7 @@ type Props = {
   compare: boolean;
   mode?: 'swipe' | 'split' | 'opacity';
   split: number;
+  onSplit?: (value: number) => void;
   opacity: number;
   footprint: boolean;
   studyArea?: boolean;
@@ -433,10 +435,8 @@ export default function ObservationMap(props: Props) {
       >
         <div ref={overlayEl} className="observation-map-canvas" />
       </div>
-      {props.compare && props.mode !== 'opacity' && (
-        <div className="observation-swipe" style={{ left: `${props.split}%` }}>
-          <span>↔</span>
-        </div>
+      {props.compare && props.mode === 'swipe' && props.onSplit && (
+        <ComparisonHandle value={props.split} onChange={props.onSplit} />
       )}
       {props.referenceData && (
         <div className="external-reference-map-label">

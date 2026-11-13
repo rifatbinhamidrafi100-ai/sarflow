@@ -1,26 +1,12 @@
+import { parseWaterResult, type WaterResult } from '../../shared/water-result';
 import { cellPercentage } from '../../shared/change-summary';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Download } from '../components/ui';
 import './water.css';
+import { WaterEvaluation } from '../components/WaterEvaluation';
+import WaterReferenceSearch from '../components/WaterReferenceSearch';
 type Input = { id: string; location: string; dataType: string; dates: number };
-type Result = {
-  dataType: string;
-  location: string;
-  commonValidCells: number;
-  counts: Record<string, number>;
-  legend: Record<string, string>;
-  observations: { id: string; date: string }[];
-  perDateValidCells: number[];
-  temporalMeansDb: (number | null)[];
-  thresholdBaseline: { candidateCells: number };
-  limitations: string[];
-  previews: { file: string; row: number; col: number; width: number; height: number }[];
-  outputs: string[];
-  window: { width: number; height: number };
-  accuracyEvaluation: null;
-  areaKm2: null;
-};
 async function request(url: string, options: RequestInit = {}) {
   const r = await fetch('/api/water' + url, options);
   const body = await r.json();
@@ -36,7 +22,7 @@ export default function Water() {
     [available, setAvailable] = useState(false);
   const [job, setJob] = useState(''),
     [status, setStatus] = useState(''),
-    [result, setResult] = useState<Result | null>(null),
+    [result, setResult] = useState<WaterResult | null>(null),
     [busy, setBusy] = useState(false),
     [split, setSplit] = useState(50),
     [mode, setMode] = useState('classes');
@@ -58,6 +44,39 @@ export default function Water() {
     },
     [],
   );
+  useEffect(() => {
+    const saved = new URLSearchParams(window.location.search).get('job');
+    if (!saved || !/^[0-9a-f-]{36}$/.test(saved)) return;
+    const runId = invalidate(),
+      c = new AbortController();
+    controller.current = c;
+    setJob(saved);
+    setBusy(true);
+    async function restore() {
+      try {
+        const body = await request('/jobs/' + saved, { signal: c.signal });
+        if (c.signal.aborted || generation.current !== runId) return;
+        setStatus(body.message);
+        if (body.status === 'running') {
+          timer.current = setTimeout(() => void restore(), 800);
+        } else {
+          setBusy(false);
+          if (body.status === 'complete') setResult(parseWaterResult(body.result));
+          else if (body.status === 'failed') setError(body.message);
+        }
+      } catch (e) {
+        if (!c.signal.aborted && generation.current === runId) {
+          setBusy(false);
+          setError(e instanceof Error ? e.message : 'Saved investigation unavailable');
+        }
+      }
+    }
+    void restore();
+    return () => {
+      c.abort();
+      clearTimeout(timer.current);
+    };
+  }, []);
   useEffect(() => {
     const c = new AbortController();
     setLoading(true);
@@ -93,7 +112,7 @@ export default function Water() {
         if (!current()) return;
         setStatus(b.message);
         if (b.status === 'complete') {
-          setResult(b.result);
+          setResult(parseWaterResult(b.result));
           setBusy(false);
         } else if (b.status !== 'running') {
           setBusy(false);
@@ -118,6 +137,9 @@ export default function Water() {
       });
       if (!current()) return;
       setJob(b.id);
+      const url = new URL(window.location.href);
+      url.searchParams.set('job', b.id);
+      window.history.replaceState(window.history.state, '', url);
       void poll(b.id);
     } catch (e) {
       if (current()) {
@@ -167,7 +189,7 @@ export default function Water() {
       <div className="page-heading">
         <div>
           <span className="tiny">Experimental calibrated-measurement workflow</span>
-          <h1>Brahmaputra water change</h1>
+          <h1>Water change investigation</h1>
         </div>
         <Link className="button" to="/observatory?region=brahmaputra">
           View rendered NISAR imagery
@@ -179,14 +201,27 @@ export default function Water() {
       </p>
       <p className="notice">
         Not an official OPERA product. Newly detected water candidates are not confirmed floods.
-        Real-event accuracy has not been evaluated.
+        Reference agreement, when available, is reported separately and does not confirm flooding.
       </p>
+      <p>
+        Want to inspect actual measurements first?{' '}
+        <Link to="/data#real-nisar">Download a verified real NISAR observation</Link>. This
+        single-date Arctic sample is available now, but does not meet this workflow’s multitemporal
+        input requirements.
+      </p>
+      <WaterReferenceSearch />
       {loading ? (
         <p role="status">Checking registered measurements…</p>
       ) : (
         <>
           <section className="panel">
             <h2>Measurement inputs</h2>
+            {result && (
+              <p className="notice">
+                These inputs and thresholds configure a new run. The displayed retained result keeps
+                its original processing parameters in the exported evidence JSON.
+              </p>
+            )}
             {inputs.length === 0 ? (
               <>
                 <p role="status">
@@ -372,9 +407,9 @@ export default function Water() {
               </tr>
             </thead>
             <tbody>
-              {Object.entries(result.legend).map(([id, label]) => (
+              {(Object.keys(result.legend) as (keyof WaterResult['legend'])[]).map((id) => (
                 <tr key={id}>
-                  <td>{label}</td>
+                  <td>{result.legend[id]}</td>
                   <td>{result.counts[id]}</td>
                   <td>
                     {cellPercentage(
@@ -421,9 +456,10 @@ export default function Water() {
           <h3>Area and uncertainty</h3>
           <p>
             Area unavailable: ground pixel area and support have not been independently justified.
-            No confidence probability or reference-label accuracy is reported. Download the
-            reason-bit raster to inspect exclusions, missing evidence and ambiguous signals.
+            No confidence probability is reported. Download the reason-bit raster to inspect
+            exclusions, missing evidence and ambiguous signals.
           </p>
+          <WaterEvaluation key={job} job={job} />
           <ul>
             {result.limitations.map((l) => (
               <li key={l}>{l}</li>

@@ -1,0 +1,9 @@
+# Keep Windows checkouts consistent with Prettier and Linux CI.
+* text=auto eol=lf
+*.apk binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.tif binary
+*.webm binary
+*.mp4 binary

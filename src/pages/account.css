@@ -1,0 +1,75 @@
+.account-page {
+  max-width: 1080px;
+}
+.account-heading {
+  max-width: 680px;
+  margin-bottom: 32px;
+}
+.account-heading h1 {
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.15;
+}
+.account-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+.account-card {
+  padding: 32px;
+  min-width: 0;
+}
+.account-card form {
+  display: grid;
+  gap: 16px;
+  margin: 24px 0;
+}
+.account-card label {
+  display: grid;
+  gap: 8px;
+}
+.account-card input {
+  width: 100%;
+  min-width: 0;
+}
+.account-card p {
+  overflow-wrap: anywhere;
+}
+.account-avatar {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-size: 24px;
+}
+.account-card .google-signin {
+  width: 100%;
+  min-height: 48px;
+  margin: 16px 0;
+  font-weight: 600;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+.account-info {
+  padding: 12px 0;
+}
+.account-info .button {
+  margin: 0 8px 12px 0;
+}
+.account-link {
+  font-size: 12px;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .account-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .account-card {
+    padding: 22px;
+  }
+}

@@ -22,3 +22,8 @@ data/monitoring/
 *.sqlite-shm
 *.sqlite-wal
 .vercel
+output/
+*.keystore
+*.jks
+*.h5
+*.hdf5

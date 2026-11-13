@@ -349,15 +349,25 @@
   position: absolute;
   top: 0;
   bottom: 0;
+  width: 36px;
+  transform: translateX(-50%);
+  z-index: 4;
+  cursor: ew-resize;
+  touch-action: none;
+  outline-offset: -4px;
+}
+.observation-swipe::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 17px;
   width: 2px;
   background: white;
-  pointer-events: none;
-  box-shadow: 0 0 6px #0006;
+  box-shadow: 0 0 7px #1edfff80;
 }
 .observation-swipe > span {
   position: absolute;
   top: 48%;
-  left: -17px;
+  left: 0;
   display: grid;
   place-items: center;
   width: 35px;
@@ -367,6 +377,12 @@
   color: #17374e;
   font-size: 18px;
   box-shadow: 0 1px 8px #0003;
+}
+.observation-swipe:hover > span,
+.observation-swipe:focus-visible > span {
+  box-shadow:
+    0 0 0 3px #0c5676,
+    0 0 14px #40dfff;
 }
 .observation-timebar {
   display: flex;

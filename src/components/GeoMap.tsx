@@ -8,6 +8,7 @@ import { useWorkspace } from '../data/Workspace';
 import { smooth } from '../../shared/analysis';
 import { rasterURL } from './Raster';
 import type { Bounds } from '../../shared/schema';
+import RadarInterpreter from './RadarInterpreter';
 
 maplibregl.setWorkerUrl(mapWorkerUrl);
 
@@ -168,6 +169,18 @@ export default function GeoMap({ onLocate }: { onLocate: (b: Bounds) => void }) 
         </span>
       </div>
       <div className="map-tools">
+        <RadarInterpreter
+          context={{
+            source:
+              d.status === 'synthetic'
+                ? 'SARFlow synthetic teaching dataset'
+                : 'Imported dataset metadata',
+            acquired: d.observations[w.frame]?.date,
+            polarization: d.polarization,
+            layer: w.lens,
+            visualization: d.status === 'synthetic' ? 'synthetic' : 'calibrated',
+          }}
+        />
         <button
           onClick={() =>
             map.current?.fitBounds(

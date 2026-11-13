@@ -61,6 +61,9 @@ export function PairControls() {
         3 × 3 mean in linear power
       </label>
       <p className="tiny">Threshold is exploratory, not calibrated to event probability.</p>
+      <p>
+        <Link to="/getting-started#analysis-lab-guide">Help with these controls & video</Link>
+      </p>
       <button className="primary run" disabled={w.analyzing} onClick={w.run}>
         <FlaskConical size={17} />
         {w.analyzing ? 'Analyzing…' : 'Run analysis'}

@@ -12,6 +12,9 @@ import { coverageRouter } from './coverage.js';
 import { waterRouter } from './water.js';
 import { monitoringRouter } from './monitoring.js';
 import { placeObservatoryRouter } from './place-observatory.js';
+import { asfDiscoveryRouter } from './asf-discovery.js';
+import { waterReferenceRouter } from './water-reference.js';
+import { authRouter } from './auth.js';
 
 interface AppOptions {
   discover?: typeof discover;
@@ -32,11 +35,22 @@ export function createApp(options: AppOptions = {}) {
       .filter(Boolean);
   if (proxies.length) app.set('trust proxy', proxies);
   app.use(securityHeaders);
+  app.use('/api/auth', authRouter());
   app.use(
-    ['/api/places', '/api/global-radar', '/api/coverage', '/api/catalog', '/api/place-observatory'],
+    [
+      '/api/places',
+      '/api/global-radar',
+      '/api/coverage',
+      '/api/catalog',
+      '/api/place-observatory',
+      '/api/asf-discovery',
+      '/api/water-references',
+    ],
     discoveryCache,
   );
   app.use('/api/place-observatory', placeObservatoryRouter());
+  app.use('/api/asf-discovery', asfDiscoveryRouter());
+  app.use('/api/water-references', waterReferenceRouter());
   app.use('/api/places', placesRouter());
   app.use('/api/global-radar', globalRadarRouter());
   app.use('/api/coverage', coverageRouter());

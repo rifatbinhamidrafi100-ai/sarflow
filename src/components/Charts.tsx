@@ -91,7 +91,7 @@ export function TemporalChart() {
 export function Histogram() {
   const { result: r } = useWorkspace();
   if (!r) return null;
-  const max = Math.max(...r.histogram.map((b) => b.count));
+  const max = Math.max(1, ...r.histogram.map((b) => b.count));
   return (
     <div className="chart">
       <h3>Distribution of change</h3>

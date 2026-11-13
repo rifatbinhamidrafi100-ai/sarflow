@@ -1,10 +1,18 @@
-import { ArrowRight, ArrowUpRight, Fingerprint, GitCompareArrows, Satellite } from 'lucide-react';
+import {
+  ArrowRight,
+  ArrowUpRight,
+  BookOpen,
+  Fingerprint,
+  GitCompareArrows,
+  GraduationCap,
+  Satellite,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useObservatory } from '../data/observatory';
 import { date } from '../components/ui';
 import './real-home.css';
-import RadarStory from '../components/RadarStory';
 import { NepalFeature } from './NepalCase';
+import { HomeTopics } from './Topics';
 export default function RealHome() {
   const { data, error, retry } = useObservatory();
   const lead = data?.regions.find((r) => r.id === 'brahmaputra');
@@ -27,17 +35,17 @@ export default function RealHome() {
             changed, and inspect the evidence needed to support an explanation.
           </p>
           <div className="actions">
-            <Link className="button primary" to="/study">
-              Start the evidence investigation
+            <Link className="button primary" to="/my-area">
+              Explore my area
               <ArrowRight size={17} />
             </Link>
-            <Link className="button" to="/world">
-              Explore the whole world
+            <Link className="button" to="/topics">
+              Choose a topic
+            </Link>
+            <Link className="button" to="/install">
+              Download mobile app
             </Link>
           </div>
-          <a className="radar-watch-link" href="#radar-story">
-            Watch radar in motion <ArrowRight size={15} />
-          </a>
           <div className="real-hero-proof">
             <Satellite size={18} />
             <div>
@@ -70,6 +78,7 @@ export default function RealHome() {
           </div>
         </Link>
       </section>
+      <HomeTopics />
       <NepalFeature />
       <section className="nepal-feature">
         <div>
@@ -80,7 +89,6 @@ export default function RealHome() {
           Animate Earth
         </Link>
       </section>
-      <RadarStory />
       <section className="real-entry-strip">
         <div>
           <strong>Observe.</strong>
@@ -94,6 +102,32 @@ export default function RealHome() {
           <strong>Investigate.</strong>
           <span>Keep interpretation connected to evidence.</span>
         </div>
+      </section>
+      <section className="real-learning-section" aria-label="Learn with SARFlow">
+        <Link className="real-learning-card" to="/getting-started">
+          <BookOpen size={28} aria-hidden="true" />
+          <span className="tiny">New to SARFlow?</span>
+          <h2>Beginner guide</h2>
+          <p>
+            Find a place, choose observation dates, compare images and read the evidence. Follow
+            each step at your own pace—no radar experience needed.
+          </p>
+          <span className="real-learning-action">
+            Start the guide <ArrowRight size={17} aria-hidden="true" />
+          </span>
+        </Link>
+        <Link className="real-learning-card" to="/resources">
+          <GraduationCap size={28} aria-hidden="true" />
+          <span className="tiny">Keep learning</span>
+          <h2>NISAR learning resources</h2>
+          <p>
+            Explore NASA training, radar explanations and official data tools. Choose a resource
+            that matches what you want to understand next.
+          </p>
+          <span className="real-learning-action">
+            Browse learning resources <ArrowRight size={17} aria-hidden="true" />
+          </span>
+        </Link>
       </section>
       <section className="real-region-section">
         <div className="section-heading">

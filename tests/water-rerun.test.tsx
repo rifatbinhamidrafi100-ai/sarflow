@@ -5,7 +5,7 @@ import {MemoryRouter} from 'react-router-dom';
 import Water from '../src/pages/Water';
 const deferred=()=>{let resolve!:(v:any)=>void;const promise=new Promise<any>(r=>{resolve=r;});return {promise,resolve};};
 const response=(body:unknown,ok=true)=>({ok,json:async()=>body});
-const result=(name:string)=>({location:name,dataType:'synthetic-software-fixture',commonValidCells:1,counts:{'1':1},legend:{'1':'Persistent candidate'},observations:[{id:'test',date:'2026-01-01'}],perDateValidCells:[1],temporalMeansDb:[-25],thresholdBaseline:{candidateCells:0},limitations:[],previews:[],outputs:['classes'],window:{width:16,height:16}});
+const result=(name:string)=>({algorithm:'sarflow-water-candidates-v1',areaKm2:null,accuracyEvaluation:null,location:name,dataType:'synthetic-software-fixture',commonValidCells:1,counts:{'0':255,'1':1,'2':0,'3':0,'4':0,'5':0},legend:{'0':'Excluded','1':'Persistent candidate','2':'New candidate','3':'Receding candidate','4':'Other','5':'Insufficient'},observations:[{id:'test',date:'2026-01-01'}],perDateValidCells:[1],temporalMeansDb:[-25],thresholdBaseline:{candidateCells:0},limitations:['Software fixture only'],previews:[],outputs:['classes'],window:{width:16,height:16}});
 const inputs=response({inputs:[{id:'test',location:'Software fixture',dataType:'synthetic-software-fixture',dates:4}],workerAvailable:true});
 afterEach(()=>{cleanup();vi.unstubAllGlobals();});
 it('completed A cannot be polled again or control B while its POST is delayed',async()=>{

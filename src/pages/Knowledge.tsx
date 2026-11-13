@@ -68,6 +68,9 @@ function Science() {
     <>
       <span className="tiny">Science / how it works</span>
       <h1>A signal, not a photograph.</h1>
+      <Link className="button" to="/resources">
+        NASA learning resources & data tools
+      </Link>
       <p className="lead">
         Synthetic aperture radar sends microwave pulses toward Earth and measures their return.
         Satellite motion lets processing combine echoes into a detailed image.

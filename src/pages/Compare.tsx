@@ -5,6 +5,7 @@ import { Badge, DataGate, date } from '../components/ui';
 import Raster from '../components/Raster';
 import { PairControls } from './Explore';
 import { preparePair } from '../../shared/analysis';
+import RadarInterpreter from '../components/RadarInterpreter';
 export default function Compare() {
   return (
     <DataGate>
@@ -28,7 +29,22 @@ function Comparison() {
           <span className="tiny">Same grid. Two moments.</span>
           <h1>Before / after</h1>
         </div>
-        <Badge observed={d.status === 'observed'} />
+        <div className="actions">
+          <RadarInterpreter
+            context={{
+              source:
+                d.status === 'synthetic'
+                  ? 'SARFlow synthetic teaching dataset'
+                  : 'Imported dataset metadata',
+              acquired: d.observations[w.after].date,
+              referenceAcquired: d.observations[w.before].date,
+              polarization: d.polarization,
+              layer: mode,
+              visualization: d.status === 'synthetic' ? 'synthetic' : 'calibrated',
+            }}
+          />
+          <Badge observed={d.status === 'observed'} />
+        </div>
       </div>
       <p className="lead">
         Compare the signal before interpreting the story. Both views share their scale, position,

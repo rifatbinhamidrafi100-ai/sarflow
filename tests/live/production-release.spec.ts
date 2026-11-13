@@ -1,0 +1,20 @@
+import { test, expect } from '@playwright/test';
+test('deployed NASA discovery and receipt contain actual catalogue evidence',async({page})=>{
+  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
+  await page.goto('/water');
+  const panel=page.getByRole('region',{name:'NASA water reference discovery'});
+  await panel.getByLabel('Reference latitude').fill('25.15');
+  await panel.getByLabel('Reference longitude').fill('89.8');
+  await panel.getByLabel('Reference start date').fill('2026-09-01');
+  await panel.getByLabel('Reference end date').fill('2026-10-31');
+  await panel.getByRole('button',{name:'Find NASA reference observations'}).click();
+  await expect(panel.getByRole('status')).toContainText('reference candidates returned');
+  await expect(panel.getByRole('status')).toContainText('Evaluation: not performed');
+  expect(await panel.locator('li a').count()).toBeGreaterThan(0);
+  await panel.getByText('Source and reproducibility',{exact:true}).click();
+  const download=page.waitForEvent('download');
+  await panel.getByRole('button',{name:'Download reference discovery receipt'}).click();
+  expect((await download).suggestedFilename()).toBe('sarflow-reference-discovery.json');
+  await page.screenshot({path:'artifacts/production-nasa-reference-20261113.png',fullPage:true});
+  expect(errors).toEqual([]);
+});
