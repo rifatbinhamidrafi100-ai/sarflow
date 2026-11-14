@@ -9,6 +9,10 @@ Arctic GCOV 1.5.0 reader check, with source checksum, quality-mask rules and mea
 power summaries. It is separate from the Brahmaputra investigation. A temporal result and
 independent event validation remain unavailable. See the [reader verification](docs/implementation/2026-10-21-gcov-150-reader.md).
 
+## Scientific readiness update — 14 November 2026
+
+Discovery, calibrated GCOV reading and compatibility checks are implemented. A compatible four-date measured series, AOI-specific terrain review, independently reviewed reference labels, a completed real flood case and measured accuracy remain incomplete. The refreshed catalog shortlist and actual **HTTP 401 Unauthorized** access checks are documented in the [scientific readiness table and evidence](docs/SCIENTIFIC_STATUS_20261114.md). Passing software tests does not establish flood-detection accuracy.
+
 ## Real-observation workspace
 
 **Place Observatory:** the global discovery page and globe investigation now expose the source catalog independently of the browse archive. Single acquisitions remain visible even without a repeat pair. Select a source record to inspect acquisition time, catalog update, product metadata, local numerical-input candidates, unrecorded processing/validation stages and exportable evidence. Prepared regions expose the same component under **Place evidence record**. Queries are bounded to 100 records per page and 10 pages; this is not an exhaustive all-mission history. See [implementation and verification](docs/implementation/2026-10-20-place-observatory.md).

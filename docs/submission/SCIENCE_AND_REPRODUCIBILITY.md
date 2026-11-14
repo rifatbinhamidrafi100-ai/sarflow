@@ -6,6 +6,10 @@ This snapshot contains real NASA NISAR browse imagery and real observation metad
 
 Source product maturity and software test success are different from scientific validation. NISAR provisional products also have their own [documented known issues](https://nisar-docs.asf.alaska.edu/provisional-known-issues/).
 
+## Current scientific readiness
+
+See the [14 November 2026 scientific readiness table](../SCIENTIFIC_STATUS_20261114.md) for the current requirement-by-requirement status, refreshed NISAR/OPERA discovery, actual download-access checks and outstanding validation steps. The four-date series and reference records are metadata candidates; no real flood case or independent accuracy evaluation has been completed.
+
 ## Architecture
 
 ```mermaid
